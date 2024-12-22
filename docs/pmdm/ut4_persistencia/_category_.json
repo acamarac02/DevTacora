@@ -1,0 +1,9 @@
+{
+    "label": "UT4. Persistencia de datos",
+    "position": 2,
+    "link": {
+      "type": "generated-index",
+      "description": "En este tema aprenderemos cómo almacenar información relevante en la base de datos integrada SQLite, así como en las SharedPreferences."
+    }
+  }
+  

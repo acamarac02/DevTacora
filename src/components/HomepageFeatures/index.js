@@ -39,35 +39,6 @@ const FeatureList = [
   },
 ];
 
-function Feature({Svg, title, description}) {
-  return (
-    <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
-      <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
-        <p>{description}</p>
-      </div>
-    </div>
-  );
-}
-
-/*export default function HomepageFeatures() {
-  return (
-    <section className={styles.features}>
-      <div className="container">
-        <div className="row">
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}*/
-
-
 const projects = [
   {
     id: 1,
@@ -75,7 +46,7 @@ const projects = [
     title: 'Acceso a Datos',
     description: 'Gestión de ficheros, bases de datos relacionales y documentales desde Java.',
     imageUrl: JavaLogo,
-    link: '#',
+    link: '/docs/ada/',
   },
   {
     id: 2,
@@ -83,21 +54,13 @@ const projects = [
     title: 'Programación Multimedia y Dispositivos Móviles',
     description: 'Desarrollo de aplicaciones Android con Android Studio y Java.',
     imageUrl: AndroidLogo, // Reemplaza con el enlace de la imagen
-    link: '#',
-  },
-  {
-    id: 3,
-    category: '1º DAM/DAW',
-    title: 'Bases de datos',
-    description: 'Diseño conceptual, lógico y físico de bases de datos relacionales.',
-    imageUrl: ReactLogo, // Reemplaza con el enlace de la imagen
-    link: '#',
-  },
+    link: '/docs/pmdm/',
+  }
 ];
 
 const ProjectCard = ({ category, title, description, imageUrl, link }) => {
   const handleCardClick = () => {
-    window.open(link, "_blank");
+    window.location.href = link;
   };
 
   return (

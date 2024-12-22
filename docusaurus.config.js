@@ -75,15 +75,15 @@ const config = {
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'tutorialSidebar',
+            sidebarId: 'adaSidebar',
             position: 'left',
-            label: 'PMDM',
+            label: 'ADA',
           },
           {
             type: 'docSidebar',
-            sidebarId: 'ut5Sidebar',
+            sidebarId: 'pmdmSidebar',
             position: 'left',
-            label: 'ADA',
+            label: 'PMDM',
           },
           {
             href: 'https://www.linkedin.com/in/aliciacamcas',
