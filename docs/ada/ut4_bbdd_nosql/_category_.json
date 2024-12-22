@@ -1,9 +1,0 @@
-{
-    "label": "UT4. Acceso a bases de datos NoSQL",
-    "position": 2,
-    "link": {
-      "type": "generated-index",
-      "description": "En este tema aprenderemos los conceptos necesarios para el manejo de MongoDB, base de datos documental, así como el acceso y manipulación de sus datos a través de Java."
-    }
-  }
-  
