@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkpmdm=self.webpackChunkpmdm||[]).push([[1903],{1912:a=>{a.exports=JSON.parse('{"blogBasePath":"/DevTacora/blog","blogTitle":"Blog","authorsListPath":"/DevTacora/blog/authors"}')}}]);
