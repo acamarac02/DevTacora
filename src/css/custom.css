@@ -37,3 +37,11 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+.justify-text {
+  text-align: justify;
+}
+
+.hidden-summary {
+  display: none;
+}
