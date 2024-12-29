@@ -45,3 +45,10 @@
 .hidden-summary {
   display: none;
 }
+
+img[alt="UT4. Primera versión app"] {
+  height: 500px;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+}
