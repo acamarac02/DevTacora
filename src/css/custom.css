@@ -46,7 +46,9 @@
   display: none;
 }
 
-img[alt="UT4. Primera versión app"] {
+img[alt="UT4. Primera versión app"],
+img[alt="UT4. Insertar animal con imagen"],
+img[alt="UT4. Eliminar animal al deslizar"] {
   height: 500px;
   width: auto;
   display: block;

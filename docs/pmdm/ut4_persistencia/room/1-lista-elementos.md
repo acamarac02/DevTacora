@@ -58,9 +58,9 @@ import androidx.room.PrimaryKey;
 public class Animal {
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
-    public String nombre;
-    public String descripcion;
+    private int id;
+    private String nombre;
+    private String descripcion;
 
     // Constructor
     public Animal(String nombre, String descripcion) {
