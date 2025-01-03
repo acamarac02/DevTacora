@@ -55,3 +55,8 @@ img[alt="UT4. Seleccion favoritos"] {
   display: block;
   margin: 0 auto;
 }
+
+img[alt="Icono licencia BY-NC-SA"] {
+  height: 80px;
+  width: auto;
+}

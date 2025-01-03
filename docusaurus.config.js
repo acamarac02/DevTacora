@@ -86,6 +86,11 @@ const config = {
             label: 'PMDM',
           },
           {
+            to: '/docs/licencia', 
+            label: 'Licencia',
+            position: 'right',
+          },
+          {
             href: 'https://www.linkedin.com/in/aliciacamcas',
             label: 'LinkedIn',
             position: 'right',
@@ -94,7 +99,22 @@ const config = {
       },
       footer: {
         style: 'dark',
-        copyright: `Copyright © ${new Date().getFullYear()} Alicia Cámara Casares. Built with Docusaurus.`,
+        copyright: `
+        <div style="position: relative; text-align: center;">
+      <div>
+        Copyright © ${new Date().getFullYear()} Alicia Cámara Casares.<br />
+        El contenido de esta página está bajo licencia 
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank">CC BY-NC-SA 4.0</a>. 
+        Todos los derechos reservados.
+      </div>
+      <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank">
+          <img src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png"
+               alt="Licencia Creative Commons BY-NC-SA" />
+        </a>
+      </div>
+    </div>
+      `,
       },
       prism: {
         theme: prismThemes.github,
