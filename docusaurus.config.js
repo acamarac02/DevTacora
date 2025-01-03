@@ -122,6 +122,15 @@ const config = {
         additionalLanguages: ['java', 'groovy']
       },
     }),
+    plugins: [
+      [
+        '@docusaurus/plugin-google-gtag',
+        {
+          trackingID: 'G-7WCKN9ZY1F',  
+          anonymizeIP: true, 
+        },
+      ],
+    ],
 };
 
 export default config;
