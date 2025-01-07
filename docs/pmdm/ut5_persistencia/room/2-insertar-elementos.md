@@ -68,7 +68,7 @@ Ahora, implementemos la funcionalidad para que el FAB lleve a una pantalla de a�
 #### 1. Crear el fragmento y la navegación
 Tu grafo de navegación deberá ser similar al siguiente:
 
-![UT4. Grafo navegación añadir animal](/img/pmdm/ut4/2-grafo-nav-add-animal.png)
+![UT5. Grafo navegación añadir animal](/img/pmdm/ut5/2-grafo-nav-add-animal.png)
 
 #### 2. Añadir Listener al FAB
 Gestiona la navegación al nuevo Fragment desde el Listener del botón flotante:
@@ -371,7 +371,7 @@ public class ImageUtils {
 
 Para comprobar que funciona correctamente, puedes implementar la pantalla de detalle, mostrando la imagen.
 
-![UT4. Insertar animal con imagen](/img/pmdm/ut4/3-video-insert.gif)
+![UT5. Insertar animal con imagen](/img/pmdm/ut5/3-video-insert.gif)
 
 ### Consideraciones  
 - **Permisos de Almacenamiento (Android 10 o inferior):**  
@@ -388,4 +388,4 @@ A partir de Android 11, no es necesario el permiso para acceder a imágenes de l
 
 Como último requisito, queremos eliminar un animal cuando se deslice hacia derecha o izquierda. ¿Cómo podríamos hacerlo? ¿Dónde habría que poner las instrucciones para eliminarlo de la base de datos?
 
-![UT4. Eliminar animal al deslizar](/img/pmdm/ut4/4-video-eliminar.gif)
+![UT5. Eliminar animal al deslizar](/img/pmdm/ut5/4-video-eliminar.gif)

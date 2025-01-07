@@ -8,11 +8,11 @@ title: Marcar como favorito
 
 En este tutorial vamos añadir un **botón de favorito (ImageButton)** a cada Animal del `RecyclerView`, de forma que al presionar el botón, se marcará o desmarcará como favorito, y se actualizará el estado visual. Además, guardaremos el nuevo estado en la base de datos.
 
-![UT4. Seleccion favoritos](/img/pmdm/ut4/7-video-favorito.gif)
+![UT5. Seleccion favoritos](/img/pmdm/ut5/7-video-favorito.gif)
 
 Para el botón usaremos los siguientes iconos ([Estrella iconos creados por Pixel perfect](https://www.flaticon.es/iconos-gratis/estrella)): 
-![UT4. Icono no favorito](/img/pmdm/ut4/6-icon_no_fav.png)
-![UT4. Icono favorito](/img/pmdm/ut4/5-icon_fav.png)
+![UT5. Icono no favorito](/img/pmdm/ut5/6-icon_no_fav.png)
+![UT5. Icono favorito](/img/pmdm/ut5/5-icon_fav.png)
 
 
 ## Modificar el layout del ViewHolder

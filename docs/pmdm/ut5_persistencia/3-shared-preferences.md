@@ -173,6 +173,6 @@ public class MainActivity extends AppCompatActivity {
 Otras herramientas que puedes utilizar para crear mensajes con botones de acción son **`Snackbar`** o **`DialogFragment`**. Este último es similar a `AlertDialog` pero permite crear layouts más complejos y personalizables.
 :::
 
-![UT4. PopUp de Bienvenida](/img/pmdm/ut4/8-video-popup.gif)
+![UT5. PopUp de Bienvenida](/img/pmdm/ut5/8-video-popup.gif)
 
 </div>

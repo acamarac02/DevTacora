@@ -46,11 +46,11 @@
   display: none;
 }
 
-img[alt="UT4. Primera versión app"],
-img[alt="UT4. Insertar animal con imagen"],
-img[alt="UT4. Eliminar animal al deslizar"],
-img[alt="UT4. Seleccion favoritos"],
-img[alt="UT4. PopUp de Bienvenida"] {
+img[alt="UT5. Primera versión app"],
+img[alt="UT5. Insertar animal con imagen"],
+img[alt="UT5. Eliminar animal al deslizar"],
+img[alt="UT5. Seleccion favoritos"],
+img[alt="UT5. PopUp de Bienvenida"] {
   height: 500px;
   width: auto;
   display: block;

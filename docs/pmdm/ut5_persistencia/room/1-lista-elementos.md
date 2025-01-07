@@ -10,7 +10,7 @@ title: Mostrar elementos almacenados
 
 En esta primera versión del proyecto, vamos a implementar el RecyclerView para mostrar la lista de animales. Para ello, necesitaremos un método que devuelva todos los animales de la base de datos y otro que inserte un animal. De momento, de cada Animal conocemos el nombre y una breve descripción. El resultado final de esta primera versión será similar a:
 
-![UT4. Primera versión app](/img/pmdm/ut4/1-primera-version-app.png)
+![5. Primera versión app](/img/pmdm/ut5/1-primera-version-app.png)
 
 
 

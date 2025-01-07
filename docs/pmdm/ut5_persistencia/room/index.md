@@ -11,7 +11,7 @@ A lo largo del tema vamos a desarrollar una aplicación que gestione un conjunto
 
 Cuando se inicie la aplicación, se solicitará a la base de datos la lista de animales para cargarlos en el RecyclerView. Todo ello, implicará el desarrollo de la siguiente arquitectura:
 
-![Diagrama de secuencia del flujo de datos entre las clases](/img/pmdm/ut4/0-diagrama-secuencia-clases.png)
+![UT5. Diagrama de secuencia del flujo de datos entre las clases](/img/pmdm/ut5/0-diagrama-secuencia-clases.png)
 
 Cualquier otra operación que se realice sobre la base de datos implicará ese mismo flujo de datos.
 </div>
