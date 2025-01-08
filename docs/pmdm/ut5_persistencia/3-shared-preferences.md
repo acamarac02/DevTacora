@@ -4,6 +4,10 @@ sidebar_label: Shared preferences
 title: Shared preferences
 ---
 
+<div className="hidden-summary">
+Almacenamiento persistente de datos simples.
+</div>
+
 <div class="justify-text">
 
 ## SharedPreferences

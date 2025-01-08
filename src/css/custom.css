@@ -50,9 +50,17 @@ img[alt="UT5. Primera versión app"],
 img[alt="UT5. Insertar animal con imagen"],
 img[alt="UT5. Eliminar animal al deslizar"],
 img[alt="UT5. Seleccion favoritos"],
-img[alt="UT5. PopUp de Bienvenida"] {
+img[alt="UT5. PopUp de Bienvenida"],
+img[alt="UT5. GIF resumen de la aplicación"] {
   height: 500px;
   width: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/** Solo centra la imagen **/
+img[alt="Documento en BBDD documental"],
+img[alt="BBDD clave-valor"] {
   display: block;
   margin: 0 auto;
 }
