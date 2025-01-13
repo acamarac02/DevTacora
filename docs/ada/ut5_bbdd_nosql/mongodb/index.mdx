@@ -1,0 +1,297 @@
+---
+sidebar_position: 2
+sidebar_label: MongoDB
+title: MongoDB
+
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<div class="justify-text">
+**MongoDB** es una base de datos NoSQL orientada a documentos, diseñada para almacenar datos de forma flexible y escalable. A diferencia de las bases de datos relacionales tradicionales, MongoDB no utiliza tablas ni filas, sino que almacena los datos en documentos de tipo **JSON (JavaScript Object Notation)** o **BSON (Binary JSON)**. Estos documentos pueden contener estructuras anidadas, listas y otros elementos complejos.
+
+MongoDB se ha consolidado como una de las bases de datos NoSQL más populares y es utilizada por empresas como **Facebook, Uber, eBay y muchas más**.
+
+## Características básicas
+Las características de MongoDB son las propias de la mayoría de las bases de datos NoSQL:
+
+1. **Modelo de Datos Flexible**  
+MongoDB permite almacenar datos sin un esquema fijo. Cada documento puede tener diferentes campos, lo que facilita la adaptabilidad a cambios en los requisitos de la aplicación sin necesidad de modificar estructuras existentes.
+
+2. **Escalabilidad Horizontal**  
+MongoDB está diseñado para escalar horizontalmente, lo que significa que puedes distribuir la base de datos en múltiples servidores (sharding). Esto permite manejar grandes volúmenes de datos y mantener un alto rendimiento a medida que crece la carga.
+
+3. **Alta Disponibilidad y Replicación**  
+MongoDB ofrece replicación automática mediante **réplicas de conjunto (replica sets)**. Esto asegura que haya copias de los datos en diferentes servidores, proporcionando tolerancia a fallos y alta disponibilidad.
+
+4. **Consultas Poderosas**  
+El lenguaje de consulta de MongoDB es **MQL (MongoDB Query Language)**, que permite realizar consultas avanzadas usando un lenguaje de consulta rico y expresivo, basado en JSON/BSON. Se pueden realizar búsquedas por rango, consultas de texto, agregaciones y más. Además, admite índices para mejorar el rendimiento de las consultas. Ejemplos de consultas:
+
+```json
+// Busca todos los documentos cuyo campo "nombre" tenga el valor "Juan Pérez", dentro de la 
+// base de datos seleccionada (db) y dentro de la colección "usuarios"
+db.usuarios.find({ "nombre": "Juan Pérez" })
+
+// Busca los usuarios con edad entre 20 y 30
+db.usuarios.find({ "edad": { "$gte": 20, "$lte": 30 } })
+```
+
+5. **Integración con Aplicaciones Modernas**  
+MongoDB se integra bien con aplicaciones web y móviles gracias a su modelo basado en JSON, que es el formato de datos utilizado en la mayoría de las aplicaciones modernas.
+
+---
+
+## Ventajas de MongoDB
+- **Rapidez en el Desarrollo**: Al no requerir un esquema fijo, los desarrolladores pueden trabajar rápidamente y ajustar los modelos de datos sobre la marcha.  
+- **Adaptabilidad**: Ideal para aplicaciones con datos no estructurados o semi-estructurados.  
+- **Alto Rendimiento**: Optimizado para manejar grandes cantidades de datos con rapidez.  
+- **Escalabilidad Dinámica**: Permite crecer a medida que aumentan las necesidades del sistema.
+
+## Desventajas de MongoDB
+- **Consistencia Eventual**: A veces, en entornos distribuidos, se sacrifica la consistencia inmediata por la disponibilidad y la partición (modelo CAP).  
+- **Uso de Memoria**: MongoDB puede consumir más memoria que las bases de datos SQL, ya que almacena datos repetidos y no sigue estrictamente la normalización.  
+- **Menor Adecuación para Transacciones Complejas**: Aunque MongoDB ha mejorado su soporte para transacciones, no es tan robusto como las bases de datos relacionales en este aspecto.
+
+---
+
+## Modelo de almacenamiento de datos
+
+MongoDB almacena la información en **colecciones** y **documentos** en lugar de tablas, filas y columnas.
+
+1. **Base de Datos (Database):**  
+Es el nivel más alto de organización. Similar a una base de datos en SQL, una base de datos en MongoDB puede contener múltiples colecciones.
+
+2. **Colección (Collection):**  
+Una colección es el equivalente a una tabla en una base de datos relacional. Sin embargo, a diferencia de las tablas, las colecciones en MongoDB no requieren un esquema fijo. Esto significa que los documentos dentro de una misma colección pueden tener estructuras diferentes.
+
+3. **Documento (Document):**  
+Los documentos son el equivalente a filas en una tabla relacional. Sin embargo, en lugar de dividir los datos en columnas, se almacenan como objetos **JSON** o **BSON**. Un documento puede contener campos anidados y listas.  
+Por ejemplo:  
+```json
+{
+  "_id": 1,
+  "nombre": "Juan Pérez",
+  "correo": "juan@example.com",
+  "edad": 30,
+  "dirección": {
+    "calle": "Avenida Siempre Viva",
+    "ciudad": "Springfield"
+  },
+  "hobbies": ["fútbol", "lectura", "viajar"]
+}
+```
+- **_id**: Es el identificador único del documento (similar a una clave primaria).  
+- **nombre, correo, edad, dirección, hobbies**: Son campos que representan diferentes atributos del documento.  
+
+4. **Campo (Field):**  
+Cada par clave-valor dentro de un documento es un campo. Por ejemplo, "nombre": "Juan Pérez" es un campo. MongoDB permite que los campos tengan diferentes tipos de datos, como texto, números, listas, objetos anidados, etc.
+
+---
+
+### Ejemplo de Diferencia con SQL  
+Vamos a ver con un ejemplo práctico cómo MongoDB agrupa información en un solo documento, mientras que en SQL necesitarías varias tablas y un `JOIN` para obtener los mismos datos.
+
+**Escenario: Gestión de Pedidos de Clientes**  
+Imagina que tienes un sistema para gestionar pedidos de clientes. En SQL, la información se normaliza en varias tablas para evitar redundancia. En MongoDB, toda la información relacionada con un pedido puede almacenarse dentro de un solo documento.
+
+#### *Modelo en SQL (Uso de Múltiples Tablas)*
+
+**Tablas:**
+1. **Clientes:** Información personal del cliente.  
+2. **Pedidos:** Registra cada pedido hecho por los clientes.  
+3. **Detalles_Pedido:** Lista los productos de cada pedido.  
+4. **Productos:** Catálogo de productos disponibles.
+
+**Ejemplo de contenido:**
+
+Tabla `Clientes`  
+| id_cliente | nombre      | correo               |  
+|------------|-------------|----------------------|  
+| 1          | Juan Pérez  | juan@example.com     |  
+
+Tabla `Pedidos`
+| id_pedido | id_cliente | fecha        |  
+|-----------|------------|--------------|  
+| 101       | 1          | 2024-01-01   |  
+
+Tabla `Detalles_Pedido`
+| id_detalle | id_pedido | id_producto | cantidad |  
+|------------|-----------|-------------|----------|  
+| 1          | 101       | 2001        | 2        |  
+| 2          | 101       | 2002        | 1        |  
+
+Tabla `Productos`
+| id_producto | nombre_producto  | precio |  
+|-------------|------------------|--------|  
+| 2001        | Portátil           | 1000   |  
+| 2002        | Teclado          | 50     |  
+
+
+#### **Consulta SQL con JOINs:**
+Si queremos obtener la información completa de los pedidos realizados por el cliente Juan Pérez:
+```sql
+SELECT c.nombre, p.id_pedido, p.fecha, d.cantidad, pr.nombre_producto
+FROM Clientes c
+JOIN Pedidos p ON c.id_cliente = p.id_cliente
+JOIN Detalles_Pedido d ON p.id_pedido = d.id_pedido
+JOIN Productos pr ON d.id_producto = pr.id_producto
+WHERE c.nombre = 'Juan Pérez';
+```
+---
+
+#### *Modelo en MongoDB*
+
+En MongoDB, la misma información se almacena en un **único documento** dentro de una colección llamada `pedidos`. No es necesario dividir los datos en múltiples colecciones ni hacer `JOINs`.
+
+**Documento MongoDB (Colección `pedidos`):**
+```json
+{
+  "_id": 101,
+  "cliente": {
+    "id_cliente": 1,
+    "nombre": "Juan Pérez",
+    "correo": "juan@example.com"
+  },
+  "fecha": "2024-01-01",
+  "productos": [
+    {
+      "id_producto": 2001,
+      "nombre_producto": "Portátil",
+      "cantidad": 2,
+      "precio": 1000
+    },
+    {
+      "id_producto": 2002,
+      "nombre_producto": "Teclado",
+      "cantidad": 1,
+      "precio": 50
+    }
+  ]
+}
+```
+
+#### **Consulta MongoDB (MQL):**
+La misma consulta que realizábamos antes se quedaría en:
+```json
+db.pedidos.find({ "cliente.nombre": "Juan Pérez" })
+```
+
+---
+
+#### Diferencias Clave:
+
+| Característica                        | SQL (Modelo Relacional)                              | MongoDB (Modelo de Documentos)                       |  
+|--------------------------------------|-----------------------------------------------------|-----------------------------------------------------|  
+| **Estructura**                        | Múltiples tablas **normalizadas**                   | Un solo documento anidado                            |  
+| **Consultas**                         | Necesita `JOIN` entre tablas                        | Consulta simple sin `JOIN`                           |   
+| **Velocidad de Lectura**              | Más lento (por `JOINs`)                             | Más rápido (datos en un solo lugar)                  |  
+| **Flexibilidad del Esquema**          | Estricto (esquema fijo)                             | Flexible (puede cambiar de un documento a otro)      |  
+| **Actualización de Datos**            | Modificación en múltiples tablas                    | Modificación en un solo documento                    |  
+
+:::warning ATENCIÓN
+ La estructura mostrada en MongoDB puede que no sea la más adecuada, aunque dependenderá del caso de uso y de la aplicación que estemos desarrollando. Ten en cuenta que estamos perdiendo la **normalización** y produciendo una **redundancia de datos**, es decir, la información del cliente y los productos está duplicada en muchos documentos. 
+ 
+ Si mañana el cliente Juan Pérez cambia su correo, habría que modificar todos los pedidos que haya realizado. Lo mismo sucedería si el producto Teclado tuviese que cambiar de precio: habría que actualizar todos los pedidos en los que esté. Por este motivo, también es importe un **buen diseño de la base de datos**.
+:::
+
+
+### Cómo Manejar la Redundancia 
+Si deseas evitar redundancia, puedes usar una colección separada para los clientes y almacenar solo una referencia al `id_cliente` en los documentos de `pedidos`. Esto emula una relación de claves foráneas similar a SQL.
+
+**Colección `clientes`:**
+```json
+{
+  "_id": 1,
+  "nombre": "Juan Pérez",
+  "correo": "juan@example.com"
+}
+```
+
+**Colección `pedidos`:**
+```json
+{
+  "_id": 102,
+  "id_cliente": 1,
+  "fecha": "2024-02-01",
+  "productos": [
+    {
+      "id_producto": 2003,
+      "nombre_producto": "Mouse",
+      "cantidad": 1,
+      "precio": 25
+    },
+    {
+      "id_producto": 2004,
+      "nombre_producto": "Monitor",
+      "cantidad": 1,
+      "precio": 200
+    }
+  ]
+}
+```
+
+En este caso, para obtener información completa del cliente y su pedido, necesitarías hacer una **consulta manual** para combinar los datos de ambas colecciones, pero reduces la redundancia.
+
+<Tabs>
+  <TabItem value="consulta" label="Consulta" default>
+    ```json
+    db.clientes.aggregate([
+  {
+    "$lookup": {
+      "from": "pedidos",         // Colección que se une
+      "localField": "_id",       // Campo en la colección "clientes"
+      "foreignField": "id_cliente", // Campo relacionado en "pedidos"
+      "as": "pedidos"            // Nombre del campo resultante que contendrá los pedidos
+    }
+  },
+  {
+    "$match": { "nombre": "Juan Pérez" } // Filtrar por el cliente deseado
+  },
+  {
+    "$project": {
+      "nombre": 1,
+      "pedidos": 1               // Seleccionar sólo los campos necesarios
+    }
+  }
+])
+    ```
+  </TabItem>
+  <TabItem value="resultado" label="Resultado">
+    ```json
+      [
+  {
+    "_id": 1,
+    "nombre": "Juan Pérez",
+    "pedidos": [
+      {
+        "_id": 102,
+        "id_cliente": 1,
+        "fecha": "2024-02-01",
+        "productos": [
+          {
+            "id_producto": 2003,
+            "nombre_producto": "Mouse",
+            "cantidad": 1,
+            "precio": 25
+          },
+          {
+            "id_producto": 2004,
+            "nombre_producto": "Monitor",
+            "cantidad": 1,
+            "precio": 200
+          }
+        ]
+      }
+    ]
+  }
+]
+
+    ```
+  </TabItem>
+</Tabs>
+
+### Conclusión
+La decisión de incluir toda la información en un documento (desnormalización) o separarla en colecciones relacionadas depende del caso de uso específico. Si las lecturas rápidas son clave y la redundancia es aceptable, usa documentos completos. Si la consistencia y la integridad son importantes, considera dividir los datos en varias colecciones.
+
+</div>
