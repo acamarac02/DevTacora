@@ -321,7 +321,13 @@ Películas que **no** tienen el campo `plot`:
 db.movies.find({ "plot": { "$exists": false } })
 ```
 
-#### **10. Resumen de Comandos**
+#### **10. Buscar Documentos con Substring**
+Películas que contiene el texto "Jurassic Park" en el campo `título`:
+```javascript
+db.movies.find({ "title": { "$regex": "Jurassic Park" } })
+```
+
+#### **11. Resumen de Comandos**
 | Operador/Función        | Uso                                         | Ejemplo                                  |
 |-------------------------|---------------------------------------------|------------------------------------------|
 | `$eq`                   | Igual a                                     | `{ "year": { "$eq": 1903 } }`           |
@@ -331,25 +337,216 @@ db.movies.find({ "plot": { "$exists": false } })
 | `sort()`, `limit()`, `skip()` | Ordenar, limitar y paginar resultados    | `sort({ "year": -1 })`                  |
 | Proyección              | Incluir/excluir campos en resultados        | `{ "title": 1, "_id": 0 }`              |
 
+:::info CAMPOS DE FECHAS
+En MongoDB, las fechas se almacenan usando el tipo de dato `Date`, que representa una marca de tiempo (timestamp). Este tipo se basa en el estándar de fechas de JavaScript, donde las fechas se manejan como el número de milisegundos desde el 1 de enero de 1970 (UTC).
+
+**Insertar Documentos con Fechas**
+
+Para insertar un fecha puedes utilizar la función ISODate(), indicando por parámetro la fecha que quieres, en el formato yyyy-MM-dd.
+```javascript
+db.miColeccion.insertOne({
+  "dateCreated": ISODate("2003-03-26")
+})
+```
+
+También puedes usar la función Date() para insertar la fecha actual:
+```javascript
+db.miColeccion.insertOne({ 
+  "dateCreated": new Date() 
+})
+```
+
+**Consultas con Fechas**
+
+Puedes realizar consultas directamente sobre este campo utilizando operadores como `$gte`, `$lte`, `$gt`, `$lt`, etc.
+
+Ejemplo: Buscar documentos con fecha después del 1 de enero de 2000:
+```javascript
+db.miColeccion.find({
+  "dateCreated": { "$gte": ISODate("2000-01-01") }
+})
+```
+
+Ejemplo: Buscar documentos exactamente con la fecha `"2003-03-26"`:
+```javascript
+db.miColeccion.find({
+  "dateCreated": ISODate("2003-03-26")
+})
+```
+
+::: 
+
+---
 
 ### Actualizar Documentos
-Puedes actualizar uno o más documentos con `updateOne` y `updateMany`.
+Puedes actualizar uno o más documentos con `updateOne` y `updateMany`. La diferencia clave entre ambos es que:
 
-**Actualizar un Documento:**
+1. **`updateOne`**: Aplica las actualizaciones solo al **primer documento** que coincida con el filtro.
+2. **`updateMany`**: Aplica las actualizaciones a **todos los documentos** que coincidan con el filtro.
+
+Ambos utilizan la misma sintaxis para el filtro y las operaciones de actualización (como `$set`, `$unset`, `$push`, etc.).
+
+#### **1. Sintaxis General**
+
+**updateOne**
 ```javascript
-db.miColeccion.updateOne(
-  { nombre: "Juan Pérez" }, 
-  { $set: { edad: 35 } }
+db.<colección>.updateOne(
+  <filtro>,          // Condición para buscar un documento
+  <actualización>,   // Operaciones para actualizar el documento
+  <opciones>         // Opcional: Configuración como upsert
 )
 ```
 
-**Actualizar Varios Documentos:**
+**updateMany**
 ```javascript
-db.miColeccion.updateMany(
-  { edad: { $lt: 30 } }, 
-  { $set: { activo: true } }
+db.<colección>.updateMany(
+  <filtro>,          // Condición para buscar los documentos
+  <actualización>,   // Operaciones para actualizar los documentos
+  <opciones>         // Opcional: Configuración como upsert
 )
 ```
+
+#### **2. Operaciones Básicas**
+
+**Actualizar un Documento con `updateOne`**
+Modifica el primer documento que coincida con el filtro.
+
+**Ejemplo:**
+Actualizar el año de lanzamiento de la película `"The Great Train Robbery"`:
+```javascript
+db.movies.updateOne(
+  { "title": "The Great Train Robbery" }, 
+  { "$set": { "year": 1904 } }
+)
+```
+
+**Actualizar Múltiples Documentos con `updateMany`**
+Actualiza todos los documentos que coincidan con el filtro.
+
+**Ejemplo:**
+Cambiar la calificación a `"PG"` para todas las películas lanzadas antes de 1950:
+```javascript
+db.movies.updateMany(
+  { "year": { "$lt": 1950 } }, 
+  { "$set": { "rated": "PG" } }
+)
+```
+
+#### **3. Operaciones Comunes**
+
+**Operador `$set`**
+Modifica o agrega un campo al documento.
+
+**Ejemplo:**
+Añadir o actualizar el campo `director`:
+```javascript
+db.movies.updateOne(
+  { "title": "The Great Train Robbery" },
+  { "$set": { "director": "Edwin S. Porter" } }
+)
+```
+
+**Operador `$unset`**
+Elimina un campo de un documento.
+
+**Ejemplo:**
+Eliminar el campo `poster` de una película:
+```javascript
+db.movies.updateOne(
+  { "title": "The Great Train Robbery" },
+  { "$unset": { "poster": "" } }
+)
+```
+
+**Operador `$inc`**
+Incrementa o decrementa un valor numérico.
+
+**Ejemplo:**
+Incrementar en 100 los votos de IMDb:
+```javascript
+db.movies.updateOne(
+  { "title": "The Great Train Robbery" },
+  { "$inc": { "imdb.votes": 100 } }
+)
+```
+
+#### **Operador `$rename`**
+Renombra un campo.
+
+**Ejemplo:**
+Renombrar el campo `director` a `directors`:
+```javascript
+db.movies.updateOne(
+  { "title": "The Great Train Robbery" },
+  { "$rename": { "director": "directors" } }
+)
+```
+
+
+#### **4. Trabajando con Arrays**
+
+**Operador `$addToSet`**
+Añade un elemento a un array si no existe.
+
+**Ejemplo:**
+Añadir `"Adventure"` al campo `genres` solo si no está presente:
+```javascript
+db.movies.updateOne(
+  { "title": "The Great Train Robbery" },
+  { "$addToSet": { "genres": "Adventure" } }
+)
+```
+
+**Operador `$push`**
+Añade un elemento a un array (permitiendo duplicados).
+
+**Ejemplo:**
+Añadir `"Thriller"` al campo `genres`:
+```javascript
+db.movies.updateOne(
+  { "title": "The Great Train Robbery" },
+  { "$push": { "genres": "Thriller" } }
+)
+```
+
+**Operador `$pull`**
+Elimina elementos específicos de un array.
+
+**Ejemplo:**
+Eliminar `"Western"` del campo `genres`:
+```javascript
+db.movies.updateMany(
+  { "genres": "Western" },
+  { "$pull": { "genres": "Western" } }
+)
+```
+
+#### 5. Opción `upsert` (Insertar si no Existe)
+
+Con la opción `upsert: true`, MongoDB inserta un nuevo documento si no se encuentra ninguno que coincida con el filtro.
+
+**Ejemplo:**
+Si no existe una película con el título `"New Movie"`, se crea con los valores proporcionados:
+```javascript
+db.movies.updateOne(
+  { "title": "New Movie" },
+  { "$set": { "year": 2023, "rated": "PG" } },
+  { "upsert": true }
+)
+```
+
+#### **7. Resumen de Operadores Comunes de Actualización**
+| Operador    | Función                                   |
+|-------------|------------------------------------------|
+| `$set`      | Modifica o agrega un campo.              |
+| `$unset`    | Elimina un campo.                       |
+| `$inc`      | Incrementa o decrementa un valor numérico.|
+| `$rename`   | Cambia el nombre de un campo.           |
+| `$push`     | Añade un elemento al final de un array. |
+| `$addToSet` | Añade un elemento si no existe en el array.|
+| `$pull`     | Elimina elementos específicos de un array.|
+
+---
 
 ### Eliminar Documentos
 Usa `deleteOne` o `deleteMany` para eliminar documentos.
@@ -369,6 +566,8 @@ db.miColeccion.deleteMany({ edad: { $lt: 25 } })
 db.miColeccion.deleteMany({})
 ```
 
+--- 
+
 ### Eliminar una Colección
 Para eliminar una colección completa:
 ```javascript
@@ -383,6 +582,7 @@ Elimina la base de datos seleccionada:
 db.dropDatabase()
 ```
 
+---
 
 ### Otros Comandos Útiles
 
@@ -391,7 +591,11 @@ db.dropDatabase()
 db.miColeccion.countDocuments()
 ```
 
+---
+
 ## Ejercicios
+
+### Ejercicio 1
 Realiza las siguientes consultas en `mongosh` sobre la base de datos `sample_mflix`.
 
 1. Encuentra todas las películas dirigidas por "Edwin S. Porter".
@@ -423,5 +627,60 @@ Realiza las siguientes consultas en `mongosh` sobre la base de datos `sample_mfl
 14. Muestra las películas que tienen al menos un género, pero no tienen director asignado.
 
 15. Busca películas donde alguno de los géneros sea "Action" y tenga a "Bruce Willis" como actor.
+
+### Ejercicio 2
+
+Desde la terminal `mongosh`:
+
+1. Crea una base de datos llamada `universidad`.
+
+2. Dentro de la base de datos, crea una colección llamada `cursos`.
+
+3. Inserta al menos **3 documentos** en la colección `cursos`. Utiliza las dos funciones de inserción. Cada documento debe contener los siguientes datos:
+     - Nombre, duración en meses y código del curso.
+     - Lista de estudiantes matriculados en el curso. De cada estudiante conocemos su nombre y nacionalidad. Ten en cuenta que algunos estudiantes pueden tener más de una nacionalidad.
+     - Información del profesor del curso: nombre, correo y especialidad.
+     - La fecha en que el curso fue implantado.
+     - Calificación promedio del curso.
+
+4. Muestra solo los cursos con calificación promedio superior a 4.6:
+
+5. Mostrar los nombres de los cursos y el nombre del profesor a cargo:
+
+6. Agregar a todos los documentos un campo llamado `requisitos`, que será un array con los valores "Matemáticas Básicas" y "Lógica".
+
+7. Matricula al estudiante Francisco Fernández con nacionalidad estadounidense y española en el curso "Introducción a la programación". Puedes cambiar ese nombre por cualquiera de los que tu hayas insertado.
+
+8. Elimina "Lógica" del campo `requisitos` para el curso "Introducción a la programación". Puedes cambiar ese nombre por cualquiera de los que tu hayas insertado.
+
+9. Elimina los cursos que tienen una duración superior a 9 meses.
+
+10. Elimina la base de datos.
+
+### Ejercicio 3
+
+Utiliza la base de datos de prueba `sample_airbnb` para resolver las siguientes consultas. Puedes descargar esta base de datos seleccionando la opción "Load Sample Dataset":
+
+![Descarga bases de datos ejemplo](../img/atlas-descarga-sample-dataset.png) 
+
+1. Encuentra todos los alojamientos que están en Portugal.
+
+2. Muestra los nombres y precios de los alojamientos cuyo precio por noche sea menor a $100.
+
+3. Encuentra alojamientos que permiten fumar (`"Smoking allowed"`) y tienen más de 3 habitaciones.
+
+4. Filtra alojamientos que tienen más de 50 reseñas y un puntaje de limpieza (`review_scores_cleanliness`) mayor o igual a 9.
+
+5. Encuentra alojamientos que ofrecen al menos las siguientes comodidades: "Wifi", "Kitchen" y "Heating".
+
+6. Busca alojamientos que puedan alojar a 6 o más personas pero cobran más de $300 por noche.
+
+7. Filtra alojamientos que tengan reseñas con la palabra "location" en los comentarios.
+
+8. Encuentra alojamientos con un depósito de seguridad mayor a $200 pero sin tarifa de limpieza.
+
+9. Muestra los nombres y ubicaciones exactas de alojamientos con coordenadas que están dentro de Brasil.
+
+10. Ordena los alojamientos por calificación general (`review_scores_rating`) en orden descendente y muestra solo los 5 mejores.
 
 </div>
