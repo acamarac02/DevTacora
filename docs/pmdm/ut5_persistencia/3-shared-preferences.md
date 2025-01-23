@@ -79,6 +79,42 @@ editor.apply();
 - **Float** → `putFloat("clave", 5.5f)`  
 - **Long** → `putLong("clave", System.currentTimeMillis())`  
 
+### Buenas prácticas
+
+Para centralizar la gestión de las preferencias es recomendable crear una clase que encapsule su lógica, utilizando constantes para las claves y métodos que establezcan los valores de cada clave y los devuelvan:
+
+```java title="SharedPreferencesHelper.java"
+public class SharedPreferencesHelper {
+
+    private SharedPreferences sharedPreferences;
+
+    private static final String PREFS_NAME = "prefs";
+    private static final String KEY_PRIMER_INGRESO = "primer_ingreso";
+
+    public SharedPreferencesHelper(Context context) {
+        sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+    }
+
+    public void guardarPrimerIngreso(boolean primerIngreso) {
+        sharedPreferences.edit().putBoolean(KEY_PRIMER_INGRESO, primerIngreso).apply();
+    }
+    
+    public boolean obtenerPrimerIngreso() {
+        // Si no existe en el almacenamiento, consideramos que es el primer ingreso
+        return sharedPreferences.getBoolean(KEY_PRIMER_INGRESO, true);
+    }
+
+}
+```
+
+Su uso sería similar al siguiente:
+
+```java
+SharedPreferencesHelper helper = new SharedPreferencesHelper(this);
+boolean isPrimerIngreso = helper.obtenerPrimerIngreso();
+helper.guardarPrimerIngreso(false);
+```
+
 ---
 
 ## AlertDialog
@@ -129,7 +165,7 @@ En este tutorial vamos ampliar la aplicación anterior, de modo que si es la pri
 - **Mostrar un Popup de bienvenida** (`AlertDialog`) si es la primera vez.  
 - **Actualizar `SharedPreferences`** para que no se vuelva a mostrar el Popup.  
 
-Como queremos que se muestre nada más iniciar la aplicación, podemos incluir este código en la `MainActivity`.
+Como queremos que se muestre nada más iniciar la aplicación, podemos incluir este código en la `MainActivity`. Ten en cuenta que estamos utilizando la clase `SharedPreferencesHelper` creada en el apartado de Buenas prácticas.
 
 ```java title="MainActivity.java"
 public class MainActivity extends AppCompatActivity {
@@ -137,33 +173,34 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREFERENCIAS = "prefs";
     private static final String PRIMER_INGRESO = "primer_ingreso";
 
+    private SharedPreferencesHelper helper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Obtener SharedPreferences
-        SharedPreferences preferences = getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
+        // Inicializamos la clase helper
+        helper = new SharedPreferencesHelper(this);
+
         // Recuperar la clave "primer_ingreso"
         // La primera vez que ingresemos esa clave no existirá y por eso la ponemos a true por defecto
-        boolean esPrimeraVez = preferences.getBoolean(PRIMER_INGRESO, true);
+        boolean esPrimeraVez = helper.obtenerPrimerIngreso();
 
         if (esPrimeraVez) {
-            mostrarPopupBienvenida(preferences);
+            mostrarPopupBienvenida();
         }
     }
 
-    private void mostrarPopupBienvenida(SharedPreferences preferences) {
+    private void mostrarPopupBienvenida() {
         new AlertDialog.Builder(this)
                 .setTitle("¡Bienvenido!")
                 .setMessage("Gracias por instalar nuestra aplicación. ¡Esperamos que te guste!")
-                .setPositiveButton("Entendido", (dialog, which) -> { // Indicamos qué hacer cuando se pulse el botón
+                .setPositiveButton("Entendido", (dialog, which) -> {
                     // Guardar que ya se mostró el Popup
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean(PRIMER_INGRESO, false);  // Marcar que ya se ha accedido
-                    editor.apply();  // Guardar los cambios
+                    helper.guardarPrimerIngreso(false);
 
-                    // Cerrar el PopUp
+                    // Cerramos el PopUp
                     dialog.dismiss();
                 })
                 .setCancelable(false)
