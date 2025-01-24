@@ -1,0 +1,1087 @@
+---
+sidebar_position: 4
+sidebar_label: Conexión desde Java
+title: Conexión desde Java
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<div class="justify-text">
+
+En este apartado vamos a conectar con nuestra base de datos MongoDB (desplegada en Atlas) desde Java, usando `Maven` como gestor de dependencias. Ten en cuenta que MongoDB ofrece **dos formas de trabajo**:
+
+- **Trabajar directamente con documentos JSON** (clase `Document`)
+- **Mapear los documentos JSON en POJOs** (Plan Old Java Object)
+
+Por sencillez, nosotros optaremos por la última opción.
+
+## Configuración del proyecto
+
+**1. Crea un nuevo proyecto en IntelliJ y selecciona Maven como gestor de depencias.**
+
+**2. Configura Maven**
+1. Abre tu archivo `pom.xml` y añade la dependencia para el controlador de MongoDB.
+   ```xml
+   <dependencies>
+       <dependency>
+           <groupId>org.mongodb</groupId>
+           <artifactId>mongodb-driver-sync</artifactId>
+           <version>5.3.0</version> <!-- Verifica la versión más reciente en Maven Central -->
+       </dependency>
+   </dependencies>
+   ```
+
+2. Guarda el archivo `pom.xml` y sincroniza para que se descarguen las dependencias.
+
+**3. Obtén la cadena de conexión**
+
+1. Ve a [MongoDB Atlas] y añade tu nueva base de datos o reutiliza una de las que ya tengas creada.
+2. Obtén la cadena de conexión:
+   - Haz clic en el botón **Connect** del clúster.
+   - Selecciona **Drivers**.
+   - Selecciona Java como lenguaje de programación.
+   - Copia la cadena de conexión proporcionada. Por ejemplo:
+     ```
+     mongodb+srv://<db_user>:<db_password>@<cluster>.mongodb.net/?retryWrites=true&w=majority&appName=ClusterADA
+     ```
+   - Recuerda reemplazar db_user, db_password y cluster por tu usuario, contraseña y nombre de tu clúster.
+   - Ten en cuenta que con esa cadena de conexión tienes acceso a cualquier base de datos de tu clúster. Deberás especificar una de ellas con un comando Java, similar a cuando ejecutábamos `use database` en `Mongosh`.
+
+**4. Establecer la conexión desde Java**
+
+1. La conexión con MongoDB se establece con las siguientes líneas:
+    ```java
+    // URI de conexión obtenida de MongoDB Atlas
+    String uri = "mongodb+srv://<db_user>:<db_password>@<cluster>.mongodb.net/?retryWrites=true&w=majority&appName=ClusterADA";
+
+    // Configurar el PojoCodecProvider para traducir automáticamente entre documentos BSON
+    // y clases Java personalizadas
+    CodecRegistry pojoCodecRegistry = fromRegistries(
+            MongoClientSettings.getDefaultCodecRegistry(),
+            fromProviders(PojoCodecProvider.builder().automatic(true).build())
+    );
+
+    // Creamos la configuración del cliente, especificando la URI de conexión
+    // y el traductor de BSON a Java
+    MongoClientSettings settings = MongoClientSettings.builder()
+            .applyConnectionString(new com.mongodb.ConnectionString(uri))
+            .codecRegistry(pojoCodecRegistry)
+            .build();
+
+    // Este cliente es el punto de entrada principal para interactuar con MongoDB.
+    // Una vez creado, puedes usarlo para obtener bases de datos y colecciones,
+    // realizar consultas, insertar datos, etc.
+    MongoClient mongoClient = MongoClients.create(settings);
+    ```
+
+:::info BUENAS PRÁCTICAS
+Ten en cuenta que la **cadena de conexión** no debería estar en el código Java, ya que en ella se encuentran datos sensibles como usuarios y contraseñas. En cambio, deberían utilizarse **ficheros properties** para almacenar dichos datos.
+:::
+
+2. Código de ejemplo para comprobar si hay conexión:
+    ```java title="Main.java"
+    public class Main {
+        public static void main(String[] args) {
+            // URI de conexión obtenida de MongoDB Atlas
+            String uri = "mongodb+srv://<db_user>:<db_password>@<cluster>.mongodb.net/?retryWrites=true&w=majority&appName=ClusterADA";
+
+            CodecRegistry pojoCodecRegistry = fromRegistries(
+                    MongoClientSettings.getDefaultCodecRegistry(),
+                    fromProviders(PojoCodecProvider.builder().automatic(true).build())
+            );
+
+            MongoClientSettings settings = MongoClientSettings.builder()
+                    .applyConnectionString(new com.mongodb.ConnectionString(uri))
+                    .codecRegistry(pojoCodecRegistry)
+                    .build();
+
+            MongoClient mongoClient = MongoClients.create(settings);
+
+            // Enviamos un ping para comprobar que hay conexión
+            MongoDatabase database = mongoClient.getDatabase("admin");
+            Document resultado = database.runCommand(new Document("ping", 1));
+            System.out.println("Resultado del ping: " + resultado.toJson());
+
+            // ¡¡¡ NO OLVIDES CERRAR LA CONEXIÓN !!!
+            mongoClient.close();
+        }
+    }
+    ```
+
+:::danger CUIDADO
+Es **altamente recomendable** usar un **try-with-resources** para gestionar la instancia de `MongoClient`. La razón principal es que `MongoClient` implementa la interfaz `Closeable`, lo que significa que tiene recursos subyacentes (como conexiones de red) que deben ser cerrados de forma explícita para evitar fugas de recursos.
+
+Cuando usas un **try-with-resources**, el cliente se cerrará automáticamente al final del bloque, incluso si ocurre una excepción, lo que garantiza que los recursos sean liberados correctamente.
+
+```java
+try (MongoClient mongoClient = MongoClients.create(settings)) {
+    MongoDatabase database = mongoClient.getDatabase("myDatabase");
+    // Realizar operaciones con la base de datos
+    System.out.println("Conexión exitosa a la base de datos: " + database.getName());
+}
+```
+
+No obstante, establecer una conexión a la base de datos cada vez que quieras realizar una operación puede ser costoso en términos de rendimiento, especialmente si las operaciones son frecuentes. Por ello, el mejor enfoque depende del caso de uso de la aplicación que se esté desarrollando:
+
+- Si estás creando un script o una aplicación pequeña que ejecuta una tarea específica y luego finaliza, puedes usar un `MongoClient` dentro de un bloque **try-with-resources** para garantizar que los recursos se liberen al terminar.
+
+- En una aplicación de larga duración (como un servidor backend), no es eficiente crear y cerrar una nueva instancia de `MongoClient` para cada operación. En lugar de eso:
+  - **Crea una instancia única de `MongoClient` al inicio de tu aplicación (singleton o mediante un patrón similar).**
+  - Usa esa misma instancia durante toda la vida de la aplicación.
+  - Asegúrate de cerrar el cliente solo cuando la aplicación se apague.
+
+**Ejemplo:**
+```java title="MongoDBRepository.java"
+public class MongoDBRepository {
+
+    private static MongoDBRepository instance;
+    private MongoClient mongoClient;
+
+    private MongoDBRepository() {
+        String uri = "mongodb+srv://root:root@clusterada.jkri7.mongodb.net/?retryWrites=true&w=majority&appName=ClusterADA";
+
+        CodecRegistry pojoCodecRegistry = fromRegistries(
+                MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build())
+        );
+
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new com.mongodb.ConnectionString(uri))
+                .codecRegistry(pojoCodecRegistry)
+                .build();
+
+        mongoClient = MongoClients.create(settings);
+    }
+
+    // Método para obtener el cliente
+    public static MongoDBRepository getInstance() {
+        if (instance == null) {
+            instance = new MongoDBRepository();
+        }
+        return instance;
+    }
+
+    // Método para cerrar el cliente al apagar la aplicación
+    public void closeMongoClient() {
+        if (mongoClient != null) {
+            mongoClient.close();
+        }
+    }
+}
+```
+:::
+
+## Mapeo de JSON a clases Java
+
+Supongamos que tu coleccion `empleados` almacena documentos con el siguiente formato:
+```json
+{
+  "_id": ObjectId('678153c134ea7483b01a4e62'),
+  "full_name": "John Doe",
+  "age": 30,
+  "address": {
+    "city": "New York",
+    "zipcode": "10001"
+  },
+  "skills": ["Java", "MongoDB", "REST APIs"]
+}
+```
+
+**1. Analizar la estructura del JSON**
+1. **Llaves principales (nivel superior):**
+   - `full_name`: Es un **String**.
+   - `age`: Es un **int**.
+   - `address`: Es un **objeto** que contiene otros valores.
+   - `skills`: Es un **array de Strings**.
+
+2. **Subestructura (objeto anidado):**
+   - `address` tiene:
+     - `city`: Es un **String**.
+     - `zipcode`: Es un **String** (podría ser un entero pero no se suelen realizar operaciones numéricas sobre códigos postales).
+
+**2. Crear las clases Java**
+Debes crear una clase para cada objeto o subestructura en el JSON. Las listas se implementarán como `List<TipoDato>`.
+
+#### **Clase Principal (`Person`)**
+```java
+public class Person {
+
+    private ObjectId id;
+    @BsonProperty(value = "full_name")
+    private String fullName;
+    private int age;
+    private Address address; // Objeto anidado
+    private List<String> skills; // Lista de Strings
+
+    // Getters y setters
+
+}
+```
+
+:::info
+- La clave principal `_id` es un objeto de tipo ObjectId en Java. 
+- Las clases siempre deben tener el constructor por defecto (además de todos los parametrizados que necesites).
+- La anotación `@BsonProperty(value = "full_name")` permite usar un nombre diferente entre el campo JSON y el atributo Java. En este caso, se utuliza para evitar violar las convenciones de nomenclatura de Java para variables, getters y setters. Le indicamos al mapeador que queremos que el campo "full_name" en JSON se mapee al campo "fullName" en Java. Para usar la anotación tendrás que añadir la siguiente dependencia:
+```xml
+<dependency>
+    <groupId>org.mongodb</groupId>
+    <artifactId>bson</artifactId>
+    <version>5.3.0</version>
+</dependency>
+```
+:::
+
+#### **Clase Secundaria (`Address`)**
+```java title="Address.java"
+public class Address {
+
+    private String city;
+    private String zipcode;
+
+    // Getters y setters
+
+}
+```
+
+:::info CAMPOS DE FECHAS
+Si defines un campo de tipo `LocalDate` en una clase Java que estás utilizando para interactuar con MongoDB, debes tener en cuenta algunos detalles sobre cómo se maneja este tipo de datos:
+
+- El tipo `LocalDate` es parte del paquete `java.time` y representa una fecha (sin hora) en el formato ISO-8601, como `2025-01-23`.
+- MongoDB no tiene un tipo de datos específico para `LocalDate`. En cambio, los valores de fecha y hora se almacenan como **`Date`** (tipo BSON) en la base de datos. Esto representa tanto la fecha como la hora en milisegundos desde el epoch (`1970-01-01T00:00:00Z`).
+- MongoDB intentará serializar y deserializar automáticamente los campos de tipo `LocalDate`. Sin embargo:
+    - **Al serializar (`LocalDate` → BSON):** Se convierte a una fecha BSON (`Date`) con la hora establecida en `00:00:00.000`.
+    - **Al deserializar (`BSON → LocalDate`):** La hora será ignorada, y solo se utilizará la parte de la fecha.
+
+Por tanto, usa `LocalDate` cuando necesites trabajar solo con fechas (sin horas) en tu lógica de negocio y si necesitas almacenar o trabajar con fechas y horas, utiliza `LocalDateTime`.
+:::
+
+## Operaciones CRUD
+
+### 1. Acceder a la BD y a la colección
+
+Antes de operar, es necesario indicar la base de datos con la que vamos a trabajar (similar a `use database`) y la colección.
+
+```java
+// Recuperamos la base de datos
+MongoDatabase database = mongoClient.getDatabase("empresa");
+
+// Recuperamos la colección, indicando que devuelve objetos de tipo Person
+MongoCollection<Person> collection = database.getCollection("empleados", Person.class);
+```
+
+### 2. Crear (Insertar documentos)
+
+1. Si solo queremos insertar un documento, usaremos el método `db.insertOne()`:
+    ```java 
+    Address direccion = new Address("Cáceres", "10004");
+        
+    List<String> skills = new ArrayList<>();
+    skills.add("Java");
+    skills.add("MongoDB");
+        
+    Person p = new Person("Pedro Pérez", 30, direccion, skills); 
+        
+    // Insertamos la persona
+    collection.insertOne(p);
+    ```
+
+2. Si necesitas insertar varios documentos a la vez, usaremos el método `db.insertMany()`:
+    ```java 
+    Address direccion1 = new Address("Madrid", "28001");
+    Address direccion2 = new Address("Barcelona", "08001");
+
+    List<String> skills1 = new ArrayList<>();
+    skills1.add("Java");
+    skills1.add("MongoDB");
+
+    List<String> skills2 = new ArrayList<>();
+    skills2.add("Python");
+    skills2.add("Data Analysis");
+
+    // Crear personas
+    Person p1 = new Person("María López", 28, direccion1, skills1);
+    Person p2 = new Person("Carlos García", 35, direccion2, skills2);
+
+    // Añadir personas a una lista
+    List<Person> listaPersonas = new ArrayList<>();
+    personas.add(p1);
+    personas.add(p2);
+
+    collection.insertMany(listaPersonas);
+    ```
+---
+
+### 3. Leer (Consultar documentos)
+
+Para recuperar los documentos utilizaremos el método `.find()`. Este método permite generar un `iterator`, que convierte los resultados de la consulta en un cursor (MongoCursor), que permite iterar sobre los documentos uno por uno.
+
+El cursor ofrece dos métodos:
+- `hasNext()`: Verifica si hay más documentos disponibles en el cursor.
+- `next()`: Recupera el siguiente documento del cursor y lo convierte en un objeto de tipo Person.
+
+```java
+MongoDatabase database = mongoClient.getDatabase("empresa");
+MongoCollection<Person> collection = database.getCollection("empleados", Person.class);
+
+// Leer documentos de MongoDB y convertirlos en POJOs
+// Aquí puedes añadirlos a otra lista o procesarlos como necesites...
+try (MongoCursor<Person> cursor = collection.find().iterator()) {
+    while (cursor.hasNext()) {
+        Person currentPerson = cursor.next();
+        System.out.println(currentPerson);
+    }
+} catch (MongoException me) {
+    System.err.println("Error al buscar empleados: " + me);
+}
+```
+
+Las consultas de MongoDB se convierten en objetos `Filters` proporcionados por la clase `com.mongodb.client.model.Filters`, es decir, las consultas que normalmente escribirías en el shell de MongoDB (en formato JSON) se traducen a métodos estáticos de la clase `Filters`. Esta clase ofrece una API que te permite construir consultas de forma sencilla y tipada.
+
+Algunos métodos comunes de `Filters` y su equivalente en MongoDB Shell son:
+
+| **Método en `Filters`**                | **Descripción**                                   | **Ejemplo MongoDB Shell**                     | **Ejemplo en Java**                           |
+|----------------------------------------|-------------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+| `eq(field, value)`                     | Filtro por igualdad                             | `{ "title": "Inception" }`                   | `eq("title", "Inception")`                   |
+| `ne(field, value)`                     | No igual                                        | `{ "title": { "$ne": "Inception" } }`        | `ne("title", "Inception")`                   |
+| `gt(field, value)`                     | Mayor que                                       | `{ "rating": { "$gt": 8.0 } }`               | `gt("rating", 8.0)`                          |
+| `lt(field, value)`                     | Menor que                                       | `{ "rating": { "$lt": 5.0 } }`               | `lt("rating", 5.0)`                          |
+| `gte(field, value)`                    | Mayor o igual que                               | `{ "rating": { "$gte": 7.0 } }`              | `gte("rating", 7.0)`                         |
+| `lte(field, value)`                    | Menor o igual que                               | `{ "rating": { "$lte": 9.0 } }`              | `lte("rating", 9.0)`                         |
+| `and(filter1, filter2, ...)`           | Combinar filtros con "y" lógico (`$and`)        | `{ "$and": [{...}, {...}] }`                 | `and(eq(...), gte(...))`                     |
+| `or(filter1, filter2, ...)`            | Combinar filtros con "o" lógico (`$or`)         | `{ "$or": [{...}, {...}] }`                  | `or(eq(...), lt(...))`                       |
+| `not(filter)`                          | Negar un filtro                                 | `{ "rating": { "$not": { "$gt": 7.0 } } }`   | `not(gt("rating", 7.0))`                     |
+| `exists(field, boolean)`               | Verificar si un campo existe o no               | `{ "awards": { "$exists": true } }`          | `exists("awards", true)`                     |
+| `regex(field, regexPattern)`           | Buscar coincidencias por expresión regular      | `{ "title": { "$regex": "Jurassic" } }`      | `regex("title", "Jurassic")`                 |
+
+
+Aquí está el contenido actualizado con el formato de **tabs** para cada apartado, utilizando `iterator` en vez de `forEach`.
+
+---
+
+**Filtros Básicos**
+
+#### **Filtrar por igualdad**
+Buscar empleados con el nombre completo `"Jane Smith"`:
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(eq("full_name", "Jane Smith"));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({ "full_name": "Jane Smith" })
+    ```
+  </TabItem>
+</Tabs>
+
+
+#### **Filtrar por múltiples campos**
+Buscar empleados que vivan en `"Los Angeles"` y tengan `25 años`:
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(and(eq("address.city", "Los Angeles"), eq("age", 25)));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({ "address.city": "Los Angeles", "age": 25 })
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+**Operadores de Comparación**
+
+Buscar los empleados mayores de 30 años:
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(gt("age", 30));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({ "age": { "$gt": 30 } })
+    ```
+  </TabItem>
+</Tabs>
+
+Buscar los empleados con edades entre 20 y 35 años:
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(and(gte("age", 20), lte("age", 35)));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({ "age": { "$gte": 20, "$lte": 35 } })
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+**Operadores Lógicos**
+
+Empleados con habilidades en `Python` o que vivan en `"Cáceres"`:
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(or(eq("skills", "Python"), eq("address.city", "Cáceres")));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({
+      "$or": [
+        { "skills": "Python" },
+        { "address.city": "Cáceres" }
+      ]
+    })
+    ```
+  </TabItem>
+</Tabs>
+
+Empleados que NO tienen más de 30 años:
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(not(gt("age", 30)));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({ "age": { "$not": { "$gt": 30 } } })
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+**Consultas con Arrays**
+
+Buscar empleados que tengan `"SQL"` en sus habilidades:
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(eq("skills", "SQL"));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({ "skills": "SQL" })
+    ```
+  </TabItem>
+</Tabs>
+
+Buscar empleados que tengan `Java` **y** `MongoDB` como habilidades:
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(all("skills", Arrays.asList("Java", "MongoDB")))
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({ "skills": { "$all": ["Java", "MongoDB"] } })
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+**Proyecciones**
+
+Recuperar solo los campos `full_name` y `age` de los empleados que vivan en `"Los Angeles"`:
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(eq("address.city", "Los Angeles"))
+                .projection(fields(include("full_name", "age"), excludeId()));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find(
+      { "address.city": "Los Angeles" },
+      { "full_name": 1, "age": 1, "_id": 0 }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+:::warning CUIDADO
+El resto de campos que  no se ha recuperado contendrán el **valor `null`**. Por este motivo es tan importante usar las **clases wrapper** (Integer, Double, etc.) en lugar de los tipos primitivos (int, double, ...) cuando **definimos el modelo**.
+:::
+
+Aquí tienes los apartados faltantes actualizados con el formato de **tabs** y utilizando `iterator` en lugar de `forEach` para recorrer los documentos.
+
+---
+
+**Ordenar Resultados**
+
+Ordenar empleados por edad en orden descendente:
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find().sort(new Document("age", -1));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find().sort({ "age": -1 })
+    ```
+  </TabItem>
+</Tabs>
+
+:::info INFO
+Si deseas ordenar por **dos campos** en MongoDB usando Java, puedes pasar un documento al método `sort()` que incluya los dos campos con sus respectivos órdenes.
+:::
+
+Ordenar empleados por edad en orden descendente y por nombre en caso de igualdad:
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find().sort(new Document("age", -1).append("full_name", 1))
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find().sort({ "age": -1, "full_name": 1 })
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+**Limitar y Saltar Resultados**
+
+Mostrar solo los primeros 3 empleados:
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find().limit(3);
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find().limit(3)
+    ```
+  </TabItem>
+</Tabs>
+
+Omitir los primeros 5 empleados:
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find().skip(5);
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find().skip(5)
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+**Buscar Documentos con Campos Existentes o Faltantes**
+
+Empleados que tienen el campo `address`:
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(exists("address", true));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({ "address": { "$exists": true } })
+    ```
+  </TabItem>
+</Tabs>
+
+Empleados que no tienen el campo `skills`:
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(exists("skills", false));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({ "skills": { "$exists": false } })
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+**Buscar Documentos con Substring**
+
+Empleados cuyo nombre contiene `"Jane"`:
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.find(regex("full_name", "Jane"));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({ "full_name": { "$regex": "Jane" } })
+    ```
+  </TabItem>
+</Tabs>
+
+
+---
+
+**Operador $in**
+
+Se utiliza para filtrar documentos que tienen un valor en un campo que coincide con uno de los valores en una lista especificada. Es equivalente a una cláusula "OR" en SQL, pero específica para comparar un campo contra varios valores posibles.
+
+Buscar empleados que vivan en `"Los Angeles"` o `"Cáceres"`:
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+    ```java
+    collection.find(in("address.city", "Los Angeles", "Cáceres")).iterator();
+    ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.empleados.find({ "address.city": { $in: ["Los Angeles", "Cáceres"] } })
+    ```
+  </TabItem>
+</Tabs>
+
+
+:::info NOTAS IMPORTANTES
+1. **Comparación de arrays:**
+   - Si el campo es un array, `$in` verifica si alguno de los valores en el array coincide con los valores de la lista.
+   - Ejemplo:
+     ```javascript
+     db.empleados.find({ "skills": { $in: ["Python", "SQL"] } })
+     ```
+     Esto coincide si el array `"skills"` contiene `"Python"` o `"SQL"`.
+
+2. **Comparación exacta:**
+   - Si el campo no es un array, `$in` compara directamente el valor del campo con los valores de la lista.
+
+3. **Escalabilidad:**
+   - `$in` es útil para realizar comparaciones múltiples en una sola consulta, reduciendo la necesidad de múltiples condiciones `or`.
+:::
+
+---
+
+### 4. Actualizar (Modificar documentos)
+
+Para actualizar documentos puedes utilizar la función `updateOne()` para actualizar el primer documento que cumpla con el filtro indicado o `updateMany` para actualizar todos los que cumplan el filtro.
+
+```java
+MongoDatabase database = mongoClient.getDatabase("empresa");
+MongoCollection<Person> collection = database.getCollection("empleados", Person.class);
+
+UpdateResult result = collection.updateOne(eq("full_name", "Jane Smith"), set("age", 40));
+System.out.println("Se han actualizado " + result.getModifiedCount() + " documentos.");
+```
+
+---
+
+**Operaciones básicas**
+
+**Operador $set**:
+Modifica o agrega un campo al documento.
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.updateOne(eq("title", "The Great Train Robbery"), set("director", "Edwin S. Porter"));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.movies.updateOne(
+      { "title": "The Great Train Robbery" },
+      { "$set": { "director": "Edwin S. Porter" } }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+
+**Operador $unset**:
+Elimina un campo de un documento.
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.updateOne(eq("title", "The Great Train Robbery"), unset("poster"));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.movies.updateOne(
+      { "title": "The Great Train Robbery" },
+      { "$unset": { "poster": "" } }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+
+**Operador $inc**:
+Incrementa o decrementa un valor numérico.
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.updateOne(eq("title", "The Great Train Robbery"), inc("imdb.votes", 100));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.movies.updateOne(
+      { "title": "The Great Train Robbery" },
+      { "$inc": { "imdb.votes": 100 } }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+
+**Operador $rename**:
+Renombra un campo.
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.updateOne(eq("title", "The Great Train Robbery"), rename("director", "directors"));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.movies.updateOne(
+      { "title": "The Great Train Robbery" },
+      { "$rename": { "director": "directors" } }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+**Trabajando con Arrays**
+
+**Operador $addToSet**:
+Añade un elemento a un array si no existe.
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.updateOne(eq("title", "The Great Train Robbery"), addToSet("genres", "Adventure"));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.movies.updateOne(
+      { "title": "The Great Train Robbery" },
+      { "$addToSet": { "genres": "Adventure" } }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+
+**Operador $push**:
+Añade un elemento a un array (permitiendo duplicados).
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.updateOne(eq("title", "The Great Train Robbery"), push("genres", "Thriller"));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.movies.updateOne(
+      { "title": "The Great Train Robbery" },
+      { "$push": { "genres": "Thriller" } }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+
+**Operador $pull**:
+Elimina elementos específicos de un array.
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.updateMany(eq("genres", "Western"), pull("genres", "Western"));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.movies.updateMany(
+      { "genres": "Western" },
+      { "$pull": { "genres": "Western" } }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+**Opción upsert**
+
+Con la opción `upsert: true`, se inserta un nuevo documento si no existe uno que coincida con el filtro.
+
+<Tabs>
+  <TabItem value="java" label="Java" default>
+        ```java
+        collection.updateOne(eq("title", "New Movie"),
+            set("year", 2023).append("rated", "PG"),
+            new UpdateOptions().upsert(true));
+        ```
+  </TabItem>
+  <TabItem value="mongosh" label="Mongosh">
+    ```javascript
+    db.movies.updateOne(
+      { "title": "New Movie" },
+      { "$set": { "year": 2023, "rated": "PG" } },
+      { "upsert": true }
+    )
+    ```
+  </TabItem>
+</Tabs>
+
+:::info actualización de múltiples campos
+Si vas a actualizar varios campos a la vez tendrás que usar `.append()` para concatenarlos, como en el ejemplo anterior.
+:::
+
+---
+
+
+### 5. Eliminar (Borrar documentos)
+
+Siguiendo la misma lógica que con las actualizaciones, usaremos `updateOne` para eliminar el primer documento que cumpla el filtro establecido y `updateMany` para eliminar todos.
+
+```java
+MongoDatabase database = mongoClient.getDatabase("empresa");
+MongoCollection<Person> collection = database.getCollection("empleados", Person.class);
+
+DeleteResult result = collection.deleteMany(gt("age", 50));
+System.out.println("Se han eliminado " + result.getDeletedCount() + " documentos.");
+```
+
+---
+
+## Ejemplo completo
+
+Vamos a utilizar la base de datos `empresa`, que contiene la colección `empleados`. Partimos de las clases de mapeo `Person` y `Address` creadas anteriormente. Vamos a implementar las clases:
+
+- `EmpleadosRepository`: inicializa la conexión con la base de datos mediante un Singleton e incluye las operaciones sobre la colección `empleados`.
+- `EmpleadoFlieds`: clase de constantes para evitar errores relacionados con la repetición y escritura incorrecta de los nombres de los campos en las consultas (como "full_name", "age", etc.).
+- `Main` como punto principal del programa.
+
+Puedes descargar el JSON con los empleados [aquí](../files/empresa.json).
+
+```java title="database.EmpleadoFields.java"
+public final class EmpleadoFields {
+
+    public static final String DATABASE_NAME = "empresa";
+    public static final String EMPLEADOS_COLLECTION_NAME = "empleados";
+
+    public static final String FULL_NAME = "full_name";
+    public static final String AGE = "age";
+    public static final String ADDRESS = "address";
+    public static final String ADDRESS_CITY = ADDRESS + ".city";
+    public static final String ZIPCODE = "address.zipcode";
+    public static final String SKILLS = "skills";
+
+}
+```
+
+```java title="database.EmpleadosRepository.java"
+import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoException;
+import com.mongodb.client.*;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
+import org.example.model.Person;
+
+import java.util.List;
+
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.gt;
+import static com.mongodb.client.model.Projections.*;
+import static com.mongodb.client.model.Updates.set;
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
+public class EmpleadosRepository {
+
+    private static EmpleadosRepository instance;
+    private MongoClient mongoClient;
+    MongoCollection<Person> collection;
+
+    private EmpleadosRepository() {
+        // MALA PRÁCTICA: sacar datos sensibles a un fichero .properties
+        String uri = "mongodb+srv://<db_user>:<db_pass>@<cluster>.mongodb.net/?retryWrites=true&w=majority&appName=ClusterADA";
+
+        CodecRegistry pojoCodecRegistry = fromRegistries(
+                MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build())
+        );
+
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new com.mongodb.ConnectionString(uri))
+                .codecRegistry(pojoCodecRegistry)
+                .build();
+
+        mongoClient = MongoClients.create(settings);
+
+        // Recuperamos la base de datos
+        MongoDatabase database = mongoClient.getDatabase(EmpleadoFields.DATABASE_NAME);
+
+        // Recuperamos la colección, indicando que devuelve objetos de tipo Person
+        collection = database.getCollection(EmpleadoFields.EMPLEADOS_COLLECTION_NAME, Person.class);
+    }
+
+    public static EmpleadosRepository getInstance() {
+        if (instance == null) {
+            instance = new EmpleadosRepository();
+        }
+        return instance;
+    }
+
+    public void mostrarPersonas() {
+        // Leer documentos de MongoDB y convertirlos en POJOs
+        // Aquí puedes añadirlos a otra lista o procesarlos como necesites...
+        try (MongoCursor<Person> cursor = collection.find().iterator()) {
+            while (cursor.hasNext()) {
+                Person currentPerson = cursor.next();
+                System.out.println(currentPerson);
+            }
+        } catch (MongoException me) {
+            System.err.println("Error al buscar empleados: " + me);
+        }
+    }
+
+    public void mostrarPersonasConProyeccion() {
+        FindIterable<Person> query = collection.find(eq(EmpleadoFields.ADDRESS_CITY, "Los Angeles"))
+                .projection(fields(include(EmpleadoFields.FULL_NAME, EmpleadoFields.AGE), excludeId()));
+
+        try (MongoCursor<Person> cursor = query.iterator()) {
+            while (cursor.hasNext()) {
+                Person currentPerson = cursor.next();
+                System.out.println(currentPerson);
+            }
+        } catch (MongoException me) {
+            System.err.println("Error al buscar empleados: " + me);
+        }
+    }
+
+
+    public void insertarPersona(Person persona) {
+        collection.insertOne(persona);
+    }
+
+    public void insertarPersonas(List<Person> personas) {
+        collection.insertMany(personas);
+    }
+
+    // Actualiza la edad de la persona cuyo nombre coincide con el indicado por parámetro
+    public void actualizarPersona(String nombre, int edad) {
+        UpdateResult result = collection.updateOne(
+                eq(EmpleadoFields.FULL_NAME, nombre),
+                set(EmpleadoFields.AGE, edad)
+        );
+        System.out.println("Se han actualizado " + result.getModifiedCount() + " documentos.");
+    }
+
+
+    // Elimina las personas mayores de la edad indicada
+    public void eliminarPersonasPorEdad(int edad) {
+        DeleteResult result = collection.deleteMany(gt(EmpleadoFields.AGE, edad));
+        System.out.println("Se han eliminado " + result.getDeletedCount() + " documentos.");
+    }
+
+    // Método para cerrar el cliente al apagar la aplicación
+    public void closeMongoClient() {
+        if (mongoClient != null) {
+            mongoClient.close();
+        }
+    }
+}
+```
+
+```java title="Main.java"
+public class Main {
+
+    private static Person crearPersona() {
+        Address direccion = new Address("Cáceres", "10004");
+
+        List<String> skills = new ArrayList<>();
+        skills.add("Java");
+        skills.add("MongoDB");
+
+        return new Person("Pedro Pérez", 30, direccion, skills);
+    }
+
+    public static void main(String[] args) {
+        // Insertamos una persona
+        Person persona = crearPersona();
+        EmpleadosRepository.getInstance().insertarPersona(persona);
+
+        // Mostramos todas las personas
+        EmpleadosRepository.getInstance().mostrarPersonas();
+
+        // Eliminamos los mayores de 50
+        EmpleadosRepository.getInstance().eliminarPersonasPorEdad(50);
+
+        // Actualizamos la edad de Jane Smith
+        EmpleadosRepository.getInstance().actualizarPersona("Jane Smith", 20);
+
+        // Cerramos la conexión
+        EmpleadosRepository.getInstance().closeMongoClient();
+    }
+}
+```
+
+## Ejercicio
+
+Una librería necesita almacenar en MongoDB la información sobre los libros disponibles:
+- De cada libro conocemos su título, autor, géneros (puede tener uno o varios), precio, stock y fecha de publicación.
+- De cada autor conocemos su nombre y nacionalidad.
+ 
+Deberás desarrollar un programa Java que permita realizar las siguientes operaciones:
+1. Crear nuevos libros y almacenarlos en la base de datos.
+2. Listar todos los libros disponibles.
+3. Buscar libros según el género.
+4. Buscar los libros publicados antes de la fecha que diga el usuario.
+5. Buscar los libros ordenador por precio de forma ascendente. Ante igual precio se debe ordenar por fecha de publicación.
+6. Actualizar el precio del libro/libros cuyo nombre coincida con el indicado por el usuario.
+7. Eliminar libros que ya no están disponibles (no hay stock).
+
+
+</div>
