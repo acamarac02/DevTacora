@@ -1,0 +1,44 @@
+[
+  {
+    _id: ObjectId('67922a52bb8ef3b15abe2a22'),
+    full_name: 'Jane Smith',
+    age: 25,
+    address: { city: 'Los Angeles', zipcode: '90001' },
+    skills: [ 'Python', 'SQL', 'Data Analysis' ]
+  },
+  {
+    _id: ObjectId('67922a5fbb8ef3b15abe2a23'),
+    full_name: 'Michael Johnson',
+    age: 40,
+    address: { city: 'Chicago', zipcode: '60601' },
+    skills: [ 'C#', 'Azure', 'Cloud Computing' ]
+  },
+  {
+    _id: ObjectId('67922a6abb8ef3b15abe2a24'),
+    full_name: 'Emily Davis',
+    age: 35,
+    address: { city: 'Austin', zipcode: '73301' },
+    skills: [ 'JavaScript', 'React', 'Node.js' ]
+  },
+  {
+    _id: ObjectId('67922a75bb8ef3b15abe2a25'),
+    full_name: 'Christopher Brown',
+    age: 28,
+    address: { city: 'San Francisco', zipcode: '94105' },
+    skills: [ 'Kotlin', 'Android Development', 'UI/UX Design' ]
+  },
+  {
+    _id: ObjectId('67922a7ebb8ef3b15abe2a26'),
+    full_name: 'Sophia Wilson',
+    age: 32,
+    address: { city: 'Seattle', zipcode: '98101' },
+    skills: [ 'Go', 'Microservices', 'DevOps' ]
+  },
+  {
+    _id: ObjectId('67922b11bb8ef3b15abe2a27'),
+    full_name: 'John Doe',
+    age: 30,
+    address: { city: 'New York', zipcode: '10001' },
+    skills: [ 'Java', 'MongoDB', 'REST APIs' ]
+  }
+]
