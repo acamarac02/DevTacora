@@ -451,7 +451,6 @@ Define las colecciones que debemos crear y haz un ejemplo de documento JSON para
 
 Puedes descargar el enunciado en este [enlace](../files/Ejercicio%20relaciones.%20Misiones.pdf).
 
-<div class="hidden-summary"> 
 ### Solución
 
 **Análisis inicial:**
@@ -529,10 +528,188 @@ Si la opción 8 se va a ejecutar con poca frecuencia, podemos hacer la relación
 }
 ```
 
-</div>
 
 ## Ejercicio 2: Stardam Valley (v2)
 
 Realiza el mismo proceso que en el ejercicio anterior para la base de datos de Stardam Valley v2.
 
+## Ejercicio 3: Gestión de Pedidos de una Tienda
+
+La tienda de sofás **"Tapizados Ágora"** necesita diseñar una base de datos NoSQL para gestionar la información relacionada con su catálogo de productos, clientes, pedidos y entregas.
+
+#### Información a gestionar
+La empresa necesita almacenar los siguientes datos:
+
+1. De los **Clientes** conocemos:
+   - Identificador único del cliente.
+   - Nombre y apellidos.
+   - Correo electrónico.
+   - Dirección(es) (pueden tener múltiples direcciones, por ejemplo, casa y oficina). De cada dirección conocemos código postal, calle y número.
+
+2. **Sofás (Productos):**
+   - Nombre del modelo (e.g., "Sofá Relax 3000").
+   - Descripción (e.g., "Un sofá reclinable con tapizado de cuero").
+   - Precio.
+   - Stock disponible.
+
+3. Por cada **Pedido** que realicen los clientes almacenaremos:
+   - Fecha del pedido.
+   - Productos solicitados (cantidad, modelo).
+   - Precio total del pedido.
+   - Estado del pedido (pendiente, en preparación, enviado, entregado).
+   - Dirección de entrega asociada al cliente.
+
+4. Por último, almacenaremos los estados de las **entregas** de los pedidos:
+   - Fecha estimada de entrega.
+   - Transportista asignado.
+   - Estado de la entrega (pendiente, en tránsito, entregado).
+
+
+#### Casos de uso
+
+La aplicación Java que vamos a desarrollar ofrecerá las siguientes opciones:
+
+1. **Consulta del catálogo de productos:**
+   - Mostrar a los clientes los modelos de sofás disponibles, su descripción, precios, y stock.
+   - Permitirá búsquedas por nombre, tapiz o rango de precios.
+
+2. **Gestión de pedidos:**
+   - Al crear un pedido, se debe guardar la información del cliente, los productos seleccionados, la cantidad solicitada y el total del pedido. También se iniciará la entrega en estado pendiente.
+   - Permitir consultar el estado del pedido en cualquier momento.
+
+3. **Consulta del historial de pedidos del cliente:**
+   - Mostrar todos los pedidos realizados por un cliente, con los detalles de cada pedido (fecha, sofás comprados, precio de cada sofá, total). También se deberá mostrar el nombre, correo y direcciones del cliente.
+
+4. **Seguimiento de entregas:**
+   - Consultar la fecha estimada de entrega y el estado del envío de un pedido.
+   - Registrar actualizaciones sobre el estado de una entrega.
+
+5. **Control del stock:**
+   - Reducir automáticamente el stock de los productos al registrar un pedido.
+   - Mostrar los sofás con bajo stock para reposición.
+
+6. **Gestión de precios:**
+  - Modificar el precio de los productos.
+
+#### Tareas a realizar
+
+Diseña la base de datos utilizando un enfoque NoSQL y justificando si se usarán documentos embebidos, referencias o colecciones intermedias para cada tipo de relación. Crea un fichero JSON de ejemplo para cada colección que crees.
+
+<div class="hidden-summary">
+
+#### Solución
+
+**Entidades**: Cliente, Dirección, Pedido, Producto y Entrega.
+
+**Relaciones**: 
+  - Cliente - (1:N) - Dirección
+  - Cliente - (1:N) - Pedido
+  - Pedido - (N:M) - Producto
+  - Pedido - (1:1) - Entrega
+
+**Entidades principales**: Pedido y Producto. (La mayoría de operaciones se realizan sobre estas dos entidades)
+
+Comenzamos a valorar las relaciones:
+
+**Cliente - (1:N) - Dirección**:
+1. **¿Los datos relacionados son independientes?** Si **no**, usa embebido.
+
+2. **¿Cuántos datos relacionados hay?** Si **pocos**, usa embebido. (Se entiende que una persona no tendrá más de 5 direcciones)
+
+3. **¿Qué tan frecuentemente se consultan juntos?** Si **siempre**, usa embebido.
+
+4. **¿Los datos cambian frecuentemente?** Si **no**, usa embebido.
+
+5. **¿Los datos son reutilizables por otros documentos?** Si **sí**, usa referenciado.
+
+Conclusión: **EMBEBIDO**.
+
+**Cliente - (1:N) - Pedido**:
+1. **¿Los datos relacionados son independientes?** Si **sí**, usa referenciado.
+
+2. **¿Cuántos datos relacionados hay?** Si **muchos**, usa referenciado.
+
+3. **¿Qué tan frecuentemente se consultan juntos?** Si **a veces**, usa referenciado.
+
+4. **¿Los datos cambian frecuentemente?** Si **sí**, usa embebido. (No será con frecuencia pero un usuario puede actualizar su correo, dirección... Nos interesa independencia)
+
+5. **¿Los datos son reutilizables por otros documentos?** Si **no**, usa embebido.
+
+Conclusión: **REFERENCIADO**. ¿Bidireccional o unidireccional?
+- ¿El cliente necesita saber sus pedidos? Caso de uso 3
+- ¿El pedido necesita conocer el cliente que lo ha realizado? Igual que en SQL, la entidad N es la que debería tener la referencia de la entidad 1.
+Se puede hacer bidireccional o guardar solo en el pedido el id del cliente.
+
+**Pedido - (N:M) - Producto**:
+1. **¿Los datos relacionados son independientes?** Si **sí**, usa referenciado.
+
+2. **¿Cuántos datos relacionados hay?** Si **muchos**, usa referenciado.
+
+3. **¿Qué tan frecuentemente se consultan juntos?** Si **a veces**, usa referenciado.
+
+4. **¿Los datos cambian frecuentemente?** Si **sí**, usa referenciado. (Se puede actualizar stock, precio...)
+
+5. **¿Los datos son reutilizables por otros documentos?** Si **no**, usa embebido.
+
+Conclusión: **REFERENCIADO**. No tiene sentido que sea bidireccional. El pedido contendrá la lista de productos elegidos.
+
+**Pedido - (1:1) - Entrega**:
+1. **¿Los datos relacionados son independientes?** Si **no**, usa embebido.
+
+2. **¿Cuántos datos relacionados hay?** Si **pocos**, usa embebido.
+
+3. **¿Qué tan frecuentemente se consultan juntos?** Si **a veces**, usa referenciado.
+
+4. **¿Los datos cambian frecuentemente?** Si **sí**, usa referenciado.
+
+5. **¿Los datos son reutilizables por otros documentos?** Si **no**, usa embebido.
+
+Conclusión: **EMBEBIDO**
+
+```json title="Colección Cliente"
+{
+  "_id": "c1",
+  "nombre": "Juan Pérez",
+  "correo": "juan@example.com",
+  "direcciones": [
+    { "codigoPostal": "28001", "calle": "Calle Mayor", "numero": 5 },
+    { "codigoPostal": "28002", "calle": "Avenida Sol", "numero": 12 }
+  ]
+}
+```
+
+```json title="Colección Pedido"
+{
+  "_id": "p1",
+  "fecha": "2023-01-15",
+  "cliente_id": "c1",
+  "direccion_entrega": { "codigoPostal": "28001", "calle": "Calle Mayor", "numero": 5 },
+  "productos": [
+    { "producto_id": "s1", "cantidad": 2, "precio": 300 },
+    { "producto_id": "s2", "cantidad": 1, "precio": 500 }
+  ],
+  "precioTotal": 800.0,
+  "estado": "pendiente",
+  "entrega": {
+    "fechaEstimada": "2023-01-20",
+    "transportista": "DHL",
+    "estado": "pendiente"
+  }
+}
+```
+
+:::info
+En la colección pedido se ha vuelto a incluir la **dirección** del cliente porque, a futuro, el cliente puede cambiar su dirección pero el pedido ya se entregó. También se ha incluido el **precio de cada producto** por el mismo motivo, porque los productos pueden cambiar de precio con el tiempo pero nos interesa saber cuánto le costó al cliente.
+:::
+
+```json title="Colección Catálogo"
+{
+  "_id": "s1",
+  "nombre": "Sofá Relax 3000",
+  "descripcion": "Un sofá reclinable con tapizado de cuero",
+  "precio": 400.0,
+  "stock": 10
+}
+```
+</div>
 </div>
