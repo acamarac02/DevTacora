@@ -144,7 +144,7 @@ Técnicamente, **se podría modelar al Arma como colección principal y guardar 
 - Este diseño se vuelve complejo y poco práctico cuando el Personaje necesita gestionar múltiples relaciones con otras entidades (como habilidades, debilidades, etc.)
 :::
 
-### 2.2. Relación 1:N (Uno a Muchos)
+### 2.2. Relación 1\:N (Uno a Muchos)
 Para modelar la relación **1:N (Uno a Muchos)** entre **Personaje** y **Habilidad** en MongoDB (donde un **Personaje** tiene una habilidad, pero una habilidad puede ser compartida por múltiples personajes), y **siendo Personaje la entidad principal**, se pueden utilizar las siguientes estrategias:
 
 #### Opciones de Modelado
@@ -178,7 +178,7 @@ Para modelar la relación **1:N (Uno a Muchos)** entre **Personaje** y **Habilid
    ```json title="Colección Personajes"
    {
      "_id": 1,
-     "nombre": "Juan Pérez",
+     "nombre": "Caballero oscuro",
      "arma_id": 101,
      "habilidad_id": 201
    }
@@ -273,7 +273,7 @@ En este modelo, cada documento de **Habilidad** incluye un array de IDs de los p
 
 :::
 
-### 2.3. Relación N:M (Muchos a Muchos)
+### 2.3. Relación N\:M (Muchos a Muchos)
 Para modelar la relación **N:M (Muchos a Muchos)** entre **Personaje** y **Debilidad** (donde un **Personaje** puede tener múltiples debilidades y cada **Debilidad** puede estar asociada a múltiples personajes), y considerando que **Personaje** es la entidad principal, podemos usar varios enfoques en MongoDB:
 
 #### Opciones de Modelado
@@ -327,7 +327,7 @@ En este modelo, cada documento de **Personaje** contiene un array de IDs que ref
 }
 ```
 
-```json title="Colección Habilidades"
+```json title="Colección Debilidades"
 {
   "_id": 301,
   "nombre": "Fobia al fuego",
@@ -442,8 +442,8 @@ Este modelo utiliza una colección intermedia para representar la relación **N:
    - Si **sí**, usa referenciado.
    - Si **no**, usa embebido.
 
-
-## Ejercicio 1: Misiones
+## Ejercicios
+### Ejercicio 1: Misiones
 
 Partiendo del ejercicio Misiones que realizamos en el tema anterior, determina el diseño de la base de datos si utilizaramos MongoDB en vez de MySQL. Justifica las decisiones que has tomado en cuanto a las relaciones, teniendo en cuenta las normas descritas anteriormente y los casos de uso de nuestro programa.
 
@@ -451,7 +451,7 @@ Define las colecciones que debemos crear y haz un ejemplo de documento JSON para
 
 Puedes descargar el enunciado en este [enlace](../files/Ejercicio%20relaciones.%20Misiones.pdf).
 
-### Solución
+#### Solución
 
 **Análisis inicial:**
 - La mayoría de casos de uso están centrados en las Misiones (3 - 7). Esta será la entidad principal.
@@ -529,11 +529,11 @@ Si la opción 8 se va a ejecutar con poca frecuencia, podemos hacer la relación
 ```
 
 
-## Ejercicio 2: Stardam Valley (v2)
+### Ejercicio 2: Stardam Valley (v2)
 
 Realiza el mismo proceso que en el ejercicio anterior para la base de datos de Stardam Valley v2.
 
-## Ejercicio 3: Gestión de Pedidos de una Tienda
+### Ejercicio 3: Gestión de Pedidos de una Tienda
 
 La tienda de sofás **"Tapizados Ágora"** necesita diseñar una base de datos NoSQL para gestionar la información relacionada con su catálogo de productos, clientes, pedidos y entregas.
 
@@ -712,4 +712,5 @@ En la colección pedido se ha vuelto a incluir la **dirección** del cliente por
 }
 ```
 </div>
+
 </div>
