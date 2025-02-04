@@ -42,6 +42,10 @@
   text-align: justify;
 }
 
+.texto-sin-justificar {
+  text-align: left;
+}
+
 .hidden-summary {
   display: none;
 }
@@ -51,7 +55,8 @@ img[alt="UT5. Insertar animal con imagen"],
 img[alt="UT5. Eliminar animal al deslizar"],
 img[alt="UT5. Seleccion favoritos"],
 img[alt="UT5. PopUp de Bienvenida"],
-img[alt="UT5. GIF resumen de la aplicación"] {
+img[alt="UT5. GIF resumen de la aplicación"],
+img[alt="Auth en el panel"] {
   height: 500px;
   width: auto;
   display: block;
