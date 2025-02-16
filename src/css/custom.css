@@ -56,7 +56,9 @@ img[alt="UT5. Eliminar animal al deslizar"],
 img[alt="UT5. Seleccion favoritos"],
 img[alt="UT5. PopUp de Bienvenida"],
 img[alt="UT5. GIF resumen de la aplicación"],
-img[alt="Auth en el panel"] {
+img[alt="Auth en el panel"],
+img[alt="Iniciar Firestore"],
+img[alt="Ubicación Firestore"] {
   height: 500px;
   width: auto;
   display: block;
