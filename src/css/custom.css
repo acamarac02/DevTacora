@@ -58,7 +58,13 @@ img[alt="UT5. PopUp de Bienvenida"],
 img[alt="UT5. GIF resumen de la aplicación"],
 img[alt="Auth en el panel"],
 img[alt="Iniciar Firestore"],
-img[alt="Ubicación Firestore"] {
+img[alt="Ubicación Firestore"],
+img[alt="Nueva organización"],
+img[alt="URL proyecto"],
+img[alt="Panel Storage"],
+img[alt="Creación bucket"],
+img[alt="Política acceso"],
+img[alt="Política todos permisos"] {
   height: 500px;
   width: auto;
   display: block;
