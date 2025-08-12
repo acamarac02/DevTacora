@@ -4,7 +4,7 @@
 // There are various equivalent ways to declare your Docusaurus config.
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
-import {themes as prismThemes} from 'prism-react-renderer';
+import { themes as prismThemes } from 'prism-react-renderer';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -86,7 +86,7 @@ const config = {
             label: 'PMDM',
           },
           {
-            to: '/docs/licencia', 
+            to: '/docs/licencia',
             label: 'Licencia',
             position: 'right',
           },
@@ -122,15 +122,15 @@ const config = {
         additionalLanguages: ['java', 'groovy', 'bash']
       },
     }),
-    plugins: [
-      [
-        '@docusaurus/plugin-google-gtag',
-        {
-          trackingID: 'G-7WCKN9ZY1F',  
-          anonymizeIP: true, 
-        },
-      ],
-    ],
+  plugins: [
+    [
+      '@docusaurus/plugin-google-gtag',
+      {
+        trackingID: 'G-7WCKN9ZY1F',
+        anonymizeIP: true,
+      },
+    ]
+  ],
 };
 
 export default config;
