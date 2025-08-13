@@ -97,8 +97,8 @@ const config = {
           },
         ],
       },
-      footer: {
-        style: 'dark',
+      /*footer: {
+        style: 'light',
         copyright: `
         <div style="position: relative; text-align: center;">
       <div>
@@ -115,7 +115,7 @@ const config = {
       </div>
     </div>
       `,
-      },
+      },*/
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
