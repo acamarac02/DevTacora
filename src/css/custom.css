@@ -11,6 +11,70 @@
 /* Paleta: https://coolors.co/50587c-f9dec9-7597d1-e9afa3-685044*/
 /* You can override the default Infima variables here. */
 :root {
+  /* Fondo navbar */
+  --ifm-navbar-background-color: #ffffff;
+
+  /* Fondo general (bg-gray-50) */
+  --ifm-header-background-color: #f9fafb; /* gray-50 */
+
+  /* Fondo tarjetas, hero (bg-white) */
+  --ifm-card-background-color: #ffffff;
+
+  /* Fondo codigo módulo(bg-gray-50) */
+  --ifm-code-background-color: #f9fafb;
+
+  /* Gradiente claro: from-blue-50 via-indigo-50 to-purple-50 */
+  --color-hero-gradient-from: #eff6ff; /* blue-50 */
+  --color-hero-gradient-via: #eef2ff;  /* indigo-50 */
+  --color-hero-gradient-to: #f5f3ff;   /* purple-50 */
+
+  /* Textos principales */
+  --color-text-title: #111827;   /* text-gray-900 */
+  --color-text-description: #4b5563; /* text-gray-600 */
+  --color-text-secondary: #6b7280;   /* text-gray-500 */
+
+  /* Hover en modo claro (text-gray-700) */
+  --color-text-hover: #374151;
+
+  /* Gradiente línea curso */
+  --color-line-gradient-start: #e5e7eb; /* gray-200 */
+  --color-line-gradient-end: transparent;
+
+  /* Valores por defecto (sin hover) */
+  --opacity-hover-light: 0.05;
+  --opacity-hover-dark: 0.05;
+
+   /* Curso actual */
+  --bg-current-course: #d1fae5; /* green-100 */
+  --text-current-course: #047857; /* green-700 */
+
+  /* Curso completado */
+  --bg-completed-course: #f3f4f6; /* gray-100 */
+  --text-completed-course: #4b5563; /* gray-600 */
+
+  /* Primarios */
+  --color-blue-start: #3b82f6; /* Tailwind blue-500 */
+  --color-blue-end: #06b6d4;   /* Tailwind cyan-500 */
+
+  --color-green-start: #22c55e; /* green-500 */
+  --color-green-end: #10b981;   /* emerald-500 */
+
+  --color-purple-start: #8b5cf6; /* purple-500 */
+  --color-pink-end: #ec4899;     /* pink-500 */
+
+  --color-orange-start: #f97316; /* orange-500 */
+  --color-red-end: #ef4444;      /* red-500 */
+
+  --color-indigo-start: #6366f1; /* indigo-500 */
+  --color-purple-end: #8b5cf6;   /* purple-500 */
+
+  /* Fondo y texto */
+  --color-bg-light: #f9fafb;  /* gray-50 */
+  --color-text-light: #111827; /* gray-900 */
+
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+/*:root {
   --ifm-color-primary: #3963ab;
   --ifm-color-primary-dark: #33599a;
   --ifm-color-primary-darker: #305491;
@@ -28,10 +92,108 @@
   --ifm-color-secondary-light: #ffe6d8;
   --ifm-color-secondary-lighter: #fff3ed;
   --ifm-color-secondary-lightest: #ffffff;
+}*/
+
+[data-theme='dark'] {
+  /* Fondo navbar */
+  --ifm-navbar-background-color: #1f2937;
+  
+  /* Cambios para modo oscuro */
+  /* Fondo general (dark:bg-gray-900) */
+  --ifm-header-background-color: #111827; /* gray-900 */
+
+  /* Fondo tarjetas, hero (dark:bg-gray-800) */
+  --ifm-card-background-color: #1f2937; /* gray-800 */
+
+  /* Fondo codigo módulo(bg-gray-700) */
+  --ifm-code-background-color: #374151;
+
+  /* Gradiente oscuro: from-gray-900 via-gray-800 to-gray-700 */
+  --color-hero-gradient-from: #111827; /* gray-900 */
+  --color-hero-gradient-via: #1f2937;  /* gray-800 */
+  --color-hero-gradient-to: #374151;   /* gray-700 */
+
+   /* Textos principales en oscuro */
+  --color-text-title: #f3f4f6;      /* text-gray-100 */
+  --color-text-description: #d1d5db; /* text-gray-300 */
+  --color-text-secondary: #9ca3af;   /* text-gray-400 */
+
+  /* Hover en modo oscuro (text-gray-300) */
+  --color-text-hover: #d1d5db;
+
+  /* Gradiente línea curso */
+  --color-line-gradient-start: #4b5563; /* gray-600 */
+  --color-line-gradient-end: transparent;
+
+  /* Modo oscuro */
+  --opacity-hover-dark: 0.10;
+
+  /* Curso actual */
+  --bg-current-course: #064e3b; /* green-900 */
+  --text-current-course: #86efac; /* green-300 */
+
+  /* Curso completado */
+  --bg-completed-course: #374151; /* gray-700 */
+  --text-completed-course: #d1d5db; /* gray-300 */
+
+  --color-blue-start: #2563eb; /* blue-600 */
+  --color-blue-end: #0891b2;   /* cyan-600 */
+
+  --color-green-start: #16a34a; /* green-600 */
+  --color-green-end: #059669;   /* emerald-600 */
+
+  --color-purple-start: #7c3aed; /* purple-600 */
+  --color-pink-end: #db2777;     /* pink-600 */
+
+  --color-orange-start: #ea580c; /* orange-600 */
+  --color-red-end: #dc2626;      /* red-600 */
+
+  --color-indigo-start: #4f46e5; /* indigo-600 */
+  --color-purple-end: #7c3aed;   /* purple-600 */
+
+  --color-bg-light: #111827;     /* gray-900 */
+  --color-text-light: #f9fafb;   /* gray-50 */
+}
+
+/* Clase reutilizable */
+.bg-gradient-to-r-gray {
+  background-image: linear-gradient(to right, var(--color-line-gradient-start), var(--color-line-gradient-end));
+}
+
+/* Simulación de group-hover para un elemento hijo */
+.group:hover .group-hover-opacity {
+  opacity: var(--opacity-hover-light);
+}
+
+[data-theme='dark'] .group:hover .group-hover-opacity {
+  opacity: var(--opacity-hover-dark);
+}
+
+/* Clases utilitarias para JSX */
+.current-course {
+  background-color: var(--bg-current-course);
+  color: var(--text-current-course);
+}
+
+.completed-course {
+  background-color: var(--bg-completed-course);
+  color: var(--text-completed-course);
+}
+
+/* Navbar claro */
+.navbar {
+  background-color: #ffffff; /* bg-white */
+  border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+}
+
+/* Navbar oscuro */
+[data-theme='dark'] .navbar {
+  background-color: #1f2937; /* bg-gray-800 */
+  border-bottom: 1px solid #374151; /* border-gray-700 */
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
+/*[data-theme='dark'] {
   --ifm-color-primary: #25c2a0;
   --ifm-color-primary-dark: #21af90;
   --ifm-color-primary-darker: #1fa588;
@@ -40,7 +202,7 @@
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-}
+}*/
 
 .justify-text {
   text-align: justify;

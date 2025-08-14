@@ -67,7 +67,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'DevTácora',
+        title: 'DevTacora',
         logo: {
           alt: 'My Site Logo',
           src: 'img/Logo_IES_Agora.png',
@@ -97,25 +97,29 @@ const config = {
           },
         ],
       },
-      /*footer: {
-        style: 'light',
+      footer: {
+        style: 'dark',
         copyright: `
-        <div style="position: relative; text-align: center;">
-      <div>
-        Copyright © ${new Date().getFullYear()} Alicia Cámara Casares.<br />
-        El contenido de esta página está bajo licencia 
-        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank">CC BY-NC-SA 4.0</a>. 
-        Todos los derechos reservados.
+        <section className="bg-white border-t border-gray-100">
+      <div className="max-w-4xl mx-auto px-6 py-16 text-center">
+        <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          Construyendo conocimiento, línea por línea
+        </h3>
+        <p className="text-gray-600 leading-relaxed">
+          © ${new Date().getFullYear()} Alicia Cámara Casares - Contenido bajo licencia${' '}
+              <a 
+                href="https://creativecommons.org/licenses/by-nc-sa/4.0/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-700 underline"
+              >
+                CC BY-NC-SA 4.0
+              </a>.
+        </p>
       </div>
-      <div style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">
-        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank">
-          <img src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png"
-               alt="Licencia Creative Commons BY-NC-SA" />
-        </a>
-      </div>
-    </div>
+    </section>
       `,
-      },*/
+      },
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
