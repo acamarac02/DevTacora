@@ -10,7 +10,7 @@ import { themes as prismThemes } from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'DevTácora',
+  title: 'DevTacora',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -70,7 +70,7 @@ const config = {
         title: 'DevTacora',
         logo: {
           alt: 'My Site Logo',
-          src: 'img/Logo_IES_Agora.png',
+          src: 'img/devtacora_logo.png',
         },
         items: [
           {
