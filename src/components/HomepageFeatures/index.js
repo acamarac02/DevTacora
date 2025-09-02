@@ -60,7 +60,7 @@ const AcademicTimeline = ({ academicData }) => {
                 <div className="flex items-center space-x-4">
                   <h2 className="text-3xl font-bold [color:var(--color-text-title)]">{yearData.year}</h2>
                   <span
-                    className={`px-4 py-2 rounded-full text-sm font-medium ${yearData.label === 'Curso Actual'
+                    className={`px-4 py-2 rounded-full text-sm font-medium -translate-y-[5.5px] ${yearData.label === 'Curso Actual'
                         ? 'current-course'
                         : 'completed-course'
                       }`}
@@ -99,23 +99,15 @@ export default function Home() {
           code: 'CEIABD',
           icon: <Brain className="w-7 h-7" />,
           gradient: 'from-purple-500 to-pink-500',
-          description: 'Algoritmos de ML, redes neuronales y procesamiento de datos',
-          link: `${siteConfig.baseUrl}docs/ada/`
+          description: 'Algoritmos de ML, redes neuronales y procesamiento de datos con Python',
+          link: `${siteConfig.baseUrl}docs/pia/`
         },
         {
-          name: 'Programación',
-          code: '1ºDAM',
-          icon: <Code2 className="w-7 h-7" />,
-          gradient: 'from-[var(--color-blue-start)] to-[var(--color-blue-end)]',
-          description: 'Fundamentos de programación y estructuras de datos',
-          link: `${siteConfig.baseUrl}docs/ada/`
-        },
-        {
-          name: 'PMDM',
+          name: 'Programación Multimedia y Dispositivos Móviles',
           code: '2ºDAM',
           icon: <Smartphone className="w-7 h-7" />,
           gradient: 'from-green-500 to-emerald-500',
-          description: 'Desarrollo de aplicaciones móviles multiplataforma',
+          description: 'Desarrollo de aplicaciones móviles Android con Java y Android Studio',
           link: `${siteConfig.baseUrl}docs/ada/`
         },
       ],
@@ -130,15 +122,15 @@ export default function Home() {
           icon: <Database className="w-7 h-7" />,
           gradient: 'from-indigo-500 to-purple-500',
           description: 'Persistencia, ORM y gestión de bases de datos',
-          link: `${siteConfig.baseUrl}docs/ada/`
+          link: `${siteConfig.baseUrl}docs/category/ut5-acceso-a-bases-de-datos-nosql`
         },
         {
           name: 'Programación Multimedia y Dispositivos Móviles',
           code: '2ºDAM',
-          icon: <Layers className="w-7 h-7" />,
-          gradient: 'from-orange-500 to-red-500',
-          description: 'Interfaces multimedia y desarrollo móvil avanzado',
-          link: `${siteConfig.baseUrl}docs/pmdm/`
+          icon: <Smartphone className="w-7 h-7" />,
+          gradient: 'from-green-500 to-emerald-500',
+          description: 'Desarrollo de aplicaciones móviles Android con Java y Android Studio',
+          link: `${siteConfig.baseUrl}mantenimiento`
         },
       ],
     },

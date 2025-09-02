@@ -75,15 +75,21 @@ const config = {
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'adaSidebar',
+            sidebarId: 'ada_2425_Sidebar',
             position: 'left',
             label: 'ADA',
           },
           {
             type: 'docSidebar',
-            sidebarId: 'pmdmSidebar',
+            sidebarId: 'pmdm_2425_Sidebar',
             position: 'left',
             label: 'PMDM',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'pia_2526_Sidebar',
+            position: 'left',
+            label: 'PIA',
           },
           {
             to: '/docs/licencia',
