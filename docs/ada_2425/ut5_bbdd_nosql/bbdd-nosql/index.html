@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="es" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-ada_2425/ut5_bbdd_nosql/bbdd-nosql" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.6.3">
+<title data-rh="true">Bases de datos NoSQL | DevTacora</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://acamarac02.github.io/DevTacora/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://acamarac02.github.io/DevTacora/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://acamarac02.github.io/DevTacora/docs/ada_2425/ut5_bbdd_nosql/bbdd-nosql"><meta data-rh="true" property="og:locale" content="es"><meta data-rh="true" name="docusaurus_locale" content="es"><meta data-rh="true" name="docsearch:language" content="es"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Bases de datos NoSQL | DevTacora"><meta data-rh="true" name="description" content="Características, uso y tipos de bases de datos NoSQL."><meta data-rh="true" property="og:description" content="Características, uso y tipos de bases de datos NoSQL."><link data-rh="true" rel="icon" href="/DevTacora/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://acamarac02.github.io/DevTacora/docs/ada_2425/ut5_bbdd_nosql/bbdd-nosql"><link data-rh="true" rel="alternate" href="https://acamarac02.github.io/DevTacora/docs/ada_2425/ut5_bbdd_nosql/bbdd-nosql" hreflang="es"><link data-rh="true" rel="alternate" href="https://acamarac02.github.io/DevTacora/docs/ada_2425/ut5_bbdd_nosql/bbdd-nosql" hreflang="x-default"><link rel="alternate" type="application/rss+xml" href="/DevTacora/blog/rss.xml" title="DevTacora RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/DevTacora/blog/atom.xml" title="DevTacora Atom Feed">
+
+
+
+<link rel="preconnect" href="https://www.google-analytics.com">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7WCKN9ZY1F"></script>
+<script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-7WCKN9ZY1F",{anonymize_ip:!0})</script><link rel="stylesheet" href="/DevTacora/assets/css/styles.b35502a1.css">
+<script src="/DevTacora/assets/js/runtime~main.99ff0e34.js" defer="defer"></script>
+<script src="/DevTacora/assets/js/main.a45c1f3e.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const n=new URLSearchParams(window.location.search).entries();for(var[t,e]of n)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Saltar al contenido principal"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Saltar al contenido principal</a></div><nav aria-label="Principal" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Alternar barra lateral" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/DevTacora/"><div class="navbar__logo"><img src="/DevTacora/img/devtacora_logo.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/DevTacora/img/devtacora_logo.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">DevTacora</b></a><a class="navbar__item navbar__link" href="/DevTacora/docs/pia_2526/">PIA</a><a class="navbar__item navbar__link" href="/DevTacora/docs/pmdm_2526/">PMDM</a></div><div class="navbar__items navbar__items--right"><a class="navbar__item navbar__link" href="/DevTacora/docs/licencia">Licencia</a><a href="https://www.linkedin.com/in/aliciacamcas" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">LinkedIn<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="Cambiar entre modo oscuro y claro (actualmente modo claro)" aria-label="Cambiar entre modo oscuro y claro (actualmente modo claro)" aria-live="polite" aria-pressed="false"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Volver al principio" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Barra lateral de Documentos" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" href="/DevTacora/docs/category/ut5-acceso-a-bases-de-datos-nosql">UT5. Acceso a bases de datos NoSQL</a><button aria-label="Colapsar categoría &#x27;UT5. Acceso a bases de datos NoSQL&#x27; de la barra lateral" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/DevTacora/docs/ada_2425/ut5_bbdd_nosql/bbdd-nosql">Bases de datos NoSQL</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" tabindex="0" href="/DevTacora/docs/ada_2425/ut5_bbdd_nosql/mongodb/">MongoDB</a><button aria-label="Ampliar la categoría &#x27;MongoDB&#x27; de la barra lateral" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Rastro de navegación"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Página de Inicio" class="breadcrumbs__link" href="/DevTacora/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item"><a class="breadcrumbs__link" itemprop="item" href="/DevTacora/docs/category/ut5-acceso-a-bases-de-datos-nosql"><span itemprop="name">UT5. Acceso a bases de datos NoSQL</span></a><meta itemprop="position" content="1"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">Bases de datos NoSQL</span><meta itemprop="position" content="2"></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">En esta página</button></div><div class="theme-doc-markdown markdown"><header><h1>Bases de datos NoSQL</h1></header><div class="hidden-summary"><p>Características, uso y tipos de bases de datos NoSQL.</p></div>
+<div class="justify-text"><p>Las bases de datos NoSQL <strong>(Not Only SQL)</strong> son sistemas de gestión de bases de datos diseñados para manejar grandes volúmenes de datos distribuidos y no estructurados o semiestructurados. A diferencia de las bases de datos relacionales tradicionales (SQL), que utilizan tablas y esquemas rígidos, NoSQL ofrece un modelo más flexible y escalable.</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="características-clave">Características clave<a href="#características-clave" class="hash-link" aria-label="Enlace directo al Características clave" title="Enlace directo al Características clave">​</a></h2><ol>
+<li>
+<p><strong>Flexibilidad en el esquema (Schema-less):</strong><br>
+<!-- -->No requieren un esquema fijo. Los datos pueden almacenarse sin definir previamente su estructura, lo que facilita la adaptación a cambios en el tiempo.</p>
+</li>
+<li>
+<p><strong>Escalabilidad Horizontal:</strong><br>
+<!-- -->Se diseñan para escalar agregando más servidores en lugar de aumentar la capacidad de un solo servidor. Esto permite manejar grandes volúmenes de datos de forma más eficiente.</p>
+</li>
+<li>
+<p><strong>Alta Disponibilidad y Distribución:</strong><br>
+<!-- -->Los datos se replican y distribuyen en varios nodos, garantizando que la base de datos siga siendo funcional incluso si uno de los nodos falla.</p>
+</li>
+<li>
+<p><strong>Rendimiento Optimizado:</strong><br>
+<!-- -->Están optimizadas para operaciones de lectura/escritura rápidas, lo que las hace ideales para aplicaciones en tiempo real o con grandes volúmenes de transacciones.</p>
+</li>
+<li>
+<p><strong>Diversidad de Modelos de Datos:</strong><br>
+<!-- -->NoSQL ofrece varios modelos de almacenamiento de datos, que se adaptan a diferentes necesidades: documentales, clave-valor, grafo...</p>
+</li>
+<li>
+<p><strong>Alto Volumen de Datos y Big Data:</strong><br>
+<!-- -->Son capaces de gestionar enormes volúmenes de datos y son utilizadas en aplicaciones que generan grandes cantidades de información, como redes sociales o sistemas IoT.</p>
+</li>
+<li>
+<p><strong>Facilidad de Desarrollo Ágil:</strong><br>
+<!-- -->Su flexibilidad permite a los desarrolladores iterar rápidamente, adaptando los modelos de datos a medida que cambian los requisitos del negocio.</p>
+</li>
+</ol><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="diferencias-entre-bases-de-datos-sql-y-nosql">Diferencias entre bases de datos SQL y NoSQL<a href="#diferencias-entre-bases-de-datos-sql-y-nosql" class="hash-link" aria-label="Enlace directo al Diferencias entre bases de datos SQL y NoSQL" title="Enlace directo al Diferencias entre bases de datos SQL y NoSQL">​</a></h2><p>Las bases de datos SQL (relacionales) y NoSQL (no relacionales) están diseñadas para diferentes tipos de aplicaciones y tienen enfoques distintos para almacenar y gestionar datos. A continuación, se explican las principales diferencias entre ambas:</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="modelo-de-datos">Modelo de Datos<a href="#modelo-de-datos" class="hash-link" aria-label="Enlace directo al Modelo de Datos" title="Enlace directo al Modelo de Datos">​</a></h3><ul>
+<li>
+<p><strong>SQL (Relacionales):</strong></p>
+<ul>
+<li>Los datos se almacenan en <strong>tablas</strong> con filas y columnas.</li>
+<li>Cada tabla tiene un <strong>esquema rígido</strong> (estructura predefinida).</li>
+<li>Se utilizan <strong>relaciones (JOINs)</strong> para vincular datos entre tablas.</li>
+</ul>
+</li>
+<li>
+<p><strong>NoSQL (No Relacionales):</strong></p>
+<ul>
+<li>Los datos se almacenan en diversos formatos: <strong>documentos (JSON, BSON), clave-valor, grafos o columnas anchas.</strong></li>
+<li><strong>No requiere esquemas fijos;</strong> el modelo es flexible y dinámico.</li>
+<li>Se pueden almacenar datos desestructurados o semiestructurados.</li>
+</ul>
+</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="escalabilidad">Escalabilidad<a href="#escalabilidad" class="hash-link" aria-label="Enlace directo al Escalabilidad" title="Enlace directo al Escalabilidad">​</a></h3><ul>
+<li>
+<p><strong>SQL:</strong></p>
+<ul>
+<li>Escala <strong>verticalmente</strong> (aumentar CPU, RAM o almacenamiento en el mismo servidor).</li>
+<li>La escalabilidad horizontal es posible, pero compleja.</li>
+</ul>
+</li>
+<li>
+<p><strong>NoSQL:</strong></p>
+<ul>
+<li>Escala <strong>horizontalmente</strong> (añadir más servidores/nodos a la red).</li>
+<li>Se adapta fácilmente a grandes volúmenes de datos y tráfico.</li>
+</ul>
+</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="consistencia-y-disponibilidad-modelo-cap">Consistencia y Disponibilidad (Modelo CAP)<a href="#consistencia-y-disponibilidad-modelo-cap" class="hash-link" aria-label="Enlace directo al Consistencia y Disponibilidad (Modelo CAP)" title="Enlace directo al Consistencia y Disponibilidad (Modelo CAP)">​</a></h3><p>El <strong>Modelo CAP</strong> es un principio fundamental en el diseño de sistemas distribuidos que establece que <strong>es imposible que un sistema distribuido garantice simultáneamente las tres propiedades siguientes:</strong></p><ol>
+<li>
+<p><strong>Consistencia (Consistency):</strong><br>
+<!-- -->Todos los nodos del sistema tienen los mismos datos en un momento dado. Cuando se realiza una escritura, todos los nodos deben reflejar el mismo valor inmediatamente.</p>
+</li>
+<li>
+<p><strong>Disponibilidad (Availability):</strong><br>
+<!-- -->El sistema sigue funcionando y respondiendo, incluso si algunos nodos fallan. Siempre se garantiza una respuesta, aunque no se asegure que contenga los datos más recientes.</p>
+</li>
+<li>
+<p><strong>Tolerancia a Particiones (Partition Tolerance):</strong><br>
+<!-- -->El sistema sigue operando incluso si hay una partición (división o pérdida de comunicación) entre nodos. Esto implica que el sistema puede seguir funcionando aunque partes de la red no puedan comunicarse entre sí.</p>
+</li>
+</ol><p>Así pues, las principales diferecias son:</p><ul>
+<li>
+<p><strong>SQL:</strong></p>
+<ul>
+<li>Prioriza la <strong>consistencia (Consistency)</strong> sobre la disponibilidad.</li>
+<li>Sigue el principio <strong>ACID (Atomicidad, Consistencia, Aislamiento, Durabilidad)</strong> para garantizar integridad en las transacciones.</li>
+</ul>
+</li>
+<li>
+<p><strong>NoSQL:</strong></p>
+<ul>
+<li>Prioriza la <strong>disponibilidad (Availability)</strong> y la <strong>partición (Partition Tolerance).</strong></li>
+<li>Utiliza el principio <strong>BASE (Basically Available, Soft state, Eventual consistency)</strong>, permitiendo que los datos se repliquen y se sincronicen eventualmente.</li>
+</ul>
+</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="flexibilidad-del-esquema">Flexibilidad del Esquema<a href="#flexibilidad-del-esquema" class="hash-link" aria-label="Enlace directo al Flexibilidad del Esquema" title="Enlace directo al Flexibilidad del Esquema">​</a></h3><ul>
+<li>
+<p><strong>SQL:</strong></p>
+<ul>
+<li><strong>Esquema fijo y estructurado.</strong> Los campos y tipos de datos deben definirse antes de insertar datos.</li>
+<li>Cualquier cambio en el esquema puede requerir migraciones complejas.</li>
+</ul>
+</li>
+<li>
+<p><strong>NoSQL:</strong></p>
+<ul>
+<li><strong>Esquema dinámico.</strong> Los datos pueden tener diferentes estructuras dentro de la misma colección o base de datos.</li>
+<li>Facilita la adaptación a cambios rápidos en los datos.</li>
+</ul>
+</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="tipos-de-consultas">Tipos de Consultas<a href="#tipos-de-consultas" class="hash-link" aria-label="Enlace directo al Tipos de Consultas" title="Enlace directo al Tipos de Consultas">​</a></h3><ul>
+<li>
+<p><strong>SQL:</strong></p>
+<ul>
+<li>Utiliza el lenguaje estándar <strong>SQL (Structured Query Language).</strong></li>
+<li>Las consultas son complejas y potentes, con <strong>operaciones JOIN</strong> entre múltiples tablas.</li>
+</ul>
+</li>
+<li>
+<p><strong>NoSQL:</strong></p>
+<ul>
+<li>Las consultas dependen del tipo de base de datos (documento, clave-valor, grafo, etc.).</li>
+<li>Las bases de datos de documentos, por ejemplo, utilizan búsquedas específicas sobre documentos (filtros, agregaciones).</li>
+<li><strong>No suele haber JOINs,</strong> lo que puede simplificar y acelerar ciertas consultas.</li>
+</ul>
+</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="rendimiento">Rendimiento<a href="#rendimiento" class="hash-link" aria-label="Enlace directo al Rendimiento" title="Enlace directo al Rendimiento">​</a></h3><ul>
+<li>
+<p><strong>SQL:</strong></p>
+<ul>
+<li><strong>Alta eficiencia</strong> en consultas complejas con relaciones.</li>
+<li>El rendimiento puede disminuir con grandes volúmenes de datos y alta concurrencia.</li>
+</ul>
+</li>
+<li>
+<p><strong>NoSQL:</strong></p>
+<ul>
+<li><strong>Optimizado para grandes volúmenes de datos</strong> y operaciones rápidas de lectura/escritura.</li>
+<li>Excelente para <strong>aplicaciones de tiempo real</strong> y grandes cargas de trabajo distribuidas.</li>
+</ul>
+</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="casos-de-uso">Casos de Uso<a href="#casos-de-uso" class="hash-link" aria-label="Enlace directo al Casos de Uso" title="Enlace directo al Casos de Uso">​</a></h3><ul>
+<li>
+<p><strong>SQL:</strong></p>
+<ul>
+<li>Aplicaciones donde la <strong>integridad de los datos es crítica</strong> (banca, comercio electrónico, contabilidad).</li>
+<li>Proyectos con <strong>datos estructurados y bien definidos.</strong></li>
+<li>Aplicaciones empresariales tradicionales.</li>
+</ul>
+</li>
+<li>
+<p><strong>NoSQL:</strong></p>
+<ul>
+<li>Aplicaciones con <strong>grandes volúmenes de datos no estructurados</strong> o semiestructurados (redes sociales, IoT, big data).</li>
+<li>Sistemas que requieren <strong>alta disponibilidad y escalabilidad horizontal</strong> (e-commerce, juegos en línea, análisis de logs).</li>
+<li>Aplicaciones que cambian constantemente y necesitan <strong>flexibilidad.</strong></li>
+</ul>
+</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="complejidad-de-implementación">Complejidad de Implementación<a href="#complejidad-de-implementación" class="hash-link" aria-label="Enlace directo al Complejidad de Implementación" title="Enlace directo al Complejidad de Implementación">​</a></h3><ul>
+<li>
+<p><strong>SQL:</strong></p>
+<ul>
+<li>Puede ser más compleja de implementar debido a la necesidad de definir esquemas y relaciones.</li>
+<li>Ideal para aplicaciones que requieren <strong>transacciones seguras</strong> y una fuerte integridad referencial.</li>
+</ul>
+</li>
+<li>
+<p><strong>NoSQL:</strong></p>
+<ul>
+<li>Fácil de comenzar y escalar, pero algunas consultas avanzadas pueden ser más complejas.</li>
+<li>Se adapta bien a <strong>modelos ágiles y en rápida evolución.</strong></li>
+</ul>
+</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="comparación">Comparación<a href="#comparación" class="hash-link" aria-label="Enlace directo al Comparación" title="Enlace directo al Comparación">​</a></h3><table><thead><tr><th><strong>Aspecto</strong></th><th><strong>SQL</strong></th><th><strong>NoSQL</strong></th></tr></thead><tbody><tr><td><strong>Modelo de Datos</strong></td><td>Relacional (tablas)</td><td>No relacional (documentos, clave-valor, grafos)</td></tr><tr><td><strong>Escalabilidad</strong></td><td>Vertical</td><td>Horizontal</td></tr><tr><td><strong>Esquema</strong></td><td>Fijo</td><td>Flexible</td></tr><tr><td><strong>Consistencia</strong></td><td>Alta (ACID)</td><td>Eventual (BASE)</td></tr><tr><td><strong>Consultas</strong></td><td>SQL (JOINs y transacciones complejas)</td><td>Varía (dependiendo del tipo de base de datos)</td></tr><tr><td><strong>Rendimiento</strong></td><td>Optimizado para relaciones</td><td>Optimizado para velocidad y volumen</td></tr><tr><td><strong>Casos de Uso</strong></td><td>Aplicaciones tradicionales y críticas</td><td>Big data, aplicaciones web en tiempo real</td></tr><tr><td><strong>Ejemplos</strong></td><td>MySQL, PostgreSQL, Oracle</td><td>MongoDB, Cassandra, Redis, DynamoDB</td></tr></tbody></table><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="tipos-según-el-modelo-de-datos">Tipos según el modelo de datos<a href="#tipos-según-el-modelo-de-datos" class="hash-link" aria-label="Enlace directo al Tipos según el modelo de datos" title="Enlace directo al Tipos según el modelo de datos">​</a></h2><p>Las bases de datos NoSQL se clasifican en varios tipos según su modelo de almacenamiento y la estructura de datos que gestionan:</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="1-bases-de-datos-documentales-document-stores">1. Bases de Datos Documentales (Document Stores)<a href="#1-bases-de-datos-documentales-document-stores" class="hash-link" aria-label="Enlace directo al 1. Bases de Datos Documentales (Document Stores)" title="Enlace directo al 1. Bases de Datos Documentales (Document Stores)">​</a></h3><p>Almacenan datos en documentos individuales en formatos como <strong>JSON, BSON o XML</strong>. Cada documento contiene pares clave-valor y puede tener estructuras anidadas (subdocumentos y arrays). Estos documentos pueden tener diferentes campos, proporcionando flexibilidad en el esquema.</p><p>Entre sus principales ventajas destacan que son <strong>flexibles y desestructuradas</strong>, ya que los documentos pueden variar en estructura y que ofrecen lenguajes que permiten construir <strong>consultas ricas</strong>, pudiendo realizar consultas sobre campos anidados y documentos completos.</p><p><img decoding="async" loading="lazy" alt="Documento en BBDD documental" src="/DevTacora/assets/images/document-database-9ec87e75b296e79118770b78d07fa015.png" width="661" height="426" class="img_ev3q"><em>Fuente: <a href="https://www.mongodb.com/resources/basics/databases/document-databases" target="_blank" rel="noopener noreferrer">MongoDB</a></em></p><p><strong>Casos de uso:</strong></p><ul>
+<li>Aplicaciones web y móviles.</li>
+<li>Sistemas de gestión de contenido (CMS).</li>
+<li>Catálogos de productos y perfiles de usuarios.</li>
+</ul><p><strong>Sistemas Gestores de Bases de Datos documentales populares:</strong></p><ul>
+<li>MongoDB</li>
+<li>CouchDB</li>
+<li>RethinkDB</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="2-bases-de-datos-clave-valor-key-value-stores">2. Bases de Datos Clave-Valor (Key-Value Stores)<a href="#2-bases-de-datos-clave-valor-key-value-stores" class="hash-link" aria-label="Enlace directo al 2. Bases de Datos Clave-Valor (Key-Value Stores)" title="Enlace directo al 2. Bases de Datos Clave-Valor (Key-Value Stores)">​</a></h3><p>Almacenan datos como pares clave-valor, donde cada clave es única y apunta a un valor. Es el modelo más simple de NoSQL, similar a un diccionario o hashmap. Entre sus principales ventajas destacan la <strong>alta velocidad</strong> en las operaciones de lectura y escritura y la <strong>simplicidad</strong>, lo que las hace ideales para almacenar datos donde no se requiere una estructura compleja.</p><p><img decoding="async" loading="lazy" alt="BBDD clave-valor" src="/DevTacora/assets/images/key-value-database-17a3dc1ced5bf4efc532234991a046eb.png" width="288" height="175" class="img_ev3q"> <em>Fuente: <a href="https://aws.amazon.com/es/nosql/key-value/" target="_blank" rel="noopener noreferrer">AWS</a></em></p><p><strong>Casos de Uso:</strong></p><ul>
+<li>Caches distribuidos.</li>
+<li>Sesiones de usuario y perfiles.</li>
+<li>Configuración de aplicaciones.</li>
+</ul><p><strong>Sistemas Gestores de Bases de Datos clave-valor populares:</strong></p><ul>
+<li>Redis</li>
+<li>DynamoDB (modo clave-valor)</li>
+<li>Riak KV</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="3-bases-de-datos-tabular-wide-column-stores">3. Bases de Datos Tabular (Wide-Column Stores)<a href="#3-bases-de-datos-tabular-wide-column-stores" class="hash-link" aria-label="Enlace directo al 3. Bases de Datos Tabular (Wide-Column Stores)" title="Enlace directo al 3. Bases de Datos Tabular (Wide-Column Stores)">​</a></h3><p>Almacenan datos en tablas, pero a diferencia de las bases de datos relacionales, <strong>cada fila puede tener un número diferente de columnas</strong>. Las columnas se agrupan en familias de columnas, lo que permite almacenar datos relacionados de manera eficiente.</p><p>Entre sus principales ventajas destaca la <strong>optimización para grandes volúmenes de datos</strong> y la <strong>eficiencia en consultas</strong>, lo que las hace excelentes para análisis de big data y procesamiento en tiempo real.</p><p><img decoding="async" loading="lazy" alt="BBDD tabular" src="/DevTacora/assets/images/wide-column-database-0ee04c322b006b8cf56fce10568ce294.png" width="1048" height="708" class="img_ev3q"> <em>Fuente: <a href="https://www.dataversity.net/wide-column-database/" target="_blank" rel="noopener noreferrer">Dataversity</a></em></p><p><strong>Casos de Uso:</strong></p><ul>
+<li>Análisis de grandes volúmenes de datos.</li>
+<li>Motores de búsqueda.</li>
+<li>Registros de transacciones.</li>
+</ul><p><strong>Sistemas Gestores de Bases de Datos tabulares populares:</strong></p><ul>
+<li>Apache Cassandra</li>
+<li>HBase (Hadoop)</li>
+<li>ScyllaDB</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="4-bases-de-datos-de-grafos-graph-databases">4. Bases de Datos de Grafos (Graph Databases)<a href="#4-bases-de-datos-de-grafos-graph-databases" class="hash-link" aria-label="Enlace directo al 4. Bases de Datos de Grafos (Graph Databases)" title="Enlace directo al 4. Bases de Datos de Grafos (Graph Databases)">​</a></h3><p>Están diseñadas para almacenar y gestionar datos altamente interconectados. Los datos se almacenan como nodos y las relaciones se representan mediante aristas. Los nodos y las aristas pueden tener propiedades (atributos).</p><p>Entre sus principales ventajas destaca el <strong>modelado de relaciones complejas</strong>, lo que las hace excelentes para gestionar redes sociales, recomendaciones, y sistemas donde las conexiones entre datos son clave y la <strong>alta eficiencia en consultas relacionales</strong>, siendo más rápidas y naturales en comparación con SQL.</p><p><img decoding="async" loading="lazy" alt="BBDD de grafo" src="/DevTacora/assets/images/graph-database-33aa02e8727fb8b85dbfe19b9389d591.png" width="540" height="309" class="img_ev3q"></p><p><em>Fuente: <a href="https://www.linkedin.com/pulse/what-graph-database-why-should-you-use-mrinmoy-ghoshal/" target="_blank" rel="noopener noreferrer">LinkedIn</a></em></p><p><strong>Casos de Uso:</strong></p><ul>
+<li>Redes sociales.</li>
+<li>Sistemas de detección de fraudes.</li>
+<li>Gestión de infraestructuras (redes de telecomunicaciones).</li>
+</ul><p><strong>Sistemas Gestores de Bases de Datos de grafo populares:</strong></p><ul>
+<li>Neo4j</li>
+<li>Amazon Neptune</li>
+<li>ArangoDB (multi-modelo, incluye grafos)</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="6-bases-de-datos-de-multimodelo-multi-model-databases">6. Bases de Datos de Multimodelo (Multi-Model Databases)<a href="#6-bases-de-datos-de-multimodelo-multi-model-databases" class="hash-link" aria-label="Enlace directo al 6. Bases de Datos de Multimodelo (Multi-Model Databases)" title="Enlace directo al 6. Bases de Datos de Multimodelo (Multi-Model Databases)">​</a></h3><p><strong>Descripción:</strong><br>
+<!-- -->Estas bases de datos permiten combinar diferentes tipos de modelos (documentos, clave-valor, grafos y columnas anchas) dentro de un mismo motor de base de datos. Sus principales ventajas son la <strong>versatilidad</strong>, al adaptarse a múltiples tipos de datos y aplicaciones y la <strong>reducción de la complejidad</strong> puesto que, en lugar de utilizar varias bases de datos especializadas, se puede manejar todo desde una sola base de datos.</p><p><strong>Casos de Uso:</strong></p><ul>
+<li>Aplicaciones que requieren diferentes formas de modelar datos.</li>
+<li>Sistemas complejos con múltiples tipos de relaciones y estructuras de datos.</li>
+</ul><p><strong>Sistemas Gestores de Bases de Datos multimodelo populares:</strong></p><ul>
+<li>ArangoDB</li>
+<li>OrientDB</li>
+<li>Couchbase</li>
+</ul><h3 class="anchor anchorWithStickyNavbar_LWe7" id="resumen-de-comparación">Resumen de comparación<a href="#resumen-de-comparación" class="hash-link" aria-label="Enlace directo al Resumen de comparación" title="Enlace directo al Resumen de comparación">​</a></h3><table><thead><tr><th><strong>Tipo de Base de Datos</strong></th><th><strong>Modelo</strong></th><th><strong>Ejemplo de Uso</strong></th><th><strong>Ejemplos Populares</strong></th></tr></thead><tbody><tr><td>Documentos</td><td>JSON/BSON</td><td>Aplicaciones Web, CMS</td><td>MongoDB, CouchDB</td></tr><tr><td>Clave-Valor</td><td>Hashmap</td><td>Cachés, sesiones de usuario</td><td>Redis, DynamoDB</td></tr><tr><td>Columna Ancha</td><td>Columnas flexibles</td><td>Big Data, registros transaccionales</td><td>Cassandra, HBase</td></tr><tr><td>Grafos</td><td>Nodos y relaciones</td><td>Redes sociales, detección de fraude</td><td>Neo4j, Amazon Neptune</td></tr><tr><td>Multimodelo</td><td>Combinación de modelos</td><td>Sistemas complejos</td><td>ArangoDB, Couchbase</td></tr></tbody></table><h2 class="anchor anchorWithStickyNavbar_LWe7" id="uso-de-bases-de-datos-nosql">Uso de Bases de Datos NoSQL<a href="#uso-de-bases-de-datos-nosql" class="hash-link" aria-label="Enlace directo al Uso de Bases de Datos NoSQL" title="Enlace directo al Uso de Bases de Datos NoSQL">​</a></h2><p>Las bases de datos NoSQL ofrecen una solución moderna y escalable para manejar datos complejos y dinámicos que las bases de datos relacionales tradicionales a menudo encuentran desafiantes, de forma que es recomendado su uso para:</p><ul>
+<li>Aplicaciones con grandes cantidades de datos no estructurados (redes sociales, sensores, logs).</li>
+<li>Proyectos que requieren escalabilidad y alta disponibilidad.</li>
+<li>Aplicaciones que necesitan responder rápidamente a cambios en los requisitos de datos.</li>
+</ul></div></div></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Página del documento"><a class="pagination-nav__link pagination-nav__link--prev" href="/DevTacora/docs/category/ut5-acceso-a-bases-de-datos-nosql"><div class="pagination-nav__sublabel">Anterior</div><div class="pagination-nav__label">UT5. Acceso a bases de datos NoSQL</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/DevTacora/docs/ada_2425/ut5_bbdd_nosql/mongodb/"><div class="pagination-nav__sublabel">Siguiente</div><div class="pagination-nav__label">MongoDB</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#características-clave" class="table-of-contents__link toc-highlight">Características clave</a></li><li><a href="#diferencias-entre-bases-de-datos-sql-y-nosql" class="table-of-contents__link toc-highlight">Diferencias entre bases de datos SQL y NoSQL</a><ul><li><a href="#modelo-de-datos" class="table-of-contents__link toc-highlight">Modelo de Datos</a></li><li><a href="#escalabilidad" class="table-of-contents__link toc-highlight">Escalabilidad</a></li><li><a href="#consistencia-y-disponibilidad-modelo-cap" class="table-of-contents__link toc-highlight">Consistencia y Disponibilidad (Modelo CAP)</a></li><li><a href="#flexibilidad-del-esquema" class="table-of-contents__link toc-highlight">Flexibilidad del Esquema</a></li><li><a href="#tipos-de-consultas" class="table-of-contents__link toc-highlight">Tipos de Consultas</a></li><li><a href="#rendimiento" class="table-of-contents__link toc-highlight">Rendimiento</a></li><li><a href="#casos-de-uso" class="table-of-contents__link toc-highlight">Casos de Uso</a></li><li><a href="#complejidad-de-implementación" class="table-of-contents__link toc-highlight">Complejidad de Implementación</a></li><li><a href="#comparación" class="table-of-contents__link toc-highlight">Comparación</a></li></ul></li><li><a href="#tipos-según-el-modelo-de-datos" class="table-of-contents__link toc-highlight">Tipos según el modelo de datos</a><ul><li><a href="#1-bases-de-datos-documentales-document-stores" class="table-of-contents__link toc-highlight">1. Bases de Datos Documentales (Document Stores)</a></li><li><a href="#2-bases-de-datos-clave-valor-key-value-stores" class="table-of-contents__link toc-highlight">2. Bases de Datos Clave-Valor (Key-Value Stores)</a></li><li><a href="#3-bases-de-datos-tabular-wide-column-stores" class="table-of-contents__link toc-highlight">3. Bases de Datos Tabular (Wide-Column Stores)</a></li><li><a href="#4-bases-de-datos-de-grafos-graph-databases" class="table-of-contents__link toc-highlight">4. Bases de Datos de Grafos (Graph Databases)</a></li><li><a href="#6-bases-de-datos-de-multimodelo-multi-model-databases" class="table-of-contents__link toc-highlight">6. Bases de Datos de Multimodelo (Multi-Model Databases)</a></li><li><a href="#resumen-de-comparación" class="table-of-contents__link toc-highlight">Resumen de comparación</a></li></ul></li><li><a href="#uso-de-bases-de-datos-nosql" class="table-of-contents__link toc-highlight">Uso de Bases de Datos NoSQL</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">
+        <section classname="bg-white border-t border-gray-100">
+      <div classname="max-w-4xl mx-auto px-6 py-16 text-center">
+        <h3 classname="text-2xl font-bold text-gray-900 mb-4">
+          Construyendo conocimiento, línea por línea
+        </h3>
+        <p classname="text-gray-600 leading-relaxed">
+          © 2025 Alicia Cámara Casares - Contenido bajo licencia 
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" classname="text-blue-600 hover:text-blue-700 underline">
+                CC BY-NC-SA 4.0
+              </a>.
+        </p>
+      </div>
+    </section>
+      </div></div></div></footer></div>
+</body>
+</html>

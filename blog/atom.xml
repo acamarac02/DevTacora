@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://acamarac02.github.io/DevTacora/blog</id>
-    <title>DevTácora Blog</title>
+    <title>DevTacora Blog</title>
     <updated>2021-08-26T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://acamarac02.github.io/DevTacora/blog"/>
-    <subtitle>DevTácora Blog</subtitle>
+    <subtitle>DevTacora Blog</subtitle>
     <icon>https://acamarac02.github.io/DevTacora/img/favicon.ico</icon>
     <entry>
         <title type="html"><![CDATA[Welcome]]></title>
