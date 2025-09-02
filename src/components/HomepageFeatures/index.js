@@ -100,7 +100,7 @@ export default function Home() {
           icon: <Brain className="w-7 h-7" />,
           gradient: 'from-purple-500 to-pink-500',
           description: 'Algoritmos de ML, redes neuronales y procesamiento de datos con Python',
-          link: `${siteConfig.baseUrl}docs/pia/`
+          link: `${siteConfig.baseUrl}docs/pia_2526/`
         },
         {
           name: 'Programación Multimedia y Dispositivos Móviles',
@@ -108,7 +108,7 @@ export default function Home() {
           icon: <Smartphone className="w-7 h-7" />,
           gradient: 'from-green-500 to-emerald-500',
           description: 'Desarrollo de aplicaciones móviles Android con Java y Android Studio',
-          link: `${siteConfig.baseUrl}docs/ada/`
+          link: `${siteConfig.baseUrl}docs/pmdm_2526/`
         },
       ],
     },

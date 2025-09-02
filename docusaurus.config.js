@@ -75,21 +75,15 @@ const config = {
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'ada_2425_Sidebar',
-            position: 'left',
-            label: 'ADA',
-          },
-          {
-            type: 'docSidebar',
-            sidebarId: 'pmdm_2425_Sidebar',
-            position: 'left',
-            label: 'PMDM',
-          },
-          {
-            type: 'docSidebar',
             sidebarId: 'pia_2526_Sidebar',
             position: 'left',
             label: 'PIA',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'pmdm_2526_Sidebar',
+            position: 'left',
+            label: 'PMDM',
           },
           {
             to: '/docs/licencia',
@@ -139,8 +133,9 @@ const config = {
         trackingID: 'G-7WCKN9ZY1F',
         anonymizeIP: true,
       },
-    ]
-  ],
+    ],
+  ]
+  
 };
 
 export default config;
