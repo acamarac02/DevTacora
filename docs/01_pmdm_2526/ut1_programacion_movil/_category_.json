@@ -1,0 +1,8 @@
+{
+  "label": "UT1. Programación móvil",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "En este primer tema estudiaremos qué es la programación móvil y cómo preparar tu entorno con Android Studio. Además, crearemos la primera app y entenderemos qué es el ciclo de vida de las aplicaciones Android."
+  }
+}
