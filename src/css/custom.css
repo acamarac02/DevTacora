@@ -237,7 +237,8 @@ img[alt="Generar Android apk"],
 img[alt="Ficheros Gradle"],
 img[alt="Project Structure"],
 img[alt="Crear emulador"],
-img[alt="Añadir emulador"] {
+img[alt="Añadir emulador"],
+img[alt="GIF resumen de la aplicación"] {
   height: 500px;
   width: auto;
   display: block;
@@ -254,7 +255,8 @@ img[alt="Arquitectura SO Android"] {
 /** Solo centra la imagen **/
 img[alt="Documento en BBDD documental"],
 img[alt="BBDD clave-valor"],
-img[alt="Android developers"] {
+img[alt="Android developers"],
+img[alt="Fuerza muelle 0"] {
   display: block;
   margin: 0 auto;
 }
