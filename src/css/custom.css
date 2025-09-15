@@ -256,7 +256,8 @@ img[alt="Arquitectura SO Android"] {
 img[alt="Documento en BBDD documental"],
 img[alt="BBDD clave-valor"],
 img[alt="Android developers"],
-img[alt="Fuerza muelle 0"] {
+img[alt="Fuerza muelle 0"],
+img[alt="Diagrama ciclo de vida"] {
   display: block;
   margin: 0 auto;
 }
@@ -265,3 +266,4 @@ img[alt="Icono licencia BY-NC-SA"] {
   height: 80px;
   width: auto;
 }
+

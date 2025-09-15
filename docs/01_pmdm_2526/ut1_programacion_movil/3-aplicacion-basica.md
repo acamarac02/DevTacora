@@ -41,9 +41,10 @@ En la práctica, **ambos modos se complementan**. Por ejemplo:
 * Con **ConstraintLayout** suele resultar más ágil comenzar en el editor gráfico, ya que las restricciones se entienden mejor visualmente.
 * Con **LinearLayout** u otros layouts más simples, escribir el XML directamente suele ser más rápido y claro.
 
+
 ### Análisis de la interfaz de "Hello World"
 
-Cuando creamos una aplicación Android nueva, esta contiene por defecto un texto "Hello World". Vamos a analizar esta interfaz para comprender ciertos aspectos antes de continuar.
+Cuando creamos una aplicación Android nueva, esta contiene por defecto un texto **"Hello World"**. Vamos a analizar esta interfaz para comprender ciertos aspectos antes de continuar.
 
 El código que contiene es:
 
@@ -69,15 +70,17 @@ El código que contiene es:
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-Podemos ver que el texto se define dentro de un campo llamado `TextView`, que a su vez está contenido dentro de un `ConstraintLayout`. Toda interfaz Android debe estar contenida dentro de alguno de los layouts existentes (`LinearLayout`, `ConstraintLayout`, `FrameLayout`, etc.).
+Podemos ver que el texto se define dentro de un campo llamado **`TextView`**, que a su vez está contenido dentro de un **`ConstraintLayout`**.
+Toda interfaz Android debe estar contenida dentro de alguno de los layouts existentes (**`LinearLayout`**, **`ConstraintLayout`**, **`FrameLayout`**, etc.).
 
-#### ConstraintLayout
 
-`ConstraintLayout` es un tipo de layout muy flexible en Android que permite posicionar y dimensionar vistas usando restricciones (constraints). Con él podemos diseñar interfaces complejas en una sola jerarquía, evitando tener que anidar muchos layouts diferentes.
+#### **ConstraintLayout**
 
-Cada elemento de la vista (por ejemplo, el `TextView`) debe estar “atado” al menos en dos direcciones (horizontal y vertical), por ejemplo: arriba y abajo, izquierda y derecha, o centrada en el padre. Podemos imaginar las constraints como **“muelles”** que tiran del elemento en cuatro direcciones (arriba, abajo, izquierda y derecha). El widget queda equilibrado entre las fuerzas definidas.  
+**`ConstraintLayout`** es un tipo de layout muy flexible en Android que permite posicionar y dimensionar vistas usando **restricciones (constraints)**. Con él podemos diseñar interfaces complejas en una sola jerarquía, evitando tener que anidar muchos layouts diferentes.
 
-En el caso del TextView vemos que ya hay definidas cuatro constraints:
+Cada elemento de la vista (por ejemplo, el **`TextView`**) debe estar “atado” al menos en **dos direcciones (horizontal y vertical)**, por ejemplo: arriba y abajo, izquierda y derecha, o centrado en el padre. Podemos imaginar las constraints como **“muelles”** que tiran del elemento en cuatro direcciones (arriba, abajo, izquierda y derecha). El widget queda equilibrado entre las fuerzas definidas.
+
+En el caso del **TextView** vemos que ya hay definidas **cuatro constraints**:
 
 ```xml
 app:layout_constraintBottom_toBottomOf="parent"
@@ -87,55 +90,62 @@ app:layout_constraintTop_toTopOf="parent"
 ```
 
 Donde:
-- `constraintTop_toTopOf="parent"` → tira hacia la parte superior del padre.  
-- `constraintBottom_toBottomOf="parent"` → hacia la parte inferior.  
-- `constraintStart_toStartOf="parent"` → hacia la izquierda.  
-- `constraintEnd_toEndOf="parent"` → hacia la derecha.  
 
-Ten en cuenta que el padre del `TextView` es el `ConstraintLayout`.
+* **`constraintTop_toTopOf="parent"`** → tira hacia la parte superior del padre.
+* **`constraintBottom_toBottomOf="parent"`** → hacia la parte inferior.
+* **`constraintStart_toStartOf="parent"`** → hacia la izquierda.
+* **`constraintEnd_toEndOf="parent"`** → hacia la derecha.
 
-Si analizamos la posición del `TextView` desde la vista de diseño, podemos ver que todas las fuerzas está en equilibrio (tienen un valor 0).
+Ten en cuenta que el **padre del `TextView` es el `ConstraintLayout`**.
+
+Si analizamos la posición del `TextView` desde la vista de diseño, podemos ver que todas las fuerzas están en **equilibrio (valor 0)**.
 
 ![Fuerza muelle 0](./0-img/aplicacion-basica/fuerza-muelle-0.png)
 
 Si queremos que el elemento esté más desplazado hacia arriba, tenemos dos formas de hacerlo:
 
-- Modificar el atributo `Vertical bias` (u `Horizontal bias` si el desplazamiento fuera hacia izquierda o derecha) a 0.2. En este caso el elemento se coloca más cerca del borde superior (20% desde arriba y 80% hacia abajo). Al trabajar en porcentajes, la posición es proporcional y se adapta a cualquier tamaño de pantalla.
+* **Modificar el atributo `Vertical bias`** (u `Horizontal bias` si el desplazamiento fuera hacia izquierda o derecha) a **0.2**. En este caso el elemento se coloca más cerca del borde superior (20% desde arriba y 80% hacia abajo). Al trabajar en porcentajes, la posición es **proporcional y adaptable** a cualquier tamaño de pantalla.
 
-    ![Modificado vertical bias](./0-img/aplicacion-basica/modificado-vertical-bias.png)
+  ![Modificado vertical bias](./0-img/aplicacion-basica/modificado-vertical-bias.png)
 
-- Romper el equilibrio entre las fuerzas, asignando un valor fijo de margen en la parte superior, en vez de 0. Si te fijas, hemos quitado el muelle hacia el bottom para evitar que tire desde ahí. Este mecanismo es más rígido que el anterior, pudiendo provocar que en pantallas pequeñas quede demasiado separado, y en pantallas grandes demasiado arriba.
+* **Romper el equilibrio entre las fuerzas**, asignando un **margen fijo** en la parte superior en lugar de 0. Si te fijas, hemos quitado el muelle hacia el **bottom** para evitar que tire desde ahí. Este mecanismo es **más rígido** que el anterior, pudiendo provocar que en pantallas pequeñas quede demasiado separado, y en pantallas grandes demasiado arriba.
 
-    ![Modificado distancia top](./0-img/aplicacion-basica/fuerza-dp.png)
+  ![Modificado distancia top](./0-img/aplicacion-basica/fuerza-dp.png)
 
 
-#### TextView
+#### **TextView**
 
 En el campo de texto, además de los atributos ya mencionados relacionados con el `ConstraintLayout`, podemos ver las siguientes propiedades:
 
-- Los atributos `layout_width` y `layout_height`, especifican el ancho y alto del elemento:
-    - El valor `wrap_content` indica que el ancho/alto se debe adaptar al contenido del elemento. En el caso del Button y el TextView, al texto que contienen.
-    - El valor `match_parent` indica que el ancho/alto debe ser el mismo que el del elemento padre.
-    - También se puede establecer un ancho/alto de tamaño fijo en píxeles (dp/px).
+* Los atributos **`layout_width`** y **`layout_height`** especifican el ancho y alto del elemento:
 
-- El atributo `text` especifica el texto que se muestra en la interfaz.
+  * El valor **`wrap_content`** indica que el ancho/alto se adapta al contenido del elemento (en el caso del Button y el TextView, al texto que contienen).
+  * El valor **`match_parent`** indica que el ancho/alto debe ser el mismo que el del elemento padre.
+  * También se puede establecer un ancho/alto de **tamaño fijo en píxeles (dp/px)**.
 
-- El atributo `id` es el **identificador único** de ese recurso. El nombre debe ser algo que permita identificar rápidamente el tipo de campo y la funcionalidad del mismo. Si lo modificas desde la vista de código, en el valor hay que poner @+id/ antes del identificador que queramos asignarle. Por ejemplo, podría quedar así:
-    ```xml
-    <TextView
-        android:id="@+id/textoInicial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="Hola mundo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    ```
+* El atributo **`text`** especifica el texto que se muestra en la interfaz.
+
+* El atributo **`id`** es el **identificador único** de ese recurso. El nombre debe ser algo que permita identificar rápidamente el tipo de campo y su función.
+  Si lo modificas desde la vista de código, en el valor hay que poner **@+id/** antes del identificador que quieras asignar.
+
+Por ejemplo:
+
+```xml
+<TextView
+    android:id="@+id/textoInicial"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="60dp"
+    android:text="Hola mundo"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+```
 
 :::info IMPORTANCIA DEL ID
-Todos los campos que vayan a ser modificados o consultados desde la lógica (desde Java) deben tener definido un id. En caso contrario, no podrás acceder a 
+Todos los campos que vayan a ser modificados o consultados desde la lógica (desde Java) deben tener definido un **id**. En caso contrario, no podrás acceder a ellos.
 :::
+
 
 ### Interfaz de la app contadora
 
@@ -363,9 +373,5 @@ Aquí, `v` representa la vista que ha sido pulsada (el botón en este caso).
 Modifica la aplicación del contador añadiendo un botón adicional para **resetear el contador**.
 :::
 
-
-:::info ACTIVIDAD DE SEGUIMIENTO
-Realiza la **Actividad de Seguimiento 1: Dungeons and Dados**
-:::
 
 </div>
