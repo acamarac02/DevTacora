@@ -58,3 +58,6 @@ btn.setText(getString(R.string.btn_accept));
 
 De esta forma, Android mostrará automáticamente el texto en el idioma configurado en el dispositivo.
 
+:::info ACTIVIDAD DE SEGUIMIENTO 3
+**Realiza la Actividad de Seguimiento 3: Domoticon.**
+:::
