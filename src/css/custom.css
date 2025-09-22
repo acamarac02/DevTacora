@@ -238,7 +238,22 @@ img[alt="Ficheros Gradle"],
 img[alt="Project Structure"],
 img[alt="Crear emulador"],
 img[alt="Añadir emulador"],
-img[alt="GIF resumen de la aplicación"] {
+img[alt="GIF resumen de la aplicación"],
+img[alt="Estructura elementos android"],
+img[alt="LinearLayout ejercicio"],
+img[alt="TableLayout"],
+img[alt="GridLayout"],
+img[alt="Atributo layout_gravity"],
+img[alt="ImageView"],
+img[alt="TextView"],
+img[alt="EditText"],
+img[alt="DatePickerDialog"],
+img[alt="Button"],
+img[alt="Switch"],
+img[alt="Botones personalizados"],
+img[alt="CheckBox"],
+img[alt="RadioButton"],
+img[alt="Spinner"]  {
   height: 500px;
   width: auto;
   display: block;
@@ -257,7 +272,16 @@ img[alt="Documento en BBDD documental"],
 img[alt="BBDD clave-valor"],
 img[alt="Android developers"],
 img[alt="Fuerza muelle 0"],
-img[alt="Diagrama ciclo de vida"] {
+img[alt="Diagrama ciclo de vida"],
+img[alt="Variedad de layouts"],
+img[alt="Valores framelayout"],
+img[alt="LinearLayout con pesos"],
+img[alt="LinearLayout anidados"],
+img[alt="RelativeLayout"],
+img[alt="Nuevo layout landscape"],
+img[alt="Layout landscape"],
+img[alt="ToggleButton"],
+img[alt="ImageButton"]  {
   display: block;
   margin: 0 auto;
 }

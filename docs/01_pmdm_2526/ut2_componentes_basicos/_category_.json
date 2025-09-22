@@ -1,0 +1,8 @@
+{
+  "label": "UT2. Componentes básicos",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "En esta unidad veremos los componentes fundamentales de Android: Intents, layouts, controles de interfaz y la internacionalización de aplicaciones. Estos conceptos son la base para construir aplicaciones más completas y usables."
+  }
+}
