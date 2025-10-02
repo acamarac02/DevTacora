@@ -253,7 +253,11 @@ img[alt="Switch"],
 img[alt="Botones personalizados"],
 img[alt="CheckBox"],
 img[alt="RadioButton"],
-img[alt="Spinner"]  {
+img[alt="Spinner"],
+img[alt="Nuevo cuaderno"],
+img[alt="Archivos Colab"],
+img[alt="Archivos Drive"],
+img[alt="Resumen range"]   {
   height: 500px;
   width: auto;
   display: block;

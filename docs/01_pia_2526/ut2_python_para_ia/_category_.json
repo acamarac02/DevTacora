@@ -1,0 +1,8 @@
+{
+  "label": "UT2. Python para la IA",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "En este tema exploramos cómo utilizar Python en el ámbito de la inteligencia artificial. Veremos bibliotecas, herramientas y técnicas clave para desarrollar aplicaciones con Python."
+  }
+}
