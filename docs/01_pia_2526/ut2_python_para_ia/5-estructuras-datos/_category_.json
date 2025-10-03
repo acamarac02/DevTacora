@@ -1,0 +1,8 @@
+{
+  "label": "Estructuras de datos",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Las estructuras de datos permiten guardar, organizar y manipular colecciones de información. En Python existen varias estructuras básicas integradas en el lenguaje, muy utilizadas en programación y especialmente útiles en Inteligencia Artificial y Ciencia de Datos."
+  }
+}

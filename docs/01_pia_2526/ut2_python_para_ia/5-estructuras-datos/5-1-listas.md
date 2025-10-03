@@ -1,15 +1,9 @@
 ---
-title: "Estructuras de datos"
-sidebar_position: 5
-description: "Listas, tuplas, conjuntos y diccionarios en Python, así como comprensiones, iteradores y generadores."
-keywords: [Python, estructuras de datos, listas, tuplas, conjuntos, diccionarios, comprensiones, iteradores, generadores]
+title: "Listas"
+sidebar_position: 1
+description: "Las listas en Python son colecciones ordenadas y modificables (mutables), que permiten elementos de cualquier tipo"
+keywords: [Python, estructuras de datos, listas]
 ---
-
-Las **estructuras de datos** permiten **guardar, organizar y manipular colecciones de información**. En Python existen varias estructuras básicas integradas en el lenguaje, muy utilizadas en programación y especialmente útiles en Inteligencia Artificial y Ciencia de Datos.
-
----
-
-## Listas
 
 * Son colecciones **ordenadas y modificables** (mutables).
 * Permiten elementos de cualquier tipo (números, cadenas, incluso otras listas).
@@ -43,6 +37,13 @@ Los índices negativos cuentan desde el final.
 ```python
 print(nombres[-1])  # Marta (último elemento)
 print(nombres[-2])  # Luis
+```
+
+### Acceso con bucles
+
+```python
+for nombre in nombres:
+    print(nombre)
 ```
 
 
@@ -224,160 +225,29 @@ ordenados = sorted(numeros, reverse=True)
 print(ordenados)  # [9, 4, 2, 1]
 ```
 
----
+### Comprensiones (comprehension)
 
-## 🔹 2. Tuplas
+Las **comprensiones de listas** permiten crear listas nuevas a partir de una secuencia (o cualquier iterable) en una sola línea, de forma concisa y legible.
 
-* Son colecciones **ordenadas pero inmutables**.
-* Se definen con paréntesis `()`.
+Sintaxis:
 
-Ejemplo:
-
-```python
-coordenada = (10, 20)
-print(coordenada[0])  # 10
 ```
-
-Características:
-
-* Una vez creadas, **no se pueden modificar** (no se añaden ni eliminan elementos).
-* Son más rápidas que las listas y se suelen usar para datos fijos.
-* Pueden desempacarse fácilmente:
-
-  ```python
-  x, y = coordenada
-  ```
-
----
-
-## 🔹 3. Conjuntos (sets)
-
-* Colecciones **no ordenadas y sin duplicados**.
-* Se definen con llaves `{}` o con la función `set()`.
-
-Ejemplo:
-
-```python
-colores = {"rojo", "azul", "verde", "rojo"}
-print(colores)   # {'rojo','azul','verde'}
+[expresion for elemento in iterable if condicion]
 ```
-
-Operaciones típicas:
-
-* Unión: `set1 | set2`
-* Intersección: `set1 & set2`
-* Diferencia: `set1 - set2`
-* Diferencia simétrica: `set1 ^ set2`
-
-👉 Muy útiles cuando nos interesa saber si un elemento existe, o cuando trabajamos con conjuntos matemáticos.
-
----
-
-## 🔹 4. Diccionarios
-
-* Colecciones **no ordenadas** de pares clave → valor.
-* Se definen con llaves `{}`.
-
-Ejemplo:
-
-```python
-persona = {"nombre": "Ana", "edad": 25}
-print(persona["nombre"])   # Ana
-persona["ciudad"] = "Madrid"  # añadir clave
-```
-
-Operaciones típicas:
-
-* `dic.keys()` → devuelve todas las claves.
-* `dic.values()` → devuelve los valores.
-* `dic.items()` → devuelve pares (clave, valor).
-* `get(clave, valor_por_defecto)` → acceso seguro.
-
-👉 Son la estructura más flexible de Python, base de los **DataFrames de Pandas**.
-
----
-
-## 🔹 5. Comprensiones
-
-Las **comprensiones** permiten crear listas, sets o diccionarios en **una sola línea**, de manera clara y eficiente.
 
 Ejemplos:
 
-* Lista con cuadrados del 0 al 4:
-
-  ```python
-  cuadrados = [x**2 for x in range(5)]
-  ```
-* Conjunto con letras de una palabra:
-
-  ```python
-  letras = {c for c in "python"}
-  ```
-* Diccionario con números y sus cuadrados:
-
-  ```python
-  dic = {x: x**2 for x in range(5)}
-  ```
-
-👉 Son muy usadas en Python por su **legibilidad y rendimiento**.
-
----
-
-## 🔹 6. Iteradores
-
-Un **iterador** es un objeto que nos permite recorrer una secuencia elemento a elemento.
-
-* Todas las estructuras vistas (listas, tuplas, sets, diccionarios) son **iterables**.
-* Podemos convertirlas en iteradores con `iter()`, y avanzar con `next()`.
-
-Ejemplo:
-
 ```python
-lista = [1, 2, 3]
-it = iter(lista)
-print(next(it))  # 1
-print(next(it))  # 2
+# Lista de cuadrados
+cuadrados = [x**2 for x in range(5)]
+print(cuadrados)  # [0, 1, 4, 9, 16]
+
+# Filtrar números pares
+pares = [x for x in range(10) if x % 2 == 0]
+print(pares)  # [0, 2, 4, 6, 8]
+
+# Transformar texto
+palabras = ["Hola", "Python", "IA"]
+longitudes = [len(p) for p in palabras]
+print(longitudes)  # [4, 6, 2]
 ```
-
-👉 Los iteradores son la base de los bucles `for` en Python.
-
----
-
-## 🔹 7. Generadores
-
-Un **generador** es una función que produce valores **de uno en uno**, usando la palabra clave `yield`.
-
-* No guarda toda la colección en memoria, lo que los hace más eficientes para manejar datos grandes.
-
-Ejemplo:
-
-```python
-def cuenta_regresiva(n):
-    while n > 0:
-        yield n
-        n -= 1
-
-for x in cuenta_regresiva(3):
-    print(x)
-```
-
-Salida:
-
-```
-3
-2
-1
-```
-
-👉 Los generadores son muy útiles en IA cuando manejamos **datasets grandes** que no caben en memoria.
-
----
-
-✅ **En resumen:**
-
-* **Listas** → colecciones ordenadas y mutables.
-* **Tuplas** → colecciones ordenadas e inmutables.
-* **Sets** → no ordenados, sin duplicados.
-* **Diccionarios** → pares clave → valor.
-* **Comprensiones** → crean estructuras de forma compacta.
-* **Iteradores y generadores** → permiten recorrer y producir datos de forma eficiente.
