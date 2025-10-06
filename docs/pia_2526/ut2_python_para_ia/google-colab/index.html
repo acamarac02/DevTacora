@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-pia_2526/ut2_python_para_ia/google-colab" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.8.1">
+<title data-rh="true">Google Colab | DevTacora</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://acamarac02.github.io/DevTacora/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://acamarac02.github.io/DevTacora/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut2_python_para_ia/google-colab"><meta data-rh="true" property="og:locale" content="es"><meta data-rh="true" name="docusaurus_locale" content="es"><meta data-rh="true" name="docsearch:language" content="es"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Google Colab | DevTacora"><meta data-rh="true" name="description" content="Tutorial de uso de Google Colab: creación de notebooks, importación de datasets, conexión con Google Drive y exportación de resultados."><meta data-rh="true" property="og:description" content="Tutorial de uso de Google Colab: creación de notebooks, importación de datasets, conexión con Google Drive y exportación de resultados."><meta data-rh="true" name="keywords" content="Google Colab,Jupyter,Python,IA,Notebooks,datasets"><link data-rh="true" rel="icon" href="/DevTacora/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut2_python_para_ia/google-colab"><link data-rh="true" rel="alternate" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut2_python_para_ia/google-colab" hreflang="es"><link data-rh="true" rel="alternate" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut2_python_para_ia/google-colab" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"UT2. Python para la IA","item":"https://acamarac02.github.io/DevTacora/docs/category/ut2-python-para-la-ia"},{"@type":"ListItem","position":2,"name":"Google Colab","item":"https://acamarac02.github.io/DevTacora/docs/pia_2526/ut2_python_para_ia/google-colab"}]}</script><link rel="alternate" type="application/rss+xml" href="/DevTacora/blog/rss.xml" title="DevTacora RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/DevTacora/blog/atom.xml" title="DevTacora Atom Feed">
+
+
+
+
+<link rel="preconnect" href="https://www.google-analytics.com">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7WCKN9ZY1F"></script>
+<script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-7WCKN9ZY1F",{anonymize_ip:!0})</script><link rel="stylesheet" href="/DevTacora/assets/css/styles.7f1759d1.css">
+<script src="/DevTacora/assets/js/runtime~main.8fd8cae0.js" defer="defer"></script>
+<script src="/DevTacora/assets/js/main.3c79d8d7.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t="light";var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",e||t),document.documentElement.setAttribute("data-theme-choice",e||t)}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Saltar al contenido principal"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Saltar al contenido principal</a></div><nav aria-label="Principal" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Alternar barra lateral" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/DevTacora/"><div class="navbar__logo"><img src="/DevTacora/img/devtacora_logo.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/DevTacora/img/devtacora_logo.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">DevTacora</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/DevTacora/docs/pia_2526/">PIA</a><a class="navbar__item navbar__link" href="/DevTacora/docs/pmdm_2526/">PMDM</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a class="navbar__item navbar__link" href="/DevTacora/docs/licencia">Licencia</a><a href="https://www.linkedin.com/in/aliciacamcas" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">LinkedIn<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Cambiar entre modo oscuro y claro (actualmente system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Volver al principio" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Barra lateral de Documentos" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/DevTacora/docs/pia_2526/">Presentación</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/DevTacora/docs/category/ut1-introducción-a-la-ia">UT1. Introducción a la IA</a><button aria-label="Ampliar la categoría &#x27;UT1. Introducción a la IA&#x27; de la barra lateral" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" href="/DevTacora/docs/category/ut2-python-para-la-ia">UT2. Python para la IA</a><button aria-label="Colapsar categoría &#x27;UT2. Python para la IA&#x27; de la barra lateral" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut2_python_para_ia/introduccion">Introducción</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/DevTacora/docs/pia_2526/ut2_python_para_ia/google-colab">Google Colab</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut2_python_para_ia/fundamentos-python">Fundamentos de Python</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut2_python_para_ia/estructuras-control">Estructuras de control</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" tabindex="0" href="/DevTacora/docs/category/estructuras-de-datos">Estructuras de datos</a><button aria-label="Ampliar la categoría &#x27;Estructuras de datos&#x27; de la barra lateral" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Rastro de navegación"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Página de Inicio" class="breadcrumbs__link" href="/DevTacora/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/DevTacora/docs/category/ut2-python-para-la-ia"><span>UT2. Python para la IA</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Google Colab</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">En esta página</button></div><div class="theme-doc-markdown markdown"><header><h1>Google Colab</h1></header><div class="justify-text"><p>Google Colab (o <em>Colaboratory</em>) es una plataforma gratuita de Google basada en <strong>Jupyter Notebooks</strong>, que permite escribir y ejecutar código Python directamente en el navegador, sin necesidad de instalar nada en el ordenador. Es una herramienta muy potente en Inteligencia Artificial porque:</p><ul>
+<li>Ofrece acceso gratuito a <strong>GPUs y TPUs</strong> para acelerar cálculos.</li>
+<li>Permite <strong>colaborar en tiempo real</strong> (como en Google Docs).</li>
+<li>Está integrado con <strong>Google Drive</strong>, facilitando guardar y compartir proyectos.</li>
+</ul><p>A continuación, veremos cómo utilizarlo paso a paso.</p><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="creación-y-organización-de-notebooks">Creación y organización de notebooks<a href="#creación-y-organización-de-notebooks" class="hash-link" aria-label="Enlace directo al Creación y organización de notebooks" title="Enlace directo al Creación y organización de notebooks">​</a></h2><p>Para trabajar con Google Colab seguiremos estos pasos:</p><ol>
+<li>Accede a <a href="https://colab.research.google.com" target="_blank" rel="noopener noreferrer">Google Colab</a>. Ten en cuenta que los cuadernos de Jupyter se guardará en Drive, por lo que selecciona la cuenta que más te interese.</li>
+<li>Haz clic en <strong>Archivo &gt; Nuevo cuaderno</strong>.</li>
+</ol><p><img decoding="async" loading="lazy" alt="Nuevo cuaderno" src="/DevTacora/assets/images/nuevo-cuaderno-734619d424ccf0b6b3569a78c679a6c7.png" width="1820" height="1414" class="img_ev3q"></p><ol start="3">
+<li>
+<p>Se abrirá un <strong>notebook</strong> con una primera celda vacía donde podrás escribir código Python.</p>
+</li>
+<li>
+<p>Dentro de un cuadero de Jupyter puedes escribir:</p>
+<ul>
+<li><strong>Celdas de texto</strong> (en formato Markdown, útiles para notas, títulos o fórmulas matemáticas). Mientras lo estés editando, en la izquierda verás el código Markdown escrito y en la derecha una preview de cómo quedará en tu cuaderno el código escrito.</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Celda de texto" src="/DevTacora/assets/images/celda-texto-0cee01f149ab303ed9cffc695f4f833f.png" width="3162" height="430" class="img_ev3q"></p>
+<ul>
+<li><strong>Celdas de código</strong> (para ejecutar Python).</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Celda de código" src="/DevTacora/assets/images/celda-codigo-3a695ac0a37e34e2fa0a8d2a3c96046f.png" width="3162" height="228" class="img_ev3q"></p>
+</li>
+<li>
+<p>Para mantener tus proyectos organizados:</p>
+<ul>
+<li>Renombra tu notebook desde la esquina superior izquierda.</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Renombrar notebook" src="/DevTacora/assets/images/renombrar-notebook-3bbd93f64899e55fa1281e5b0999a6ba.png" width="1270" height="220" class="img_ev3q"></p>
+<ul>
+<li>Mueve el archivo a una carpeta de tu <strong>Google Drive</strong> en la opción <em>Archivo &gt; Mover</em>.</li>
+</ul>
+</li>
+</ol><p>💡 <strong>Consejo:</strong> usa nombres descriptivos y organiza las carpetas por temas o unidades del curso.</p><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="ejecutar-código">Ejecutar código<a href="#ejecutar-código" class="hash-link" aria-label="Enlace directo al Ejecutar código" title="Enlace directo al Ejecutar código">​</a></h2><p>Cuando en Google Colab ejecutas una celda por <strong>primera vez</strong>, el sistema necesita <strong>conectar con un entorno de ejecución</strong>. Ese entorno es, en realidad, una <strong>máquina virtual basada en Linux</strong> que Google crea en la nube exclusivamente para tu sesión. Esta máquina ya trae incorporado un intérprete de Python 3 con las librerías más comunes ya instaladas (NumPy, Pandas, Matplotlib, etc.).</p><p>Cuando ejecutamos código, el resultado de la ejecución aparece <strong>debajo de la celda</strong> (puede ser un valor, un gráfico, una tabla, etc.).</p><p>Para ejecutarlo, tenemos dos opciones:</p><ul>
+<li>
+<p><strong>Ejecutar celda a celda</strong> con <strong>Ctrl + Enter</strong> o el botón de Play:</p>
+<p><img decoding="async" loading="lazy" alt="Celda ejecutada" src="/DevTacora/assets/images/celda-ejecutada-24001f165037532c8a30354fc6bef2e1.png" width="1042" height="302" class="img_ev3q"></p>
+<p>Si te fijas en el imagen anterior, el [1] indica que ha sido la primera celda en ejecutarse en el entorno creado y los 0s indica el tiempo que tardó en ejecutar.</p>
+</li>
+<li>
+<p><strong>Ejecutar todo el código que haya en el Notebook</strong>, seleccionando la opción Ejecutar todas en el menú superior. En este caso, se ejecutarán las celdas en orden secuencial, ignorando todas las celdas de texto.</p>
+</li>
+</ul><hr><h3 class="anchor anchorWithStickyNavbar_LWe7" id="orden-de-ejecución">Orden de ejecución<a href="#orden-de-ejecución" class="hash-link" aria-label="Enlace directo al Orden de ejecución" title="Enlace directo al Orden de ejecución">​</a></h3><p>El orden de ejecución en Colab no siempre coincide con el orden en el que aparecen las celdas.</p><ul>
+<li>Cada vez que ejecutas una celda, se guarda el resultado en la memoria del entorno.</li>
+<li>Si vuelves atrás y modificas una celda anterior, tendrás que <strong>ejecutarla de nuevo</strong> y luego volver a ejecutar las posteriores para que el flujo sea coherente.</li>
+<li>El número que aparece a la izquierda de la celda (por ejemplo <code>[3]</code>) indica el orden en el que fue ejecutada.</li>
+</ul><p>💡 <strong>Consejo:</strong> cuando tu notebook tenga muchas celdas, usa la opción <strong>Entorno de ejecución &gt; Ejecutar todas</strong> para asegurarte de que todo funciona de principio a fin.</p><hr><h3 class="anchor anchorWithStickyNavbar_LWe7" id="reinicio-del-entorno">Reinicio del entorno<a href="#reinicio-del-entorno" class="hash-link" aria-label="Enlace directo al Reinicio del entorno" title="Enlace directo al Reinicio del entorno">​</a></h3><p>El entorno de Colab es <strong>temporal</strong>:</p><ul>
+<li>Al cabo de unas horas de inactividad, la sesión puede cerrarse.</li>
+<li>También puede reiniciarse si usas demasiada memoria.</li>
+</ul><p>Cuando esto ocurre, todas las variables y archivos cargados se borran. Para volver a trabajar, deberás <strong>ejecutar de nuevo todas las celdas</strong>.</p><hr><h3 class="anchor anchorWithStickyNavbar_LWe7" id="ejecución-de-comandos-del-sistema">Ejecución de comandos del sistema<a href="#ejecución-de-comandos-del-sistema" class="hash-link" aria-label="Enlace directo al Ejecución de comandos del sistema" title="Enlace directo al Ejecución de comandos del sistema">​</a></h3><p>Google Colab no solo permite ejecutar Python, también puedes lanzar comandos de sistema (Linux/Unix) anteponiendo el símbolo <code>!</code>.</p><p>Ejemplos:</p><ul>
+<li><code>!pwd</code> → muestra la carpeta actual.</li>
+<li><code>!ls</code> → lista los archivos en el directorio actual.</li>
+<li><code>!mkdir datos</code> → crea una carpeta llamada <code>datos</code>.</li>
+<li><code>!pip install nombre_libreria</code> → instala una librería adicional en el entorno.</li>
+</ul><p>Esto es muy útil para manejar datasets y gestionar paquetes sin salir de Colab.</p><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="importación-de-datasets">Importación de datasets<a href="#importación-de-datasets" class="hash-link" aria-label="Enlace directo al Importación de datasets" title="Enlace directo al Importación de datasets">​</a></h2><p>Muchas veces necesitarás trabajar con conjuntos de datos externos. Google Colab ofrece varias formas de importarlos:</p><ul>
+<li>
+<p><strong>Subir un archivo desde tu ordenador</strong>:</p>
+<ul>
+<li>
+<p>Haz clic en el icono de carpeta (barra lateral izquierda).</p>
+<p><img decoding="async" loading="lazy" alt="Archivos Colab" src="/DevTacora/assets/images/archivos-colab-23bbdcf536eda533d23ef91bf5497adb.png" width="686" height="1356" class="img_ev3q"></p>
+</li>
+<li>
+<p>Selecciona <strong>Subir</strong> y elige un archivo (CSV, TXT, JSON, etc.).</p>
+</li>
+<li>
+<p>El archivo estará disponible en el <strong>entorno temporal</strong> de Colab.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Cargar datos desde una URL</strong>:</p>
+<ul>
+<li>Puedes descargar datasets directamente con comandos como <code>wget</code> o <code>curl</code> dentro de una celda.</li>
+</ul>
+</li>
+</ul><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="conexión-con-google-drive">Conexión con Google Drive<a href="#conexión-con-google-drive" class="hash-link" aria-label="Enlace directo al Conexión con Google Drive" title="Enlace directo al Conexión con Google Drive">​</a></h2><p>Una de las mayores ventajas de Colab es que se integra con <strong>Google Drive</strong>.</p><ol>
+<li>
+<p>En el panel lateral izquierdo, haz clic en el icono de Drive.</p>
+<p><img decoding="async" loading="lazy" alt="Google Drive" src="/DevTacora/assets/images/google-drive-aca756d603f85d0c89bf763ad817cfa9.png" width="3346" height="1430" class="img_ev3q"></p>
+</li>
+<li>
+<p>Selecciona <strong>Montar Drive</strong>.</p>
+</li>
+<li>
+<p>Una vez montado, verás una carpeta llamada <code>/drive/MyDrive</code>.</p>
+<p><img decoding="async" loading="lazy" alt="Archivos Drive" src="/DevTacora/assets/images/archivos-drive-9996a07dbb683725d5d025206a70e35e.png" width="682" height="542" class="img_ev3q"></p>
+</li>
+<li>
+<p>Dentro tendrás acceso a todos tus archivos y carpetas de Google Drive.</p>
+</li>
+</ol><p>Esto te permitirá <strong>leer datasets almacenados en Drive</strong> y <strong>guardar tus resultados directamente en la nube</strong>, sin depender del entorno volátil que habíamos visto antes.</p><hr><h2 class="anchor anchorWithStickyNavbar_LWe7" id="descarga-y-exportación-de-resultados">Descarga y exportación de resultados<a href="#descarga-y-exportación-de-resultados" class="hash-link" aria-label="Enlace directo al Descarga y exportación de resultados" title="Enlace directo al Descarga y exportación de resultados">​</a></h2><p>Al finalizar un proyecto, puedes guardar y exportar tu trabajo de distintas formas:</p><ul>
+<li>
+<p><strong>Guardar en Google Drive</strong>: el notebook se guarda automáticamente en tu cuenta de Drive.</p>
+</li>
+<li>
+<p><strong>Descargar el notebook</strong>: desde <strong>Archivo &gt; Descargar</strong>, elige entre:</p>
+<ul>
+<li><code>.ipynb</code> (formato de Jupyter Notebook).</li>
+<li><code>.py</code> (archivo Python).</li>
+<li><code>.pdf</code> (ideal para entregar informes).</li>
+</ul>
+</li>
+<li>
+<p><strong>Guardar resultados intermedios</strong>: también puedes exportar tablas o gráficos en formato CSV, PNG, etc., directamente a tu carpeta de Drive montada en Colab.</p>
+</li>
+</ul></div></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Página del documento"><a class="pagination-nav__link pagination-nav__link--prev" href="/DevTacora/docs/pia_2526/ut2_python_para_ia/introduccion"><div class="pagination-nav__sublabel">Anterior</div><div class="pagination-nav__label">Introducción</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/DevTacora/docs/pia_2526/ut2_python_para_ia/fundamentos-python"><div class="pagination-nav__sublabel">Siguiente</div><div class="pagination-nav__label">Fundamentos de Python</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#creación-y-organización-de-notebooks" class="table-of-contents__link toc-highlight">Creación y organización de notebooks</a></li><li><a href="#ejecutar-código" class="table-of-contents__link toc-highlight">Ejecutar código</a><ul><li><a href="#orden-de-ejecución" class="table-of-contents__link toc-highlight">Orden de ejecución</a></li><li><a href="#reinicio-del-entorno" class="table-of-contents__link toc-highlight">Reinicio del entorno</a></li><li><a href="#ejecución-de-comandos-del-sistema" class="table-of-contents__link toc-highlight">Ejecución de comandos del sistema</a></li></ul></li><li><a href="#importación-de-datasets" class="table-of-contents__link toc-highlight">Importación de datasets</a></li><li><a href="#conexión-con-google-drive" class="table-of-contents__link toc-highlight">Conexión con Google Drive</a></li><li><a href="#descarga-y-exportación-de-resultados" class="table-of-contents__link toc-highlight">Descarga y exportación de resultados</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">
+        <section classname="bg-white border-t border-gray-100">
+      <div classname="max-w-4xl mx-auto px-6 py-16 text-center">
+        <h3 classname="text-2xl font-bold text-gray-900 mb-4">
+          Construyendo conocimiento, línea por línea
+        </h3>
+        <p classname="text-gray-600 leading-relaxed">
+          © 2025 Alicia Cámara Casares - Contenido bajo licencia 
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" classname="text-blue-600 hover:text-blue-700 underline">
+                CC BY-NC-SA 4.0
+              </a>.
+        </p>
+      </div>
+    </section>
+      </div></div></div></footer></div>
+</body>
+</html>
