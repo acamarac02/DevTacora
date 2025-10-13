@@ -121,3 +121,37 @@ print(claves)
 valores = list(persona.values())
 print(valores)
 ```
+
+
+### Obtener pares clave-valor
+
+El método `.items()` devuelve una **lista de pares (clave, valor)** del diccionario.
+Cada elemento devuelto es una tupla con la clave y su valor correspondiente.
+
+```python
+persona = {"nombre": "Ana", "edad": 25, "ciudad": "Madrid"}
+
+pares = list(persona.items())
+print(pares)
+```
+
+**Salida:**
+
+```
+[('nombre', 'Ana'), ('edad', 25), ('ciudad', 'Madrid')]
+```
+
+También puede recorrerse directamente en un bucle `for`:
+
+```python
+for clave, valor in persona.items():
+    print(clave, "→", valor)
+```
+
+**Salida:**
+
+```
+nombre → Ana
+edad → 25
+ciudad → Madrid
+```
