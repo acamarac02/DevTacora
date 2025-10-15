@@ -1,0 +1,8 @@
+{
+  "label": "UT3. Interfaces de usuario y navegación",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "En esta unidad profundizaremos en la creación de interfaces dinámicas mediante Fragments, la implementación de menús y sistemas de navegación (Drawer, Bottom Navigation, etc.), y la arquitectura MVVM para una gestión eficiente de la lógica y los datos en las aplicaciones Android."
+  }
+}

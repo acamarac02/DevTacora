@@ -257,7 +257,15 @@ img[alt="Spinner"],
 img[alt="Nuevo cuaderno"],
 img[alt="Archivos Colab"],
 img[alt="Archivos Drive"],
-img[alt="Resumen range"]   {
+img[alt="Resumen range"],
+img[alt="Activity con fragment"],
+img[alt="Reutilización codigo - Fragments"],
+img[alt="Navigation graph"],
+img[alt="NavHostFragment"],
+img[alt="Tipo Navigation"],
+img[alt="Modo design"],
+img[alt="Creación fragment"],
+img[alt="Directorio fragments"]  {
   height: 500px;
   width: auto;
   display: block;
@@ -285,7 +293,8 @@ img[alt="RelativeLayout"],
 img[alt="Nuevo layout landscape"],
 img[alt="Layout landscape"],
 img[alt="ToggleButton"],
-img[alt="ImageButton"]  {
+img[alt="ImageButton"],
+img[alt="Crear grafo navegación"]  {
   display: block;
   margin: 0 auto;
 }
