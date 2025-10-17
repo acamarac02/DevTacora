@@ -1,0 +1,8 @@
+{
+  "label": "Menús",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Los menús en Android permiten estructurar la navegación de una aplicación mediante elementos visuales como Toolbar, Navigation Drawer, Bottom Navigation o TabLayout, ofreciendo una experiencia coherente y fluida al usuario."
+  }
+}
