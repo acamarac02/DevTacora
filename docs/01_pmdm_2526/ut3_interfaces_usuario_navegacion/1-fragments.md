@@ -598,5 +598,9 @@ Ventajas de usar `ViewModel`:
 Aprenderemos esta técnica en próximos apartados.
 :::
 
+:::info ACTIVIDAD DE SEGUIMIENTO 4
+**Realiza la Actividad de Seguimiento 4: Proceso Onboarding.**
+:::
+
 
 </div>

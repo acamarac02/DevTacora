@@ -10,7 +10,7 @@ keywords: [Android, OptionsMenu, Toolbar, Menu, NavigationUI, MaterialDesign]
 El **Options Menu** es el menú principal de acciones que aparece en la **parte superior derecha de la Toolbar** (a veces representado con el icono de tres puntos verticales).  
 Se utiliza para ofrecer **acciones adicionales o configuraciones secundarias**, como *Buscar*, *Ajustes*, *Ayuda*, etc.
 
-<!-- ![Demo Options Menu](../0-img/demo-options-menu.gif) -->
+![Demo Options Menu](../0-img/demo-options-menu.gif)
 
 ---
 
@@ -31,13 +31,21 @@ Partiremos de un proyecto con **Navigation Component configurado** y una **Toolb
     tools:context=".MainActivity">
 
     <!-- AppBar superior -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:titleCentered="true"
-        app:titleTextColor="@android:color/white" />
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:titleCentered="true"
+            app:popupTheme="@style/ThemeOverlay.Material3.Dark"
+            app:titleTextColor="@android:color/white"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Contenedor principal de fragments -->
     <androidx.fragment.app.FragmentContainerView
@@ -50,7 +58,7 @@ Partiremos de un proyecto con **Navigation Component configurado** y una **Toolb
         app:navGraph="@navigation/nav_graph" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-````
+```
 
 ---
 
@@ -108,23 +116,20 @@ En `res/navigation/nav_graph.xml` definimos los fragments a los que accederemos 
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
-
     <fragment
         android:id="@+id/homeFragment"
         android:name="es.iesagora.demomenu.HomeFragment"
-        android:label="Inicio"
+        android:label="Home"
         tools:layout="@layout/fragment_home" />
-
     <fragment
         android:id="@+id/settingsFragment"
         android:name="es.iesagora.demomenu.SettingsFragment"
-        android:label="Ajustes"
+        android:label="Settings"
         tools:layout="@layout/fragment_settings" />
-
     <fragment
         android:id="@+id/helpFragment"
         android:name="es.iesagora.demomenu.HelpFragment"
-        android:label="Ayuda"
+        android:label="Help"
         tools:layout="@layout/fragment_help" />
 </navigation>
 ```
@@ -142,7 +147,7 @@ En la `MainActivity` configuramos la `Toolbar` y el `NavigationUI` para que sinc
 ```java title="MainActivity.java"
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding binding;
+    private ActivityMainBinding binding;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
 
@@ -151,52 +156,52 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView((binding = ActivityMainBinding.inflate(getLayoutInflater())).getRoot());
 
-        // 1️⃣ Configurar la Toolbar como ActionBar
+        // 1. Obtenemos la referencia de la Toolbar del layout
         setSupportActionBar(binding.toolbar);
 
-        // 2️⃣ Obtener el NavController
-        navController = ((NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.nav_host_fragment)).getNavController();
+        // 2. Obtenemos el NavController desde el contenedor del grafo
+        navController = ((NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)).getNavController();
 
-        // 3️⃣ Definir los destinos principales
+        // 3. Definir los destinos principales. En este caso solo home será principal (decisión de diseño)
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.homeFragment
         ).build();
 
-        // 4️⃣ Vincular Toolbar con NavController
+        // 4. Vincular Toolbar con NavController
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
     }
 
-    // 5️⃣ Cargar el menú de opciones en la Toolbar
+    // Cargar el menú de opciones en la Toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_options, menu);
         return true;
     }
 
-    // 6️⃣ Gestionar los clics en las opciones del menú
+    // Gestionar los clics en las opciones del menú
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return NavigationUI.onNavDestinationSelected(item, navController)
                 || super.onOptionsItemSelected(item);
     }
 
-    // 7️⃣ Gestionar el botón de navegación (flecha atrás)
+    // Gestionar el botón de navegación (flecha atrás)
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 }
 ```
 
----
+:::info EN APPS MODERNAS  
+El **Options Menu** (el menú de los tres puntos) ha perdido protagonismo en las interfaces modernas basadas en **Material Design 3**.  
+Actualmente se utiliza sobre todo para **acciones globales o poco frecuentes** (*Ajustes*, *Ayuda*, *Acerca de…*), mientras que las acciones principales se colocan directamente en la **Toolbar**, o bien se integran en patrones de navegación más actuales como el **Bottom Navigation** o el **Navigation Drawer**.  
+:::
 
-## ✅ Ventajas del Options Menu
-
-* Permite acceder a **acciones globales** o de configuración.
-* Integra automáticamente el título del fragment en la Toolbar.
-* Compatible con **NavigationUI**, lo que evita manejar los clics manualmente.
-* Se adapta automáticamente al **modo claro/oscuro** de Material 3.
+:::info ACTIVIDAD DE SEGUIMIENTO 5
+**Realiza la Actividad de Seguimiento 5: Demo menús.**
+:::
 
 </div>
