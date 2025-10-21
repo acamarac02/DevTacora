@@ -270,7 +270,9 @@ img[alt="Demo menús"],
 img[alt="App con appbar"],
 img[alt="Demo BottomMenu"],
 img[alt="Demo Drawer"],
-img[alt="Demo Options Menu"] {
+img[alt="Demo Options Menu"],
+img[alt="Esquema TabLayout"],
+img[alt="Demo Tabs"] {
   height: 500px;
   width: auto;
   display: block;

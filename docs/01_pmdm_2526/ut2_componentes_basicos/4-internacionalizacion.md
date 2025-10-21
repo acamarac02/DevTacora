@@ -9,16 +9,32 @@ La **internacionalización** en Android permite que tu aplicación soporte múlt
 
 ## Directorios de recursos
 
-Los textos de la interfaz de usuario (botones, etiquetas, mensajes, etc.) se almacenan en archivos `strings.xml` dentro de la carpeta `res/values`.  
-Para cada idioma, se debe crear un nuevo directorio `values` con un sufijo que identifique el idioma específico:
+Los **textos de la interfaz de usuario** (botones, etiquetas, títulos, mensajes, etc.) se guardan en archivos `strings.xml` dentro de la carpeta `res/values`.
+
+Cuando queremos traducir la aplicación a varios idiomas, **no es necesario crear manualmente nuevas carpetas**.
+Android Studio se encarga de colocar el archivo en el directorio correcto según el idioma que elijamos al crearlo.
+
+Para añadir un nuevo idioma:
+
+1. Haz clic derecho sobre la carpeta **`res` → New → Android Resource File**.
+2. En el campo **File name**, escribe `strings.xml`.
+3. En **Resource type**, selecciona `Values`.
+4. En el apartado **Available qualifiers**, elige **Locale** y selecciona el idioma y país deseado (por ejemplo, `es` para español).
+5. Android Studio creará automáticamente el archivo dentro del directorio adecuado.
+
+![Nuevo idioma](./0-img/nuevo-idioma.png)
+
+Ejemplo del resultado:
 
 ```
-res/values/strings.xml      → Textos por defecto (usualmente en inglés)
-res/values-es/strings.xml   → Textos en español
-res/values-en/strings.xml   → Textos en inglés
-res/values-fr/strings.xml   → Textos en francés
-res/values-de/strings.xml   → Textos en alemán
+res/values/strings.xml        → Textos por defecto (idioma base)
+res/values-es/strings.xml     → Traducción al español
+res/values-fr/strings.xml     → Traducción al francés
+res/values-de/strings.xml     → Traducción al alemán
 ```
+
+Android selecciona **automáticamente** el archivo adecuado según el idioma configurado en el dispositivo del usuario.
+
 
 ## Ejemplo de `strings.xml`
 
