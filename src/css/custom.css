@@ -272,7 +272,11 @@ img[alt="Demo BottomMenu"],
 img[alt="Demo Drawer"],
 img[alt="Demo Options Menu"],
 img[alt="Esquema TabLayout"],
-img[alt="Demo Tabs"] {
+img[alt="Demo Tabs"],
+img[alt="Ejemplo RecyclerView"],
+img[alt="Grafo navegación RecyclerView"],
+img[alt="Resumen navegación Recycler"],
+img[alt="Demo Recycler"] {
   height: 500px;
   width: auto;
   display: block;
@@ -302,7 +306,10 @@ img[alt="Layout landscape"],
 img[alt="ToggleButton"],
 img[alt="ImageButton"],
 img[alt="Crear grafo navegación"],
-img[alt="BottomNavigation demo"]  {
+img[alt="BottomNavigation demo"],
+img[alt="Disposiciones RecyclerView"],
+img[alt="Resumen ViewHolders"],
+img[alt="Organización paquetes"]  {
   display: block;
   margin: 0 auto;
 }
