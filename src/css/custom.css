@@ -276,7 +276,8 @@ img[alt="Demo Tabs"],
 img[alt="Ejemplo RecyclerView"],
 img[alt="Grafo navegación RecyclerView"],
 img[alt="Resumen navegación Recycler"],
-img[alt="Demo Recycler"] {
+img[alt="Demo Recycler"],
+img[alt="Demo app"] {
   height: 500px;
   width: auto;
   display: block;
@@ -309,7 +310,8 @@ img[alt="Crear grafo navegación"],
 img[alt="BottomNavigation demo"],
 img[alt="Disposiciones RecyclerView"],
 img[alt="Resumen ViewHolders"],
-img[alt="Organización paquetes"]  {
+img[alt="Organización paquetes"],
+img[alt="Argumento Serializable"]  {
   display: block;
   margin: 0 auto;
 }

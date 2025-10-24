@@ -223,6 +223,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
     }
 
+    // Método que se ejecuta cuando el usuario pulsa el botón de “navegación superior” de la barra de la app, es decir:
+    // el icono de flecha atrás, o el icono de menú hamburguesa (si tienes un DrawerLayout).
+    @Override
+    public boolean onSupportNavigateUp() {
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
+
 }
 ```
 

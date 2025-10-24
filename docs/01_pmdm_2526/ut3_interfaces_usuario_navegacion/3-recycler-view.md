@@ -355,6 +355,8 @@ Ahora conectamos todo en el fragmento que mostrará la lista de animales.
 public class AnimalesFragment extends Fragment {
 
     private FragmentAnimalesBinding binding;
+    private AnimalesRepository repository;
+    private AnimalesAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -368,26 +370,358 @@ public class AnimalesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Obtenemos la lista desde el Repository
-        AnimalesRepository repository = new AnimalesRepository();
+        repository = new AnimalesRepository();
         List<Animal> listaAnimales = repository.getAnimales();
 
         // Configuramos el RecyclerView
-        AnimalesAdapter adapter = new AnimalesAdapter(requireContext(), listaAnimales);
+        adapter = new AnimalesAdapter(requireContext(), listaAnimales);
         binding.recyclerView.setAdapter(adapter);
 
         // Definimos el LayoutManager (en cuadrícula de 2 columnas)
         binding.recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
-
     }
 }
 ```
 
 ---
 
-## Interacción con los ViewHolders
 
-### Navegación a la pantalla de detalle
+## Navegación a la pantalla de detalle
 
-### Eliminar un elemento
+Ahora vamos a hacer que **al pulsar sobre un animal del RecyclerView**, se abra una **pantalla de detalle** (`DetalleAnimalFragment`) que muestre su información completa.  
+Para ello utilizaremos el sistema de **Navigation Component** y los **argumentos entre fragments**.
+
+![Demo app](./0-img/demo-nav-recyclerview.gif)
+
+### 1️⃣ Añadir el argumento al grafo de navegación
+
+En el paso 1 del tutorial anterior ya creamos el fragmento de detalle (`detalleAnimalFragment`) dentro del grafo de navegación.
+Ahora vamos a añadirle el **argumento** que recibirá: el **animal seleccionado** en el fragmento principal (`AnimalesFragment`).
+
+Llamaremos a este argumento **`animal`** y su tipo será **`Custom Serializable`**, ya que la clase `Animal` implementa la interfaz Serializable y podremos enviarla completa entre fragments.
+
+![Argumento Serializable](./0-img/arg-custom-serializable.png)
+
+En la siguiente pantalla del wizard buscaremos la clase Java que creamos anteriormente para representar cada animal.
+
+![Clase Java](./0-img/selec-clase-java.png)
+
+El grafo de navegación queda de la siguiente forma:
+
+```xml title="nav_graph.xml"
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/animalesFragment">
+
+    <fragment
+        android:id="@+id/animalesFragment"
+        android:name="es.iesagora.demorecyclerview.AnimalesFragment"
+        android:label="Animales"
+        tools:layout="@layout/fragment_animales" >
+        <action
+            android:id="@+id/action_animalesFragment_to_detalleAnimalFragment"
+            app:destination="@id/detalleAnimalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detalleAnimalFragment"
+        android:name="es.iesagora.demorecyclerview.DetalleAnimalFragment"
+        android:label="Detalle animal"
+        tools:layout="@layout/fragment_detalle_animal" >
+        <argument
+            android:name="animal"
+            app:argType="es.iesagora.demorecyclerview.model.Animal" />
+    </fragment>
+</navigation>
+```
+
+> 💡 Esto permitirá **enviar un objeto `Animal` completo** desde el fragmento principal hasta el de detalle.
+
+---
+
+### 2️⃣ Modificar el adaptador para detectar los clics
+
+Cada `ViewHolder` tiene una propiedad `itemView`, que representa **la vista raíz del layout del elemento**.
+Podemos asignarle un **OnClickListener** para detectar cuándo el usuario toca cualquier parte de la tarjeta.
+
+Este código se coloca dentro del método `onBindViewHolder()` porque es el lugar donde **asociamos los datos de cada posición** con su vista correspondiente.
+De esta forma, el clic siempre estará vinculado **al objeto `Animal` que se está mostrando en ese momento**.
+
+En este ejemplo, al hacer clic sobre un animal:
+
+* Obtenemos el objeto correspondiente.
+* Navegamos al fragmento de detalle, enviando el `Animal` como argumento.
+
+```java title="AnimalesAdapter.java (fragmento modificado)"
+// Aquí va el resto del código que ya teníamos
+
+@Override
+public void onBindViewHolder(@NonNull AnimalViewHolder holder, int position) {
+    Animal animal = animales.get(position);
+
+    holder.binding.tvNombre.setText(animal.getNombre());
+    holder.binding.ivAnimal.setImageResource(animal.getImagen());
+
+    // Detectar el click sobre la tarjeta
+    holder.itemView.setOnClickListener(v -> {
+        // 1. Crear un Bundle con el animal seleccionado
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("animal", animal);
+
+        // 2. Navegar al fragmento de detalle usando NavController
+        NavController navController = Navigation.findNavController(v);
+        navController.navigate(R.id.action_animalesFragment_to_detalleAnimalFragment, bundle);
+    });
+}
+```
+
+> 🔹 Aquí estamos utilizando el método `navigate()` del `NavController` para movernos al destino definido en el grafo (`action_animalesFragment_to_detalleAnimalFragment`).
+
+---
+
+### 3️⃣ Crear el layout de detalle
+
+En `fragment_detalle_animal.xml`, diseñamos la interfaz que mostrará la información completa del animal.
+Podemos incluir su imagen, nombre y descripción.
+
+```xml title="fragment_detalle_animal.xml"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:padding="16dp"
+    tools:context=".DetalleAnimalFragment">
+
+    <ImageView
+        android:id="@+id/ivDetalle"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tvNombreDetalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tvDescripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+</LinearLayout>
+```
+
+---
+
+### 4️⃣ Implementar el fragmento de detalle
+
+En el fragmento `DetalleAnimalFragment`, recuperamos el argumento recibido (en el método del ciclo de vida `onCreate`) y lo mostramos en pantalla.
+
+```java title="DetalleAnimalFragment.java"
+public class DetalleAnimalFragment extends Fragment {
+
+    // Variable para almacenar el animal recibido
+    private Animal animal;
+    private FragmentDetalleAnimalBinding binding;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Recuperamos el argumento enviado desde el adapter (antes de crear la vista)
+        if (getArguments() != null) {
+            animal = (Animal) getArguments().getSerializable("animal");
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentDetalleAnimalBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (animal != null) {
+            // Mostramos los datos del animal en la interfaz
+            binding.tvNombreDetalle.setText(animal.getNombre());
+            binding.ivDetalle.setImageResource(animal.getImagen());
+            binding.tvDescripcion.setText(animal.getDescripcion());
+        } else {
+            // En caso de error, podríamos volver atrás o mostrar un mensaje
+            Toast.makeText(requireContext(), "No se pudo cargar el detalle del animal", Toast.LENGTH_SHORT).show();
+            requireActivity().onBackPressed();
+        }
+    }
+}
+```
+
+:::tip Recuerda
+Para que la navegación funcione correctamente:
+
+* La **acción** entre fragments debe estar creada en el **grafo de navegación**.
+* La **clase `Animal`** debe implementar `Serializable` (ya lo hace).
+* El **ID de la acción** usado en `navigate()` debe coincidir con el del grafo (`action_animalesFragment_to_detalleAnimalFragment`).
+  :::
+
+## Eliminar un elemento mediante gestos
+
+En este apartado aprenderemos a **eliminar un elemento del RecyclerView deslizando el dedo** hacia la izquierda o hacia la derecha, igual que hacen muchas apps modernas (como la lista de correos o de tareas).
+
+Para ello utilizaremos la clase **`ItemTouchHelper`**, que permite **detectar gestos de movimiento o desplazamiento** sobre los elementos del RecyclerView (los ViewHolders).
+
+![Demo app](./0-img/demo-eliminar-recycler.gif)
+
+### 1️⃣ Añadir métodos al Repository
+
+Antes de poder eliminar elementos desde el fragmento, debemos preparar nuestro **repositorio de datos** para ofrecer las operaciones necesarias.
+
+Hemos añadido dos nuevos métodos a la clase `AnimalesRepository`:
+
+```java title="AnimalesRepository.java (fragmento añadido)"
+public class AnimalesRepository {
+
+    private List<Animal> listaAnimales;
+
+    public AnimalesRepository() {
+        listaAnimales = new ArrayList<>();
+        // ... Inicialización de la lista con los animales ...
+    }
+
+    // Devuelve el animal que ocupa una posición concreta
+    public Animal getAnimal(int position) {
+        if (position >= 0 && position < listaAnimales.size()) {
+            return listaAnimales.get(position);
+        }
+        return null; // Devuelve null si la posición no es válida
+    }
+
+    // Elimina un animal de la lista
+    public void eliminarAnimal(Animal animal) {
+        listaAnimales.remove(animal);
+    }
+
+    public List<Animal> getAnimales() {
+        return listaAnimales;
+    }
+}
+```
+
+* El método **`getAnimal(int position)`** nos permite **acceder fácilmente al objeto `Animal`** que se encuentra en una posición específica del `RecyclerView`.
+  Esto es útil, por ejemplo, cuando el usuario desliza una tarjeta y necesitamos saber **qué animal corresponde a esa posición**.
+
+* El método **`eliminarAnimal(Animal animal)`** encapsula la lógica de eliminación dentro del repositorio,
+  evitando que otras clases modifiquen directamente la lista interna.
+  Así mantenemos un **mejor control de los datos** y una estructura más limpia y mantenible.
+
+
+### 2️⃣ Crear el objeto `ItemTouchHelper`
+
+En el fragmento `AnimalesFragment`, dentro del método `onViewCreated()`, añadiremos el código para configurar un objeto `ItemTouchHelper`.  
+Este objeto necesita un **callback** que defina qué debe hacer cuando se detecta un gesto de movimiento o deslizamiento.
+
+```java title="AnimalesFragment.java (fragmento modificado)"
+public class AnimalesFragment extends Fragment {
+
+    private FragmentAnimalesBinding binding;
+    AnimalesRepository repository;
+    AnimalesAdapter adapter;
+
+    ...
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ...
+
+        eventoEliminarElto(view);
+    }
+
+    private void eventoEliminarElto(View view) {
+        ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(
+                0, // No permitimos mover elementos (drag)
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT // Permitimos deslizar a izquierda o derecha
+        ) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                // No necesitamos implementar el movimiento (solo eliminación)
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                // 1. Obtenemos la posición del elemento deslizado
+                int position = viewHolder.getBindingAdapterPosition();
+
+                if (position != RecyclerView.NO_POSITION) {
+                    // 2. Recuperamos el animal correspondiente
+                    Animal animalEliminado = repository.getAnimal(position);
+
+                    // 3. Lo eliminamos del repositorio
+                    repository.getAnimales().remove(animalEliminado);
+
+                    // 4. Notificamos al adaptador para que actualice la interfaz
+                    adapter.notifyItemRemoved(position);
+
+                    // 5.(Opcional) Mostramos un mensaje al usuario
+                    Snackbar.make(view, animalEliminado.getNombre() + " eliminado", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        };
+
+        // Asociamos el callback al RecyclerView
+        new ItemTouchHelper(callback).attachToRecyclerView(binding.recyclerView);
+    }
+}
+```
+
+La explicación paso a paso del código anterior sería:
+
+| Paso    | Acción                                                                                                                                                             |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **1** | Obtenemos la **posición** del elemento deslizado usando `viewHolder.getBindingAdapterPosition()` y comprobamos que **no sea** `RecyclerView.NO_POSITION`.          |
+| **2** | Con esa posición, recuperamos el **`Animal`** correspondiente desde el repositorio: `repository.getAnimal(position)`.                                              |
+| **3** | Eliminamos ese objeto de la **fuente de datos**: `eliminarAnimal(animalEliminado)`. |
+| **4** | Notificamos al adaptador para actualizar la interfaz y **quitar la tarjeta**: `adapter.notifyItemRemoved(position)`.                                               |
+| **5** | Mostramos un **mensaje de confirmación** (por ejemplo, con `Snackbar`) indicando que el elemento se ha eliminado.                                                  |
+
+---
+
+### 3️⃣ Consideraciones importantes
+
+Si tu clase `Animal` aún **no tiene implementado el método `equals()`**, es muy recomendable añadirlo.
+Esto permitirá eliminar objetos por contenido (mismo nombre, imagen, etc.) y no solo por referencia.
+
+```java title="Animal.java (añadir al final)"
+@Override
+public boolean equals(Object o) {
+    if (!(o instanceof Animal)) return false;
+    Animal animal = (Animal) o;
+    return imagen == animal.imagen && Objects.equals(nombre, animal.nombre) && Objects.equals(descripcion, animal.descripcion);
+    }
+
+@Override
+public int hashCode() {
+    return Objects.hash(nombre, imagen, descripcion);
+}
+```
+
+:::info PERSISTENCIA DEL BORRADO
+Este sistema de gestos, tal y como lo hemos implementado, **solo elimina el elemento visualmente y de la lista en memoria**.
+Más adelante, cuando usemos bases de datos, haremos que los cambios se guarden de forma persistente.
+:::
 
 </div>
