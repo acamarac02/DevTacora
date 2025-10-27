@@ -300,7 +300,10 @@ img[alt="Layout landscape"],
 img[alt="ToggleButton"],
 img[alt="ImageButton"],
 img[alt="Crear grafo navegación"],
-img[alt="BottomNavigation demo"]  {
+img[alt="BottomNavigation demo"],
+img[alt="Matriz imagen RGB"],
+img[alt="Array una dimensión"],
+img[alt="Array bidimensional"] {
   display: block;
   margin: 0 auto;
 }
