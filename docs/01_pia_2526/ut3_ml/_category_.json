@@ -1,0 +1,9 @@
+{
+  "label": "UT3. Machine Learning",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "title": "UT3. Machine Learning",
+    "description": "En esta unidad aprenderás el ciclo completo del aprendizaje automático: desde la exploración de datos (EDA) hasta la creación y optimización de modelos predictivos con Python y scikit-learn."
+  }
+}

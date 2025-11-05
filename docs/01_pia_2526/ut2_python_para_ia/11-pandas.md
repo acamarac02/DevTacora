@@ -1105,12 +1105,6 @@ print(ventas.sort_index())
 
 ---
 
-Perfecto 👌
-Aquí tienes el apartado completo **“6. Carga y guardado de datos”**, con el mismo tono narrativo, progresión didáctica y formato visual que el resto de tus apuntes de *Pandas*.
-Incluye explicaciones paso a paso, ejemplos comentados, salidas esperadas y observaciones prácticas para IA y análisis de datos.
-
----
-
 ## Carga y guardado de datos
 
 Una de las principales ventajas de Pandas es su capacidad para **leer y escribir datos en múltiples formatos**.

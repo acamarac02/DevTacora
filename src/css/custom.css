@@ -315,7 +315,9 @@ img[alt="BottomNavigation demo"],
 img[alt="Disposiciones RecyclerView"],
 img[alt="Resumen ViewHolders"],
 img[alt="Organización paquetes"],
-img[alt="Argumento Serializable"]  {
+img[alt="Argumento Serializable"],
+img[alt="Flujo ML"],
+img[alt="Aprendizaje no supervisado"]  {
   display: block;
   margin: 0 auto;
 }
