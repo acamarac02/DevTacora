@@ -91,7 +91,7 @@ Un modelo simple (como KNN) puede ofrecer **resultados excelentes** si seguimos 
 
 ## Actividad práctica: EDA con el dataset Heart Disease
 
-Tu reto consiste en **repetir el mismo proceso que has realizado con el Titanic**, pero aplicándolo al dataset [`heart_disease.csv`](./0-datasets/heart_disease.csv). Puedes obtener más información de este dataset [aquí](https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data).
+Tu reto consiste en **repetir el mismo proceso que has realizado con el Titanic**, pero aplicándolo al dataset [`heart_disease.csv`](./0-datasets/heart_disease_simple.csv). Puedes obtener más información de este dataset [aquí](https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data).
 
 :::info Objetivos de la tarea
 
