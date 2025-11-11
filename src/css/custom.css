@@ -317,7 +317,8 @@ img[alt="Resumen ViewHolders"],
 img[alt="Organización paquetes"],
 img[alt="Argumento Serializable"],
 img[alt="Flujo ML"],
-img[alt="Aprendizaje no supervisado"]  {
+img[alt="Aprendizaje no supervisado"],
+img[alt="Gráfico EDA"]  {
   display: block;
   margin: 0 auto;
 }
