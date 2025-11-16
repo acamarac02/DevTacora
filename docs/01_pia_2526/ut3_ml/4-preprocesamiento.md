@@ -593,115 +593,7 @@ Para ello existen dos técnicas principales: **Label Encoding** y **One-Hot Enco
 
 ---
 
-#### 🔢 Label Encoding (para variables *ordinales*)
-
-El **Label Encoding** convierte cada categoría en un número entero. Es útil **solo cuando las categorías tienen un orden lógico**, es decir, una jerarquía natural. Por ejemplo:
-
-* Talla de ropa: `S < M < L < XL`
-* Nivel de educación: `Primaria < Secundaria < Universidad`
-* Clase en Titanic: `1st < 2nd < 3rd`
-
-
-**No se debe usar cuando las categorías no tienen orden**, porque el modelo entendería erróneamente que un valor “vale más” que otro.
-
-**Ejemplo pequeño**
-
-```python
-from sklearn.preprocessing import LabelEncoder
-
-enc = LabelEncoder()
-
-sizes = ["S", "M", "L", "S", "XL", "M"]
-encoded = enc.fit_transform(sizes)
-
-print(encoded)
-```
-
-Posible salida:
-
-```
-[0 1 2 0 3 1]
-```
-
-### 📌 ¿Qué columnas genera?
-
-Genera **una sola columna numérica**, en la que cada categoría es reemplazada por un número entero.
-
-Por ejemplo:
-
-| Talla | Encoded |
-| ----- | ------- |
-| S     | 0       |
-| M     | 1       |
-| L     | 2       |
-| XL    | 3       |
-
----
-
-## 🎛️ One-Hot Encoding (para variables *nominales*)
-
-El **One-Hot Encoding** transforma cada categoría en una columna nueva, con valores 0/1 (presencia o ausencia).
-Es la opción correcta cuando **las categorías NO tienen orden**.
-
-### ✔️ Cuándo usarlo
-
-Cuando las categorías son simplemente nombres y **no existe jerarquía**:
-
-* Sexo: `male`, `female`
-* Puerto de embarque: `S`, `C`, `Q`
-* Tipo de producto: `A`, `B`, `C`
-
-### ❌ Cuándo NO usarlo
-
-Cuando la variable tiene demasiadas categorías (cientos o miles), porque genera muchas columnas.
-
-### 🔍 Ejemplo pequeño
-
-```python
-import pandas as pd
-
-df = pd.DataFrame({"Embarked": ["S", "C", "Q", "S"]})
-encoded = pd.get_dummies(df, columns=["Embarked"])
-
-encoded
-```
-
-Salida:
-
-```
-   Embarked_C  Embarked_Q  Embarked_S
-0           0           0           1
-1           1           0           0
-2           0           1           0
-3           0           0           1
-```
-
-### 📌 ¿Qué columnas genera?
-
-El One-Hot crea **una columna por categoría**, con 1 si la fila pertenece a esa categoría y 0 si no.
-
-Por ejemplo, a partir de:
-
-```
-Embarked
-S
-C
-Q
-S
-```
-
-Se obtiene:
-
-| Embarked_C | Embarked_Q | Embarked_S |
-| ---------- | ---------- | ---------- |
-| 0          | 0          | 1          |
-| 1          | 0          | 0          |
-| 0          | 1          | 0          |
-| 0          | 0          | 1          |
-
----
-
-## 🧠 ¿Cómo elegir entre Label y One-Hot?
+#### ¿Cómo elegir entre Label y One-Hot?
 
 | Tipo de variable          | Ejemplo             | Codificación recomendada           |
 | ------------------------- | ------------------- | ---------------------------------- |
@@ -711,114 +603,516 @@ Se obtiene:
 
 ---
 
-## 🧩 Ejemplo real con Titanic
+#### Label Encoding (para variables *ordinales*)
 
-**Sex** → no tiene orden → `One-Hot Encoding`
-**Embarked** → tampoco → `One-Hot Encoding`
-**Pclass** → sí tiene orden (1 < 2 < 3) → `Label Encoding` opcional, aunque muchos modelos la aceptan directamente como número
+Vamos a suponer que en el Titanic la columna **Pclass** no viniera como números `1, 2, 3`, sino como texto:
+
+```text
+"1st", "2nd", "3rd"
+```
+
+Es una variable **categórica ordinal** (hay un orden claro: 1st < 2nd < 3rd), así que aquí **sí tiene sentido** usar **Label Encoding**.
+
+La idea es la misma que con los nulos:
+
+👉 **Ajustamos (fit) solo con `X_train`** y después **aplicamos (transform) a `X_train` y `X_test`**.
+
+```python
+from sklearn.preprocessing import LabelEncoder
+
+encoder_pclass = LabelEncoder()
+
+# Ajustamos el encoder SOLO con los datos de train
+encoder_pclass.fit(X_train["Pclass"])
+
+# Transformamos train y test con el mismo mapeo aprendido
+X_train["Pclass_encoded"] = encoder_pclass.transform(X_train["Pclass"])
+X_test["Pclass_encoded"]  = encoder_pclass.transform(X_test["Pclass"])
+```
+
+Si las clases fueran, por ejemplo:
+
+```text
+["1st", "2nd", "3rd"]
+```
+
+el encoder podría aprender algo como:
+
+```text
+"1st" -> 0
+"2nd" -> 1
+"3rd" -> 2
+```
+
+Y las nuevas columnas quedarían así:
+
+| Pclass | Pclass_encoded |
+| ------ | -------------- |
+| 1st    | 0              |
+| 3rd    | 2              |
+| 2nd    | 1              |
+
+💡 **Importante:**
+
+* `fit` aprende qué categorías existen y en qué orden las codifica → **solo en X_train**.
+* `transform` aplica ese mismo mapeo a **X_train y X_test**.
+* Genera **una única columna numérica**, que conserva el orden natural de la variable (`1st < 2nd < 3rd`).
 
 ---
 
-💬 **Conclusión:**
+#### One-Hot Encoding (para variables *nominales*)
 
-> Usa **Label Encoding** solo cuando las categorías tienen un orden real.
-> Usa **One-Hot Encoding** cuando las categorías no tienen jerarquía, como `Sex` o `Embarked` en Titanic.
-> Ambos métodos permiten que los modelos trabajen correctamente con variables categóricas.
+En el Titanic, columnas como **Sex** o **Embarked** contienen categorías que **no tienen un orden**:
 
+```text
+Sex:       "male", "female"
+Embarked:  "S", "C", "Q"
+```
+
+Cuando las categorías **no tienen jerarquía**, no podemos asignarles números como 0, 1, 2 porque el modelo podría interpretar erróneamente que uno “vale más” que otro.
+
+👉 En estos casos, la técnica correcta es **One-Hot Encoding**.
+
+Esta técnica crea **una columna por cada categoría**, con valores 0/1 indicando si esa fila pertenece a esa categoría.
+
+La idea es la misma que antes:
+
+* Ajustamos (fit) el codificador solo con `X_train`
+* Transformamos tanto `X_train` como `X_test` con lo aprendido
+
+**Ejemplo con la columna `Embarked` del Titanic**
+
+Vamos a transformar esta variable nominal en columnas numéricas:
+
+```python
+from sklearn.preprocessing import OneHotEncoder
+import pandas as pd
+
+# handle_unknown="ignore" → evita errores si aparece una categoría nueva en el test que no existía en train (pone todo a 0)
+# sparse_output=False → devuelve un array "normal" en lugar de una matriz dispersa
+encoder_embarked = OneHotEncoder(handle_unknown="ignore", sparse_output=False)
+
+# Ajustamos SOLO con los datos de train
+encoder_embarked.fit(X_train[["Embarked"]])
+
+# Transformamos train y test usando lo aprendido
+# embarked_train y embarked_test son arrays numpy, hay que procesarlos más tarde para obtener un DataFrame
+embarked_train = encoder_embarked.transform(X_train[["Embarked"]])
+embarked_test  = encoder_embarked.transform(X_test[["Embarked"]])
+
+# Convertimos las matrices a DataFrames para verlas mejor y añadirlas posteriormente a nuestro DataFrame completo
+embarked_train = pd.DataFrame(embarked_train, 
+                              columns=encoder_embarked.get_feature_names_out(["Embarked"]))
+embarked_test  = pd.DataFrame(embarked_test,
+                              columns=encoder_embarked.get_feature_names_out(["Embarked"]))
+```
+
+Vamos a entender cómo funciona el código anterior. Supongamos que tenemos este DataFrame:
+
+
+| Embarked |
+| -------- |
+| S        |
+| C        |
+| Q        |
+| S        |
+| C        |
+
+
+Si aplicamos **One-Hot Encoding**, obtendremos tres nuevas columnas (una por cada categoría):
+
+```
+Embarked_C   Embarked_Q   Embarked_S
+```
+
+La transformación completa quedaría así:
+
+| Embarked | Embarked_C | Embarked_Q | Embarked_S |
+| -------- | ---------- | ---------- | ---------- |
+| S        | 0          | 0          | 1          |
+| C        | 1          | 0          | 0          |
+| Q        | 0          | 1          | 0          |
+| S        | 0          | 0          | 1          |
+| C        | 1          | 0          | 0          |
+
+
+💡 **Interpretación rápida:**
+
+* Cada categoría se convierte en una columna.
+* El valor 1 indica la categoría correspondiente de esa fila.
+* Solo una columna vale 1 porque cada pasajero solo puede embarcar por un puerto.
+
+---
+
+Tras aplicar One-Hot Encoding, normalmente:
+
+1. Se **eliminan las columnas originales** (`Embarked`, `Sex`, etc.)
+2. Se **añaden las columnas generadas** al DataFrame
+
+Ejemplo:
+
+```python
+# Eliminamos columnas categóricas originales
+X_train = X_train.drop(columns=["Embarked"])
+X_test  = X_test.drop(columns=["Embarked"])
+
+# Añadimos las nuevas columnas codificadas
+X_train = pd.concat([X_train, embarked_train], axis=1)
+X_test  = pd.concat([X_test, embarked_test], axis=1)
+```
+
+---
+
+### Paso 3.3. Escalado y normalización de variables numéricas
+
+Tras imputar valores nulos y codificar las variables categóricas, el siguiente paso es **escalar o normalizar las variables numéricas**.  
+Este proceso es fundamental en muchos modelos de Machine Learning, especialmente aquellos que son sensibles a la magnitud de los valores (por ejemplo, KNN, regresión logística, redes neuronales, SVM…).
+
+En un dataset como el Titanic, algunas columnas numéricas tienen escalas muy distintas:
+
+| Variable | Rango aproximado |
+|----------|------------------|
+| `Age`    | 0 – 80           |
+| `Fare`   | 0 – 512          |
+| `SibSp`  | 0 – 8            |
+
+Si no escalamos estas variables:
+
+* Los modelos podrían **dar más importancia** a las columnas con valores más grandes (`Fare`).
+* La distancia entre puntos en modelos basados en distancia (como KNN o clustering) estaría **sesgada**.
+* El entrenamiento podría tardar más y converger peor.
+
+➡️ **Escalar no cambia la forma de los datos**, pero sí su rango, para que todas las variables “jueguen en igualdad de condiciones”.
+
+:::info Nota avanzada (Paso previo sobre los outliers)
+
+En algunas variables **muy sesgadas**, como `Fare` en el Titanic, los valores altos son mucho mayores que los valores típicos.  
+Esto produce una distribución con **cola larga**, que puede afectar a ciertos modelos o a algunos métodos de escalado (por ejemplo, MinMaxScaler).
+
+![Gráfico EDA](./0-img/boxplot-fare.png)
+
+En análisis más avanzados existe la posibilidad de aplicar **transformaciones matemáticas** como:
+
+* `log()` → reduce el impacto de los valores muy grandes  
+* `sqrt()` → suaviza moderadamente la distribución  
+* Transformaciones más complejas como **Box-Cox** o **Yeo-Johnson**
+
+Estas transformaciones no eliminan outliers reales, sino que simplemente **reducen su influencia** para modelos muy sensibles a distribuciones sesgadas.
+
+Sin embargo, estas técnicas pertenecen a un nivel más avanzado de *Feature Engineering*.  
+En este curso inicial **no son necesarias** y no las aplicaremos, ya que los modelos que veremos funcionan correctamente sin esta complejidad adicional.
+:::
+
+---
+
+#### Métodos más utilizados
+
+Aquí veremos los dos escaladores que se usan en la mayoría de proyectos:
+
+- **StandardScaler** → distribuye con media = 0 y desviación estándar = 1  
+- **MinMaxScaler** → lleva todos los valores al rango [0, 1]
+
+Ambos se utilizan **después** del *train/test split*, tras las imputaciones necesarias y antes de entrenar el modelo.
+
+---
+
+#### StandardScaler (escalado estándar)
+
+El `StandardScaler` transforma cada variable numérica para que tenga:
+
+* **Media = 0**
+* **Desviación estándar = 1**
+
+Matemáticamente:
+
+```
+valor_escalado = (valor - media) / desviación_estándar
+```
+
+**¿Cuándo usar StandardScaler?**
+
+✔ **Para casi todos los modelos clásicos de Machine Learning.**
+
+Porque:
+* Centra los datos (media=0), lo cual ayuda al entrenamiento.
+* No obliga a tener datos en un rango fijo.
+* Funciona bien incluso si las variables no están “perfectamente distribuidas”.
+
+**Ejemplo con Titanic**
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+# ¡IMPORTANTE! Seleccionamos solo las columnas numéricas que queremos escalar (por ahora seleccionaremos todas)
+num_cols = ["Pclass", "Age", "Fare", "SibSp", "Parch"]
+
+# Creamos el escalador
+scaler = StandardScaler()
+
+# Ajustamos el escalador SOLO con los datos de train (fit)
+X_train[num_cols] = scaler.fit_transform(X_train[num_cols])
+
+# Aplicamos la transformación a test (transform)
+X_test[num_cols] = scaler.transform(X_test[num_cols])
+```
+
+Tras esto, cada columna quedará escalada, por ejemplo:
+
+
+| Variable | Antes | Después |
+| -------- | ----- | ------- |
+| Age      | 22    | -0.73   |
+| Age      | 38    | 1.22    |
+| Fare     | 512   | 4.11    |
+| Parch    | 0     | -0.45   |
+
+
+💡 **Interpretación:**
+
+* Valores negativos → menores que la media
+* Valores positivos → mayores que la media
+
+---
+
+#### MinMaxScaler (normalización 0–1)
+
+El `MinMaxScaler` transforma cada variable numérica para que todos sus valores queden dentro del rango:
+
+* **Mínimo = 0**
+* **Máximo = 1**
+
+Matemáticamente:
+
+```
+valor_escalado = (valor - min) / (max - min)
+```
+
+Es decir, cada valor se reescala proporcionalmente según el valor mínimo y máximo de la columna.
+
+---
+
+**¿Cuándo usar MinMaxScaler?**
+
+✔ **Cuando queremos que todos los valores queden entre 0 y 1.**  
+✔ Útil en modelos que funcionan mejor con entradas normalizadas en un rango fijo, como:
+* Redes neuronales
+* Modelos que trabajan con activaciones entre 0 y 1   
+
+❌ **No es ideal si hay valores extremos muy altos (outliers reales).** En esos casos, un único valor muy grande puede hacer que casi todos los demás queden muy cerca de 0 tras escalar.
+
+**Ejemplo con Titanic**
+
+Vamos a escalar las mismas columnas numéricas que antes:
+
+```python
+from sklearn.preprocessing import MinMaxScaler
+
+# Seleccionamos las columnas numéricas que queremos escalar
+num_cols = ["Pclass", "Age", "Fare", "SibSp", "Parch"]
+
+# Creamos el escalador
+scaler = MinMaxScaler()
+
+# Ajustamos el escalador SOLO con los datos de train (fit)
+X_train[num_cols] = scaler.fit_transform(X_train[num_cols])
+
+# Aplicamos la transformación a test (transform)
+X_test[num_cols] = scaler.transform(X_test[num_cols])
+```
+
+Tras esto, cada columna quedará normalizada al rango 0–1. Por ejemplo:
+
+| Variable | Antes | Después |
+| -------- | ----- | ------- |
+| Age      | 22    | 0.28    |
+| Age      | 38    | 0.54    |
+| Fare     | 512   | 1.00    |
+| Parch    | 0     | 0.00    |
+
+
+💡 **Interpretación:**
+
+* **0** representa el valor mínimo visto en *train*.
+* **1** representa el valor máximo visto en *train*.
+* El resto de valores quedan en posiciones proporcionales dentro del intervalo 0–1.
+
+:::info Nota sobre MinMaxScaler
+Aunque MinMaxScaler funciona bien en muchos casos, recuerda que si existe un valor extremadamente alto (como una tarifa de 500), el resto de valores quedarán muy cerca de 0.
+Por eso, aunque es útil, suele utilizarse menos que StandardScaler en problemas clásicos.
+:::
+
+---
+
+#### Resumen StandardScaler vs MinMaxScaler
+
+| Característica          | StandardScaler               | MinMaxScaler                      |
+| ----------------------- | ---------------------------- | --------------------------------- |
+| Rango                   | No fijo (puede ser negativo) | Entre 0 y 1                       |
+| Usa                     | Media y desviación           | Mínimo y máximo                   |
+| Afectado por outliers   | Sí (mucho)                   | Sí (muchísimo)                    |
+| Mejor para              | Modelos lineales, KNN, SVM   | Redes neuronales, datos entre 0-1 |
+
+---
+
+#### ¿Debo escalar todas las columnas numéricas?
+
+✔ **Sí**, si usas modelos basados en distancias (KNN, SVM).
+✔ **Sí**, si usas regresión logística o redes neuronales.
+❌ **No es necesario** para árboles de decisión o Random Forest (no les afecta).
+
+---
+
+
+### Paso 3.4. Feature Engineering básico
+
+El **Feature Engineering** consiste en crear nuevas variables (features) que puedan aportar información adicional al modelo.  
+En esta fase del curso solo veremos **transformaciones sencillas y muy intuitivas**, sin técnicas avanzadas.
+
+El objetivo es mejorar la capacidad predictiva del modelo utilizando información que ya existe en el dataset, pero combinada de forma más útil.
+
+---
+
+#### Creación de variables intuitivas
+
+A veces, combinar varias columnas puede generar una nueva variable con más significado que las originales por separado.
+
+En el Titanic, las columnas:
+
+* `SibSp` → número de hermanos/esposos a bordo  
+* `Parch` → número de padres/hijos a bordo  
+
+por separado aportan información, pero **juntas pueden representar mejor el tamaño del grupo familiar**.
+
+Creamos una nueva columna:
+
+```python
+# Crear tamaño familiar
+X_train["FamilySize"] = X_train["SibSp"] + X_train["Parch"] + 1
+X_test["FamilySize"]  = X_test["SibSp"] + X_test["Parch"] + 1
+```
+
+¿Por qué sumamos 1?
+
+👉 Para incluir al propio pasajero en el tamaño total de la familia.
+
+Ejemplo:
+
+| SibSp | Parch | FamilySize |
+| ----- | ----- | ---------- |
+| 1     | 0     | 2          |
+| 0     | 0     | 1          |
+| 3     | 1     | 5          |
+
+💡 **Interpretación:**
+Los grupos más grandes tenían, en general, menor probabilidad de sobrevivir, por lo que esta variable puede ayudar al modelo.
+
+---
+
+#### Eliminación de variables redundantes
+
+Una vez que hemos creado una nueva variable derivada de otras dos, es posible que las variables originales **ya no sean necesarias** o aporten información duplicada.
+
+En este nivel básico, la regla que seguiremos será:
+
+👉 **Si la nueva variable resume bien la información, podemos eliminar las columnas que la generaron.**
+
+Por ejemplo, tras crear `FamilySize`, podríamos eliminar `SibSp` y `Parch` para evitar redundancia:
+
+```python
+X_train = X_train.drop(columns=["SibSp", "Parch"])
+X_test  = X_test.drop(columns=["SibSp", "Parch"])
+```
+
+Esto hace el dataset más compacto y claro para el modelo.
+
+---
+
+## Paso 4. Preparación final del dataset
+
+Después de haber realizado todas las tareas de preprocesamiento —limpieza estructural, división en *train/test*, imputación, codificación, escalado y feature engineering— ya tenemos nuestros datos prácticamente listos para entrenar modelos de Machine Learning.
+
+Antes de continuar, es recomendable hacer una **última revisión rápida** para comprobar que todo ha quedado correctamente transformado.
+
+---
+
+### Paso 4.1 Revisión rápida de coherencia
+
+En este punto debemos asegurarnos de que:
+
+✔ **No quedan valores nulos**
+
+```python
+X_train.isnull().sum()
+X_test.isnull().sum()
+```
+
+Si alguna columna sigue teniendo nulos, puede deberse a:
+
+* una codificación incompleta,
+* un problema en la imputación,
+* o columnas que no se incluyeron en el proceso.
+
+✔ **Todas las columnas son numéricas**
+
+Los modelos clásicos de Machine Learning **solo aceptan variables numéricas**. Debemos asegurarnos de que ya no quedan columnas categóricas sin transformar:
+
+```python
+X_train.dtypes
+```
+
+En este punto todo debería ser `int`, `float` o `uint8` (en caso de One-Hot Encoding).
+
+
+✔ **Las columnas de train y test coinciden**
+
+Esto es MUY importante. Si el número o nombre de columnas no coincide entre `X_train` y `X_test`, el modelo no podrá predecir correctamente.
+
+```python
+print(X_train.shape)
+print(X_test.shape)
+
+print(X_train.columns)
+print(X_test.columns)
+```
+
+Si no coinciden, normalmente significa que:
+
+* faltó eliminar alguna columna original antes de concatenar,
+* hubo categorías presentes en train que no aparecieron en test,
+* o se mezclaron escaladores o imputadores incorrectamente.
+
+---
+
+### Paso 4.2 Dataset final listo para el modelado
+
+Cuando se cumple todo los descrito en el paso anterior, **nuestro dataset está preparado para entrenar un modelo.**
+
+A partir de aquí, podemos comenzar con:
+
+* Regresión logística
+* Árboles
+* Random Forest
+* KNN
+* SVM
+* etc.
+
+---
+
+### Paso 4.3 Guardar los datasets transformados (opcional, pero recomendable)
+
+Es muy habitual guardar las versiones preprocesadas de los datos, especialmente si queremos:
+
+* reutilizarlos,
+* compartirlos,
+* hacer pruebas con diferentes modelos,
+* o evitar repetir todo el proceso de preprocesamiento.
+
+```python
+X_train.to_csv("titanic_X_train_preprocessed.csv", index=False)
+X_test.to_csv("titanic_X_test_preprocessed.csv", index=False)
+y_train.to_csv("titanic_y_train.csv", index=False)
+y_test.to_csv("titanic_y_test.csv", index=False)
+```
 
 
 </div>
-
-
-
-
-
-
-
-# 🧩 ÍNDICE REVISADO — *Preprocesamiento de Datos en Machine Learning (Nivel Intermedio)*
-
-## Introducción
-
-* Qué es el preprocesamiento y por qué es esencial tras el EDA.
-* Diferencia entre EDA y preprocesamiento.
-* Objetivo: dejar los datos limpios, coherentes y listos para entrenar el modelo.
-* Herramientas principales: `pandas` y `sklearn.preprocessing`.
-
----
-
-## Índice del tema — Preprocesamiento (reestructurado por fases)
-
-### Paso 1. Operaciones **antes** de la división (*pre-split*)
-* Objetivo: dejar el dataset **coherente y limpio** a nivel estructural.
-* 1.1 Limpieza estructural
-  - Eliminar columnas irrelevantes (IDs, texto libre sin uso).
-  - Corrección de **tipos de datos** (`object` → `int`, `float`, `datetime`).
-  - Normalización básica de formatos (espacios, mayúsculas/minúsculas, categorías mal escritas).
-* 1.2 Duplicados
-  - Detección: `df.duplicated()`
-  - Eliminación: `drop_duplicates()`
-* 1.3 Outliers y errores **evidentes**
-  - Detección visual (boxplot) y sentido común.
-  - Acción: corregir o eliminar solo los **imposibles** (no tratamiento estadístico aún).
-
----
-
-### Paso 2. **División** en *train/test*
-* Por qué dividir antes de “aprender” parámetros (evitar **data leakage**).
-* Separar `X` (features) y `y` (target).
-* `train_test_split` (proporción, `random_state`, `stratify` cuando aplique).
-* Nota: A partir de aquí, todo lo que **aprende** algo de los datos se **ajusta en train** y se **aplica a test**.
-
----
-
-### Paso 3. Operaciones **después** de la división (*post-split*)
-* Objetivo: **aprender** parámetros con *train* y **transformar** *test* con los mismos.
-
-* 3.1 Valores nulos
-  - Detección: `isnull().sum()`, `info()`.
-  - Estrategias:
-    - Eliminación de filas/columnas con demasiados nulos (si procede).
-    - **Imputación** (media, mediana, moda) con `SimpleImputer`.
-    - Imputación condicional (por grupos) cuando tenga sentido.
-  - Ejemplo con Titanic y `SimpleImputer`.
-
-* 3.2 Codificación de variables categóricas
-  - Cuándo usar **Label Encoding** (ordinales).
-  - Cuándo usar **One-Hot Encoding** (nominales).
-  - Implementación con `OneHotEncoder` o `pandas.get_dummies()` (manteniendo la lógica *fit* en train y *transform* en test).
-
-* 3.3 Escalado y normalización de variables numéricas
-  - **StandardScaler** (media 0, desviación 1).
-  - **MinMaxScaler** (0 a 1).
-  - Aplicación correcta: `.fit()` en *train*, `.transform()` en *test*.
-
-* 3.4 (Opcional y simple) Feature Engineering básico
-  - Creación de variables intuitivas (e.g., `FamilySize`).
-  - Eliminación de variables redundantes tras crear nuevas.
-
----
-
-### Paso 4. Preparación final del dataset
-* Revisión rápida de coherencia tras transformaciones.
-* Conjunto listo para el modelado.
-* Exportación: `to_csv` (dataset limpio y, si aplica, versiones transformadas).
-
----
-
-### Ejemplo completo: *Preprocesamiento Titanic*
-* Aplicación paso a paso con código y breves conclusiones por bloque.
-
----
-
-### Actividad de seguimiento: *Preprocesamiento Employee Attrition*
-* Dataset: `employee.csv`
-* Tareas:
-  - **Antes del split:** limpieza estructural, duplicados, outliers imposibles.
-  - **Split train/test.**
-  - **Después del split:** imputación con `SimpleImputer`, codificación, escalado, FE básico.
-  - Exportación del dataset limpio.
-* Entregable: cuaderno de Google Colab.
-
----
-
-> 💡 **Regla de oro:** Todo lo que **aprende parámetros** de los datos (medias, modas, categorías, escalas…) **se ajusta con *train*** y **se aplica a *test*** sin volver a aprender.
