@@ -279,7 +279,9 @@ img[alt="Resumen navegación Recycler"],
 img[alt="Demo Recycler"],
 img[alt="Demo app"],
 img[alt="Demo bloqueo pantalla"],
-img[alt="Ciclo de vida del ViewModel"] {
+img[alt="Ciclo de vida del ViewModel"],
+img[alt="Demo favorito"],
+img[alt="Demo SearchView"] {
   height: 500px;
   width: auto;
   display: block;

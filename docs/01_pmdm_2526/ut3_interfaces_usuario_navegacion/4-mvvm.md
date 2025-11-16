@@ -49,7 +49,6 @@ Esto significa que:
 
 ![Demo girar pantalla](./0-img/girar-pantalla.gif)
 
----
 
 Para solucionar este problema y otros que surgirían con el consumo de APIs o bases de datos, necesitamos una capa intermedia que:
 
@@ -192,18 +191,6 @@ Todo su código sigue siendo válido y funcional. Por simplificar, en este tutor
 
 ---
 
-### Estructura del proyecto
-
-Nuestra aplicación mantiene la misma estructura general con una sola `Activity` y dos `Fragments`:
-
-* `AnimalesFragment`: muestra la lista de animales en el `RecyclerView`.
-* `DetalleAnimalFragment`: muestra la información detallada del animal seleccionado.
-
-Lo único que cambia ahora es **cómo obtenemos y gestionamos los datos**.  
-Ya no accederemos directamente al `Repository` desde el fragmento, sino a través del **`ViewModel`**, que actuará como intermediario entre la vista y los datos.
-
----
-
 ### Crear el ViewModel
 
 El **ViewModel** es el componente que conserva los datos y la lógica de presentación.  
@@ -222,6 +209,9 @@ public class AnimalesViewModel extends ViewModel {
     public AnimalesViewModel() {
         // Inicializamos el repository para tener los animales listos
         repository = new AnimalesRepository();
+    }
+
+    public void obtenerAnimales() {
         // Recuperamos los animales del repository y los almacenamos en el MLiveData
         animales.setValue(repository.getAnimales());
     }
@@ -238,7 +228,7 @@ public class AnimalesViewModel extends ViewModel {
 ### Modificar el Fragment principal
 
 En lugar de acceder directamente al `Repository`, el fragmento obtendrá una instancia del **ViewModel** mediante el `ViewModelProvider`.
-Luego, se **suscribirá (observer)** al `LiveData` para recibir actualizaciones automáticas.
+Luego, se **suscribirá (observer)** al `LiveData` para recibir actualizaciones automáticas. Ten en cuenta que hasta que no llames al método `viewModel.obtenerAnimales()` el `MutableLiveData` no cargará los animales del `Repositoy`.
 
 :::info CODIGO NUEVO
 En el siguiente código está subrayado en más oscuro aquellas líneas adicionales añadidas. Ten en cuenta también que se han eliminado algunas líneas, como la que creaba el repository.
@@ -280,6 +270,9 @@ public class AnimalesFragment extends Fragment {
             // Si hay cambios, actualizamos la lista del adaptador del RecyclerView
             adapter.establecerLista(lista);
         });
+
+        // Llamamos al método que recupera los animales
+        viewModel.obtenerAnimales();
         // highlight-end
     }
 }
@@ -628,6 +621,388 @@ private void eventoEliminarElto(View view) {
 6. El `RecyclerView` redibuja la lista sin el elemento eliminado.
 :::
 
+---
+
+## Tutorial de uso – Marcar como favorito
+
+En este apartado aprenderemos a **marcar y desmarcar animales como favoritos**, lo que supone incorporar:
+
+* Un atributo booleano `favorito` en el modelo (clase `Animal`)
+* Un icono que cambia en el `ViewHolder`.
+* El `ViewModel` actua de intermediario entre la vista (`Adapter`) y el `Repository`.
+* El `Fragment` observa los datos.
+
+![Demo favorito](./0-img/demo-fav.gif)
+
+---
+
+### Modificar el layout del ViewHolder
+
+Dentro del ViewHolder tenemos que incorporar el icono de favorito. Como imagen podemos utilizar una de las que nos proporciona Android.
+
+Ejemplo de layout:
+
+```xml title="viewholder_animal.xml"
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <!-- Contenedor para posicionar el icono arriba a la derecha -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <!-- Icono de favorito -->
+        <ImageView
+            android:id="@+id/icon_favorite"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:src="@android:drawable/btn_star_big_off"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Contenedor del contenido -->
+        <LinearLayout
+            android:id="@+id/contenedorAnimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:layout_below="@id/icon_favorite">
+
+            <ImageView
+                android:id="@+id/ivAnimal"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
+
+            <TextView
+                android:id="@+id/tvNombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>
+```
+
+:::info Iconos de favoritos (estrella)
+Los recursos **@android:drawable/btn_star_big_off** y **@android:drawable/btn_star_big_on** son iconos estándar incluidos en Android:
+
+* **`btn_star_big_off`** → ⭐ *estrella gris* → indica que **no es favorito**.
+* **`btn_star_big_on`** → ⭐ *estrella amarilla* → indica que **sí es favorito**.
+
+Estos iconos son perfectos para marcar / desmarcar favoritos sin necesidad de añadir imágenes externas al proyecto.
+:::
+
+---
+
+### Modificar el modelo (`Animal.java`)
+
+Añadimos un atributo `boolean esFavorito`, que determinará eis el Pokemon se ha marcado como favorito o no.
+
+```java
+public class Animal {
+    private String nombre;
+    private int imagen;
+    private String descripcion;
+    // highlight-next-line
+    private boolean favorito;
+
+    public Animal(String nombre, int imagen, String descripcion) {
+        this.nombre = nombre;
+        this.imagen = imagen;
+        this.descripcion = descripcion;
+        // highlight-next-line
+        this.favorito = false; // Por defecto no es favorito
+    }
+
+    // highlight-start
+    public boolean isFavorito() {
+        return favorito;
+    }
+
+    public void setFavorito(boolean favorito) {
+        this.favorito = favorito;
+    }
+    // highlight-start
+
+    // Resto del código que ya tuvieras...
+}
+```
+
+---
+
+### Cambios en el Adapter
+
+En el adaptador es donde conectamos cada elemento de la lista con su tarjeta visual.
+Para añadir la funcionalidad de “favoritos”, el método `onBindViewHolder()` debe hacer dos cosas adicionales:
+
+* **Mostrar el icono correcto**: cuando se carga cada tarjeta, debe comprobar si el animal es favorito y poner la estrella encendida o apagada (método `establecerIconoFavorito`).
+
+* **Responder al click en la estrella**: si se pulsa el icono, el adaptador debe cambiar el estado del animal, actualizar el icono y avisar al `ViewModel` para que guarde el cambio en base de datos, que para nosotros de momento será el repository.
+
+De esta forma, el adaptador se encarga tanto de mostrar la información como de reaccionar a las acciones del usuario, mientras que el `ViewModel` mantiene el estado actualizado.
+
+
+```java title="AnimalesAdapter.java"
+public class AnimalesAdapter extends RecyclerView.Adapter<AnimalesAdapter.AnimalViewHolder> {
+
+    // Aquí va el código que ya tenías...
+
+    // Rellena los datos en el ViewHolder correspondiente a una posición concreta
+    @Override
+    public void onBindViewHolder(@NonNull AnimalViewHolder holder, int position) {
+        Animal animal = animales.get(position);
+
+        // Enlazamos los datos con los elementos del layout
+        holder.binding.tvNombre.setText(animal.getNombre());
+        holder.binding.ivAnimal.setImageResource(animal.getImagen());
+
+        // Detectar el click sobre la tarjeta
+        holder.itemView.setOnClickListener(v -> {
+            // Guardamos el animal seleccionado en el ViewModel
+            viewModel.seleccionarAnimal(animal);
+
+            // Navegar al fragmento de detalle usando NavController
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_animalesFragment_to_detalleAnimalFragment);
+        });
+
+        // highlight-start
+        // Cuando se cargue el RecyclerView, actualizamos el icono según el estado del animal
+        establecerIconoFavorito(animal, holder);
+
+        // Listener para el evento sobre el icono de favorito
+        holder.binding.iconFavorite.setOnClickListener(v -> marcarFavorito(animal, holder));
+        // highlight-end
+    }
+
+    // highlight-start
+    // Método que se ejecuta en el evento de click sobre la estrella
+    private void marcarFavorito(Animal animal, AnimalViewHolder holder) {
+        // Cambiamos el estado del animal seleccionado
+        if (animal.isFavorito()) animal.setFavorito(false);
+        else animal.setFavorito(true);
+
+        // Cambiamos el icono del animal seleccionado
+        establecerIconoFavorito(animal, holder);
+
+        // Actualizamos el estado del animal en base de datos (de momento el repository)
+        // Recuerda que no podemos acceder al repository directamente, si no a través del ViewModel
+        viewModel.actualizarAnimal(animal);
+    }
+
+    // Método que establece el icono según el estado del animal
+    private void establecerIconoFavorito(Animal animal, AnimalViewHolder holder) {
+        if (animal.isFavorito()) {
+            holder.binding.iconFavorite.setImageResource(android.R.drawable.btn_star_big_on);
+        } else {
+            holder.binding.iconFavorite.setImageResource(android.R.drawable.btn_star_big_off);
+        }
+    }
+    // highlight-end
+}
+```
+
+---
+
+### Gestionar favoritos en el ViewModel y Repisitory
+
+El **ViewModel** actúa como puente entre la vista y el Repository.
+Cuando el usuario pulsa la estrella y cambia el estado de un animal, el ViewModel recibe el objeto actualizado y se lo pasa al Repository para que lo guarde:
+
+```java title="AnimalesViewModel.java"
+public class AnimalesViewModel extends ViewModel {
+
+    // Código previo...
+
+    public void actualizarAnimal(Animal animal) {
+        repository.actualizarAnimal(animal);
+    }
+}
+```
+
+En el **Repository** es donde realmente se modifican los datos.
+Para evitar que el animal cambie de posición en la lista (y por tanto en el RecyclerView), primero buscamos su índice y luego lo reemplazamos por la versión actualizada:
+
+```java
+public class AnimalesRepository {
+
+    private List<Animal> listaAnimales;
+
+    // Código previo...
+
+    public void actualizarAnimal(Animal animal) {
+        // Recuperamos la posición previa para volver a colocarlo en el mismo sitio
+        int posicion = listaAnimales.indexOf(animal);
+        // Colocamos el animal modificado en el mismo sitio
+        listaAnimales.set(posicion, animal);
+    }
+}
+```
+
+---
+
+## Tutorial de uso – Búsqueda de elementos
+
+La búsqueda es una de las funciones más útiles cuando trabajamos con listas grandes de datos.
+En este apartado aprenderemos a implementar un campo de búsqueda que filtre la lista de animales **mientras el usuario escribe**, utilizando el mismo enfoque de MVVM que ya hemos aplicado en los apartados anteriores.
+
+La idea principal es:
+
+1. El usuario escribe en el `SearchView`.
+2. El `Fragment` envía el texto al `ViewModel`.
+3. El `ViewModel` pide la lista filtrada al `Repository`.
+4. El `LiveData` se actualiza y notifica al `Fragment`.
+5. El observer del `Fragment` envía la nueva lista al `Adapter` y la muestra automáticamente.
+
+Así mantenemos la separación de responsabilidades:
+
+💡 **El Fragment solo escucha y envía texto. El ViewModel actúa como intermediario y el Repository hace la lógica de filtrado.**
+
+![Demo SearchView](./0-img/demo-searchview.gif)
+
+---
+
+### Layout con SearchView
+
+Creamos un layout similar al anterior, pero añadiendo un `SearchView` editable desde el inicio:
+
+```xml title="
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".AnimalesFragment">
+
+    <!-- Barra de búsqueda -->
+    <SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:queryHint="Buscar animal" />
+
+    <!-- Lista -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
+```
+
+:::info ¿Qué es un SearchView?
+`SearchView` es un componente de Android que permite al usuario escribir texto para realizar búsquedas dentro de una lista o conjunto de datos.
+Es ideal para **filtrar resultados en tiempo real**, ya que detecta cada carácter escrito y puede enviarlo al `ViewModel` para actualizar la información mostrada.
+
+**Atributos XML más útiles:**
+
+* `android:iconifiedByDefault="false"` → Hace que el cuadro de búsqueda aparezca desplegado desde el inicio.
+* `android:queryHint="Texto de ayuda"` → Muestra un texto guía dentro del campo de búsqueda.
+* `android:layout_width / layout_height` → Controlan el tamaño del componente.
+* `android:focusable="true"` → Permite activar el teclado al tocar el campo.
+
+Estos atributos permiten personalizar fácilmente su apariencia y comportamiento.
+:::
+
+
+---
+
+### Activar la búsqueda desde el Fragment
+
+El `Fragment` configura el RecyclerView, observa los cambios y escucha lo que escribe el usuario en tiempo real. Al código que teníamos ya, debemos añadirle:
+
+```java
+public class AnimalesFragment extends Fragment {
+
+    // Código anterior
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Código anterior
+
+        // Evento de búsqueda sobre el searchView
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            
+            // Método que se ejecuta cuando el usuario le da a intro
+            // No nos interesa implementarlo
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            // Método que se ejecuta cada vez que el usuario escribe una letra en el searchView
+            @Override
+            public boolean onQueryTextChange(String texto) {
+                viewModel.buscarAnimalPorNombre(texto);
+                return true;
+            }
+        });
+    }
+}
+```
+
+---
+
+### Filtrar elementos en ViewModel y Repository
+
+El `ViewModel` actúa como intermediario entre la vista y la capa de datos.
+Cuando el usuario escribe en el `SearchView`, el `Fragment` envía ese texto al `ViewModel`, y este se encarga de pedir al `Repository` la lista filtrada.
+Después, actualiza el `MutableLiveData` para que el `Fragment` reciba la nueva lista y el `Adapter` pueda mostrarla automáticamente.
+
+```java title="AnimalesViewModel"
+public class AnimalesViewModel extends ViewModel {
+
+    // Usamos el mismo LiveData que ya mostraba la lista completa
+    public MutableLiveData<List<Animal>> animales = new MutableLiveData<>();
+    
+    // Código previo
+
+    // Recibe el texto del SearchView y pide al Repository la lista filtrada
+    public void buscarAnimalPorNombre(String texto) {
+        animales.setValue(repository.getAnimalesPorNombre(texto));
+    }
+}
+```
+
+Por su parte, el `Repository` es el encargado de realizar el filtrado.
+Aquí es donde recorremos la lista original y seleccionamos solamente los animales cuyo nombre **comienza** por el texto introducido por el usuario:
+
+```java title="AnimalesRepository"
+public class AnimalesRepository {
+
+    // Código anterior
+
+    // Devuelve solo los animales cuyo nombre empieza por el texto indicado
+    public List<Animal> getAnimalesPorNombre(String texto) {
+        List<Animal> resultado = new ArrayList<>();
+        for (Animal a : listaAnimales) {
+            if (a.getNombre().toLowerCase().startsWith(texto)) {
+                resultado.add(a);
+            }
+        }
+        return resultado;
+    }
+}
+```
 
 
 </div>
