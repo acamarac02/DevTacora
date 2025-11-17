@@ -72,37 +72,10 @@ Estas operaciones se hacen **antes de dividir** porque afectan por igual a todos
 ### Paso 1.1 Limpieza estructural
 
 El objetivo de la limpieza estructural es **asegurar que el dataset esté bien formado**:
-* Quitar columnas que no aportan información al modelo.
 * Comprobar que los tipos de datos son correctos.
 * Corregir formatos o errores de escritura en las variables.
 
 A continuación veremos cada una de estas operaciones aplicadas al dataset **Titanic**.
-
-#### Eliminación de columnas irrelevantes
-
-Algunos campos no aportan información útil para el modelo o pueden incluso introducir ruido.  
-Ejemplos típicos son identificadores únicos (`PassengerId`) o campos con texto libre (`Name`, `Ticket`, `Cabin`).
-
-Estas columnas **no ayudan a predecir la supervivencia**, por lo que es recomendable eliminarlas antes del modelado.
-
-```python
-# Seleccionamos las columnas relevantes (features) y la variable objetivo (target)
-features = ['Pclass', 'Sex', 'Age', 'Fare', 'SibSp', 'Parch', 'Embarked']
-target = 'Survived'
-
-X = df[features].copy()  # Hacemos una copia para modificar más adelante (rellenar nulos, codificar, etc.)
-y = df[target]
-```
-
-💡 **Explicación teórica:**
-
-* Los **identificadores** (como `PassengerId`) son únicos por fila, por lo que no aportan patrones comunes al modelo.
-* Las columnas **de texto libre** (como `Name` o `Ticket`) contienen información no estructurada difícil de procesar sin técnicas de *Feature Engineering* avanzadas (como procesamiento de texto), que no vamos a abordar.
-* **Cabin** tiene la mayoría de sus valores nulos, por lo que se elimina también.
-
-💬 **Conclusión:**
-
-> Al eliminar variables irrelevantes, reducimos el ruido y simplificamos el modelo sin perder información útil.
 
 ---
 
@@ -258,6 +231,16 @@ df = df.drop_duplicates()
 * Por defecto, `drop_duplicates()` elimina las filas repetidas **manteniendo la primera aparición**.
 * Este método elimina duplicados considerando **todas las columnas**.
 
+:::danger Nota importante sobre el orden EDA → Preprocesamiento
+
+Los pasos **1.1 (Corrección de tipos y normalización de categorías)** y **1.2 (Eliminación de columnas irrelevantes o duplicadas)** pueden realizarse **durante el EDA**, antes de generar gráficos univariantes y bivariantes.
+Esto permite obtener **gráficos limpios y coherentes**, evitando categorías duplicadas (“male”, “Male”, “ male ”), tipos incorrectos o columnas que no aportan valor visual.
+
+Sin embargo, **todos los pasos restantes del preprocesamiento** (tratamiento de valores imposibles, imputación, codificación, escalado, feature engineering…) **deben realizarse únicamente después de completar el EDA**, cuando ya se ha comprendido la estructura y los problemas del dataset.
+
+:::
+
+---
 
 ### Paso 1.3 Outliers y errores evidentes
 
@@ -577,8 +560,8 @@ Ejemplo con `Embarked`:
 # Imputador para columnas categóricas, quedándose con la categoría más frecuente
 imputer_cat = SimpleImputer(strategy="most_frequent")
 
-X_train["Embarked"] = imputer_cat.fit_transform(X_train[["Embarked"]])
-X_test["Embarked"]  = imputer_cat.transform(X_test[["Embarked"]])
+X_train["Embarked"] = imputer_cat.fit_transform(X_train[["Embarked"]]).ravel()
+X_test["Embarked"]  = imputer_cat.transform(X_test[["Embarked"]]).ravel()
 ```
 
 Esto rellena los valores nulos con la **categoría más frecuente** de los pasajeros en *train*.
@@ -686,10 +669,8 @@ Vamos a transformar esta variable nominal en columnas numéricas:
 
 ```python
 from sklearn.preprocessing import OneHotEncoder
-import pandas as pd
 
-# handle_unknown="ignore" → evita errores si aparece una categoría nueva en el test que no existía en train (pone todo a 0)
-# sparse_output=False → devuelve un array "normal" en lugar de una matriz dispersa
+# Empezamos por Embarked
 encoder_embarked = OneHotEncoder(handle_unknown="ignore", sparse_output=False)
 
 # Ajustamos SOLO con los datos de train
@@ -702,9 +683,11 @@ embarked_test  = encoder_embarked.transform(X_test[["Embarked"]])
 
 # Convertimos las matrices a DataFrames para verlas mejor y añadirlas posteriormente a nuestro DataFrame completo
 embarked_train = pd.DataFrame(embarked_train, 
-                              columns=encoder_embarked.get_feature_names_out(["Embarked"]))
+                              columns=encoder_embarked.get_feature_names_out(["Embarked"]),
+                              index=X_train.index)
 embarked_test  = pd.DataFrame(embarked_test,
-                              columns=encoder_embarked.get_feature_names_out(["Embarked"]))
+                              columns=encoder_embarked.get_feature_names_out(["Embarked"]),
+                              index=X_test.index)
 ```
 
 Vamos a entender cómo funciona el código anterior. Supongamos que tenemos este DataFrame:
@@ -744,7 +727,7 @@ La transformación completa quedaría así:
 
 ---
 
-Tras aplicar One-Hot Encoding, normalmente:
+Tras aplicar One-Hot Encoding, en el último paso:
 
 1. Se **eliminan las columnas originales** (`Embarked`, `Sex`, etc.)
 2. Se **añaden las columnas generadas** al DataFrame
@@ -752,18 +735,76 @@ Tras aplicar One-Hot Encoding, normalmente:
 Ejemplo:
 
 ```python
-# Eliminamos columnas categóricas originales
-X_train = X_train.drop(columns=["Embarked"])
-X_test  = X_test.drop(columns=["Embarked"])
-
-# Añadimos las nuevas columnas codificadas
-X_train = pd.concat([X_train, embarked_train], axis=1)
-X_test  = pd.concat([X_test, embarked_test], axis=1)
+# Eliminamos columnas categóricas originales, sustituyéndolas por las nuevas generadas
+X_train = pd.concat([X_train.drop(columns=["Embarked"]), embarked_train], axis=1)
+X_test  = pd.concat([X_test.drop(columns=["Embarked"]), embarked_test], axis=1)
 ```
 
 ---
 
-### Paso 3.3. Escalado y normalización de variables numéricas
+### Paso 3.3. Feature Engineering básico
+
+El **Feature Engineering** consiste en crear nuevas variables (features) que puedan aportar información adicional al modelo.  
+En esta fase del curso solo veremos **transformaciones sencillas y muy intuitivas**, sin técnicas avanzadas.
+
+El objetivo es mejorar la capacidad predictiva del modelo utilizando información que ya existe en el dataset, pero combinada de forma más útil.
+
+#### Creación de variables intuitivas
+
+A veces, combinar varias columnas puede generar una nueva variable con más significado que las originales por separado.
+
+En el Titanic, las columnas:
+
+* `SibSp` → número de hermanos/esposos a bordo  
+* `Parch` → número de padres/hijos a bordo  
+
+por separado aportan información, pero **juntas pueden representar mejor el tamaño del grupo familiar**.
+
+Creamos una nueva columna:
+
+```python
+# Crear tamaño familiar
+X_train["FamilySize"] = X_train["SibSp"] + X_train["Parch"] + 1
+X_test["FamilySize"]  = X_test["SibSp"] + X_test["Parch"] + 1
+```
+
+¿Por qué sumamos 1?
+
+👉 Para incluir al propio pasajero en el tamaño total de la familia.
+
+Ejemplo:
+
+| SibSp | Parch | FamilySize |
+| ----- | ----- | ---------- |
+| 1     | 0     | 2          |
+| 0     | 0     | 1          |
+| 3     | 1     | 5          |
+
+💡 **Interpretación:**
+Los grupos más grandes tenían, en general, menor probabilidad de sobrevivir, por lo que esta variable puede ayudar al modelo.
+
+---
+
+#### Eliminación de variables redundantes
+
+Una vez que hemos creado una nueva variable derivada de otras dos, es posible que las variables originales **ya no sean necesarias** o aporten información duplicada.
+
+En este nivel básico, la regla que seguiremos será:
+
+👉 **Si la nueva variable resume bien la información, podemos eliminar las columnas que la generaron.**
+
+Por ejemplo, tras crear `FamilySize`, podríamos eliminar `SibSp` y `Parch` para evitar redundancia:
+
+```python
+X_train = X_train.drop(columns=["SibSp", "Parch"])
+X_test  = X_test.drop(columns=["SibSp", "Parch"])
+```
+
+Esto hace el dataset más compacto y claro para el modelo.
+
+---
+
+### Paso 3.4. Escalado y normalización de variables numéricas
 
 Tras imputar valores nulos y codificar las variables categóricas, el siguiente paso es **escalar o normalizar las variables numéricas**.  
 Este proceso es fundamental en muchos modelos de Machine Learning, especialmente aquellos que son sensibles a la magnitud de los valores (por ejemplo, KNN, regresión logística, redes neuronales, SVM…).
@@ -956,74 +997,9 @@ Por eso, aunque es útil, suele utilizarse menos que StandardScaler en problemas
 
 #### ¿Debo escalar todas las columnas numéricas?
 
-✔ **Sí**, si usas modelos basados en distancias (KNN, SVM).
-✔ **Sí**, si usas regresión logística o redes neuronales.
+✔ **Sí**, si usas modelos basados en distancias (KNN, SVM).  
+✔ **Sí**, si usas regresión logística o redes neuronales.  
 ❌ **No es necesario** para árboles de decisión o Random Forest (no les afecta).
-
----
-
-
-### Paso 3.4. Feature Engineering básico
-
-El **Feature Engineering** consiste en crear nuevas variables (features) que puedan aportar información adicional al modelo.  
-En esta fase del curso solo veremos **transformaciones sencillas y muy intuitivas**, sin técnicas avanzadas.
-
-El objetivo es mejorar la capacidad predictiva del modelo utilizando información que ya existe en el dataset, pero combinada de forma más útil.
-
----
-
-#### Creación de variables intuitivas
-
-A veces, combinar varias columnas puede generar una nueva variable con más significado que las originales por separado.
-
-En el Titanic, las columnas:
-
-* `SibSp` → número de hermanos/esposos a bordo  
-* `Parch` → número de padres/hijos a bordo  
-
-por separado aportan información, pero **juntas pueden representar mejor el tamaño del grupo familiar**.
-
-Creamos una nueva columna:
-
-```python
-# Crear tamaño familiar
-X_train["FamilySize"] = X_train["SibSp"] + X_train["Parch"] + 1
-X_test["FamilySize"]  = X_test["SibSp"] + X_test["Parch"] + 1
-```
-
-¿Por qué sumamos 1?
-
-👉 Para incluir al propio pasajero en el tamaño total de la familia.
-
-Ejemplo:
-
-| SibSp | Parch | FamilySize |
-| ----- | ----- | ---------- |
-| 1     | 0     | 2          |
-| 0     | 0     | 1          |
-| 3     | 1     | 5          |
-
-💡 **Interpretación:**
-Los grupos más grandes tenían, en general, menor probabilidad de sobrevivir, por lo que esta variable puede ayudar al modelo.
-
----
-
-#### Eliminación de variables redundantes
-
-Una vez que hemos creado una nueva variable derivada de otras dos, es posible que las variables originales **ya no sean necesarias** o aporten información duplicada.
-
-En este nivel básico, la regla que seguiremos será:
-
-👉 **Si la nueva variable resume bien la información, podemos eliminar las columnas que la generaron.**
-
-Por ejemplo, tras crear `FamilySize`, podríamos eliminar `SibSp` y `Parch` para evitar redundancia:
-
-```python
-X_train = X_train.drop(columns=["SibSp", "Parch"])
-X_test  = X_test.drop(columns=["SibSp", "Parch"])
-```
-
-Esto hace el dataset más compacto y claro para el modelo.
 
 ---
 
@@ -1114,5 +1090,18 @@ y_train.to_csv("titanic_y_train.csv", index=False)
 y_test.to_csv("titanic_y_test.csv", index=False)
 ```
 
+---
+
+## Ejercicio de Titanic
+
+Realiza el preprocesamiento del dataset **Titanic**, pero esta vez con un fichero “ensuciado” a propósito para poder aplicar la mayoría de las técnicas vistas.
+
+Puedes partir del cuaderno que ya tienes de EDA (cuidado, tendrás que volver a ejecutarlo con el nuevo dataset):
+
+👉 [Cuaderno de EDA — Titanic](./0-datasets/EDA_Titanic.ipynb)
+
+📂 Dataset para este ejercicio: [`titanic_sucio.csv`](./0-datasets/titanic_sucio.csv)
+
+Como opción adicional, puedes entrenar un modelo sencillo (por ejemplo, **KNN**) con el dataset ya preprocesado para comprobar que todo el flujo funciona correctamente y que los resultados mejoran con respecto al preprocesamiento sencillo que hacíamos al inicio del tema.
 
 </div>
