@@ -1,0 +1,9 @@
+{
+  "label": "Clasificación",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "title": "Clasificación",
+    "description": "Modelos de aprendizaje supervisado orientados a predecir categorías o clases. En estos problemas disponemos de datos etiquetados y el objetivo es aprender un modelo capaz de asignar la clase correcta a nuevas observaciones."
+  }
+}

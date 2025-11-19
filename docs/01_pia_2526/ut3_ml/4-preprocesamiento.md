@@ -278,11 +278,11 @@ dtype: float64
 * Una tarifa de más de 500 también puede ser válida para pasajeros de primera clase.
 * Pero si encontráramos una edad de **250 años** o un valor negativo en la tarifa (`Fare = -10`), serían claramente errores de registro.
 
-Podemos usar condiciones simples para **detectar valores imposibles** y corregirlos o eliminarlos.
+Podemos usar condiciones simples para **detectar valores imposibles** y corregirlos o eliminarlos. En nuestro caso, vamos a sustituirlos por valores vacíos, que más tarde se imputarán.
 
 ```python
 # Ejemplo: eliminar edades imposibles
-df = df[df["Age"] <= 100]
+df.loc[(df["Age"] < 0) | (df["Age"] > 120), "Age"] = np.nan
 
 # Ejemplo: corregir tarifas negativas (si existieran)
 # Esto aprende de datos, se debería hacer después de dividir en train y test

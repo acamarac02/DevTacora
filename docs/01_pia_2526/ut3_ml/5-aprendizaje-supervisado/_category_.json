@@ -1,0 +1,9 @@
+{
+  "label": "Aprendizaje supervisado",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "title": "Aprendizaje supervisado",
+    "description": "Modelos de Machine Learning organizados por tareas de clasificación y regresión. Por cada modelo estudiaremos su funcionamiento, implementación y métricas."
+  }
+}
