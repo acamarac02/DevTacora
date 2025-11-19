@@ -808,7 +808,7 @@ El objetivo de la actividad es realizar el **Preprocesamiento** sobre el dataset
 
 ### Dataset
 
-**Fichero:** [`employee.csv`](./0-datasets/employee.csv)    
+**Fichero:** [`employee.csv`](../../0-datasets/employee.csv)    
 **Más información:** [Kaggle](https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset)   
 **Variable objetivo (target):** `Attrition`
 * `Yes` → el empleado dejó la empresa
