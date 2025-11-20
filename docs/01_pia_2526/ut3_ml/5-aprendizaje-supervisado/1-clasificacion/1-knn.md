@@ -393,16 +393,6 @@ print("Mejor valor de k:", best_k)
 
 #### Opción 2. GridSearchCV
 
-`GridSearchCV` realiza **automáticamente** todo el proceso anterior:
-
-* Prueba varios valores de k
-* Evalúa el modelo con cross-validation
-* Devuelve el mejor
-
-Sin embargo, es una técnica más avanzada que veremos más adelante.
-
-<!--
-
 `GridSearchCV` es una herramienta de scikit-learn que **automatiza todo el proceso de búsqueda de hiperparámetros**, incluido el valor óptimo de *k* en KNN.  
 Hace exactamente lo mismo que el método manual anterior, pero de manera más cómoda y estructurada:
 
@@ -478,8 +468,6 @@ knn_best = grid.best_estimator_
 Este modelo se encuentra **totalmente entrenado y listo para predecir**, por lo que no es necesario volver a llamarlo a `fit()`.
 
 :::
-
--->
 
 ---
 
