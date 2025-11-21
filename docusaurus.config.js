@@ -95,6 +95,12 @@ const config = {
             label: 'PMDM',
           },
           {
+            type: 'docSidebar',
+            sidebarId: 'pmdm_2425_Sidebar',
+            position: 'left',
+            label: 'PMDM 24-25',
+          },
+          {
             to: '/docs/licencia',
             label: 'Licencia',
             position: 'right',
