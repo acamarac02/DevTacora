@@ -182,33 +182,13 @@ Aunque los Árboles de Decisión son modelos muy flexibles y funcionan bien incl
 
 Las reglas principales son las siguientes:
 
-### No necesitan escalado
-
-A diferencia de modelos basados en distancia (como KNN o SVM), los árboles **no utilizan distancias**, sino comparaciones del tipo:
-
-> ¿petal_length ≤ 2.45?
-
-Por eso, **da igual** que una variable esté en metros, centímetros o miles de euros: el árbol tomará decisiones igual.
-
-### Las categóricas deben codificarse
-
-Los árboles solo trabajan con valores numéricos, así que las variables categóricas deben convertirse a números.
-
-Sin embargo, a diferencia de KNN:
-
-* **da lo mismo** si usas *Label Encoding* o *One-Hot Encoding*,
-* el árbol no interpreta estos números como órdenes o magnitudes,
-* simplemente los usa para dividir ramas.
-
-Esto hace que el preprocesamiento sea más sencillo.
-
-
-### Sensibles a outliers extremos (pero menos que otros modelos)
-
-Un valor atípico puede forzar un split extraño o poco útil.
-Aun así, los árboles son más robustos que KNN, porque los outliers:
-* no distorsionan distancias (como en KNN),
-* solo afectan si generan una condición de división atípica.
+| Aspecto                                | ¿Es necesario?    | Explicación                                                                                                                                                  |
+| -------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Escalado (StandardScaler / MinMax)** | **❌ No**          | Los árboles no usan distancias, solo comparaciones del tipo “¿feature ≤ umbral?”. La escala no afecta a las decisiones.                                      |
+| **Codificación de categóricas**        | **✔ Sí**          | Los árboles solo aceptan números. Se puede usar **Label Encoding** o **One-Hot**, ambas funcionan porque el árbol **no interpreta orden** entre los valores. |
+| **Tratamiento de outliers**            | **✔ A veces**     | Los árboles son robustos, pero outliers muy extremos pueden causar splits raros. Menos crítico que en modelos basados en distancia.                          |
+| **Eliminar nulos o imputarlos**        | **✔ Sí**          | Los Árboles de Decisión de scikit-learn **no aceptan nulos**. Es obligatorio imputar o eliminar filas.                                                       |
+| **Eliminar columnas irrelevantes**     | **✔ Recomendado** | Features totalmente inútiles pueden generar splits basados en ruido. No es crítico, pero mejora la calidad del árbol.                                        |
 
 ---
 
