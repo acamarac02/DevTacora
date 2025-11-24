@@ -192,44 +192,14 @@ Características importantes de KNN:
 KNN es uno de los modelos más sensibles al preprocesamiento de los datos.
 Esto se debe a que **todas sus decisiones se basan en distancias**, y cualquier detalle en las features puede alterar completamente el resultado.
 
-A continuación vemos por qué el preprocesamiento es especialmente crítico en este modelo.
+| Aspecto                                | ¿Es necesario?          | Explicación                                                                                                                                                                            |
+| -------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Escalado (StandardScaler / MinMax)** | **✔ Obligatorio**       | Como KNN mide distancias, si una feature tiene valores muy grandes dominará la distancia total. Escalado imprescindible.                                                               |
+| **Codificación de categóricas**        | **✔ Sí**                | KNN no trabaja con texto. Se requiere **One-Hot Encoding** cuando no hay orden. **Label Encoding puede distorsionar** porque introduce un orden artificial entre categorías.                                   |
+| **Tratamiento de outliers**            | **✔ Muy recomendado**   | KNN es extremadamente sensible a outliers. Un valor extremo puede alterar todas las distancias y cambiar las predicciones.                                                             |
+| **Eliminar nulos o imputarlos**        | **✔ Sí**                | KNN no permite nulos. Imputar es preferible a eliminar datos, ya que suele ser sensible al tamaño de dataset.                                                                          |
+| **Eliminar columnas irrelevantes**     | **✔ Muy recomendado**   | Cada feature influye en la distancia. Variables inútiles generan ruido y empeoran la precisión.                                                                                        |
 
-### Escalado de variables
-
-En KNN, cada variable contribuye a la distancia.
-Si una columna tiene valores mucho más grandes que otra, dominará la distancia aunque no sea la más relevante.
-
-Ejemplo típico en Titanic:
-
-* `Fare` puede llegar a 500
-* `Age` solo llega a 80
-
-Si no escalamos:
-
-* Fare “arrastra” la distancia,
-* Age deja de tener peso,
-* y KNN toma decisiones distorsionadas.
-
-💡 **Conclusión:**
-El escalado (StandardScaler o MinMaxScaler) es **obligatorio** en KNN.
-Sin él, el modelo no funciona bien.
-
----
-
-### Codificación de variables categóricas
-
-KNN calcula distancias entre filas. Para que pueda hacerlo, **todas las variables deben ser numéricas**.
-
-Pero además:
-
-* Una codificación incorrecta puede inventar relaciones que no existen.
-* Por ejemplo, si `Embarked` se codifica como `S=0`, `C=1`, `Q=2`, KNN interpretará que Q está “más lejos” de S que C, lo cual **no tiene sentido**.
-
-Por eso, en variables **nominales** se requiere One-Hot Encoding.
-Esto evita introducir un orden artificial que arruinaría la distancia.
-
-💡 **Conclusión:**
-La codificación correcta evita que KNN aprenda relaciones geométricas que no son reales.
 
 ---
 
