@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="es" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-pia_2526/ut3_ml/aprendizaje-supervisado/clasificacion/arbol-decision" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.8.1">
+<title data-rh="true">Decision Trees | DevTacora</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://acamarac02.github.io/DevTacora/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://acamarac02.github.io/DevTacora/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/clasificacion/arbol-decision"><meta data-rh="true" property="og:locale" content="es"><meta data-rh="true" name="docusaurus_locale" content="es"><meta data-rh="true" name="docsearch:language" content="es"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Decision Trees | DevTacora"><meta data-rh="true" name="description" content="Introducción a los Árboles de Decisión aplicados a problemas de clasificación. Cómo funcionan, cómo toman decisiones, sus hiperparámetros principales y cómo entrenarlos y evaluarlos en Python utilizando el dataset Iris."><meta data-rh="true" property="og:description" content="Introducción a los Árboles de Decisión aplicados a problemas de clasificación. Cómo funcionan, cómo toman decisiones, sus hiperparámetros principales y cómo entrenarlos y evaluarlos en Python utilizando el dataset Iris."><meta data-rh="true" name="keywords" content="Árboles de Decisión,Decision Tree,Clasificación,Machine Learning,scikit-learn,iris,reglas,hiperparámetros"><link data-rh="true" rel="icon" href="/DevTacora/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/clasificacion/arbol-decision"><link data-rh="true" rel="alternate" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/clasificacion/arbol-decision" hreflang="es"><link data-rh="true" rel="alternate" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/clasificacion/arbol-decision" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"UT3. Machine Learning","item":"https://acamarac02.github.io/DevTacora/docs/category/ut3-machine-learning"},{"@type":"ListItem","position":2,"name":"Aprendizaje supervisado","item":"https://acamarac02.github.io/DevTacora/docs/category/aprendizaje-supervisado"},{"@type":"ListItem","position":3,"name":"Clasificación","item":"https://acamarac02.github.io/DevTacora/docs/category/clasificación"},{"@type":"ListItem","position":4,"name":"Decision Trees","item":"https://acamarac02.github.io/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/clasificacion/arbol-decision"}]}</script><link rel="alternate" type="application/rss+xml" href="/DevTacora/blog/rss.xml" title="DevTacora RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/DevTacora/blog/atom.xml" title="DevTacora Atom Feed">
+
+
+
+
+<link rel="preconnect" href="https://www.google-analytics.com">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7WCKN9ZY1F"></script>
+<script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-7WCKN9ZY1F",{anonymize_ip:!0})</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css" integrity="sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM" crossorigin="anonymous"><link rel="stylesheet" href="/DevTacora/assets/css/styles.574be4bf.css">
+<script src="/DevTacora/assets/js/runtime~main.98a7bc4a.js" defer="defer"></script>
+<script src="/DevTacora/assets/js/main.7b8a9bda.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t="light";var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",e||t),document.documentElement.setAttribute("data-theme-choice",e||t)}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Saltar al contenido principal"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Saltar al contenido principal</a></div><nav aria-label="Principal" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Alternar barra lateral" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/DevTacora/"><div class="navbar__logo"><img src="/DevTacora/img/devtacora_logo.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/DevTacora/img/devtacora_logo.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">DevTacora</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/DevTacora/docs/pia_2526/">PIA</a><a class="navbar__item navbar__link" href="/DevTacora/docs/pmdm_2526/">PMDM</a><a class="navbar__item navbar__link" href="/DevTacora/docs/category/ut5-persistencia-de-datos">PMDM 24-25</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a class="navbar__item navbar__link" href="/DevTacora/docs/licencia">Licencia</a><a href="https://www.linkedin.com/in/aliciacamcas" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">LinkedIn<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Cambiar entre modo oscuro y claro (actualmente system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Volver al principio" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Barra lateral de Documentos" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/DevTacora/docs/pia_2526/">Presentación</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/DevTacora/docs/category/ut1-introducción-a-la-ia">UT1. Introducción a la IA</a><button aria-label="Ampliar la categoría &#x27;UT1. Introducción a la IA&#x27; de la barra lateral" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/DevTacora/docs/category/ut2-python-para-la-ia">UT2. Python para la IA</a><button aria-label="Ampliar la categoría &#x27;UT2. Python para la IA&#x27; de la barra lateral" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" href="/DevTacora/docs/category/ut3-machine-learning">UT3. Machine Learning</a><button aria-label="Colapsar categoría &#x27;UT3. Machine Learning&#x27; de la barra lateral" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/introduccion">Introducción</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/primer-modelo">Primer modelo de ML: Titanic</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/eda">Exploratory Data Analysis (EDA)</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/preprocesamiento">Preprocesamiento de Datos</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" tabindex="0" href="/DevTacora/docs/category/aprendizaje-supervisado">Aprendizaje supervisado</a><button aria-label="Colapsar categoría &#x27;Aprendizaje supervisado&#x27; de la barra lateral" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" tabindex="0" href="/DevTacora/docs/category/clasificación">Clasificación</a><button aria-label="Colapsar categoría &#x27;Clasificación&#x27; de la barra lateral" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/clasificacion/knn">K-Nearest Neighbors (KNN)</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/clasificacion/arbol-decision">Decision Trees</a></li></ul></li></ul></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Rastro de navegación"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Página de Inicio" class="breadcrumbs__link" href="/DevTacora/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/DevTacora/docs/category/ut3-machine-learning"><span>UT3. Machine Learning</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/DevTacora/docs/category/aprendizaje-supervisado"><span>Aprendizaje supervisado</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/DevTacora/docs/category/clasificación"><span>Clasificación</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Decision Trees</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">En esta página</button></div><div class="theme-doc-markdown markdown"><header><h1>Decision Trees</h1></header><p>Los <strong>Árboles de Decisión</strong> son uno de los modelos más intuitivos y visuales de todo el Machine Learning.
+En lugar de usar fórmulas o distancias, toman decisiones siguiendo <strong>reglas tipo “si… entonces…”</strong> que dividen los datos en grupos cada vez más homogéneos.</p>
+<p>Un Árbol de Decisión es un modelo que:</p>
+<ul>
+<li>divide el espacio de datos en regiones según preguntas simples (<em>“¿petal_length ≤ 2.45?””</em>)</li>
+<li>llega a una <strong>hoja</strong>, donde asigna una clase (en clasificación)</li>
+<li>aprende automáticamente qué preguntas hacer y en qué orden</li>
+</ul>
+<p>Se usan para <strong>clasificación</strong> (por ejemplo, qué especie de flor es Iris) y para <strong>regresión</strong> (predecir valores numéricos).</p>
+<p><img decoding="async" loading="lazy" alt="Gráfico EDA" src="/DevTacora/assets/images/ejemplo-decision-tree-053e57f7d852d454b80428224e7571a5.png" width="800" height="400" class="img_ev3q"></p>
+<p>Un árbol decide paso a paso:</p>
+<ol>
+<li>¿Los ingresos del cliente superan los 50.000€?</li>
+<li>Si no, ¿tiene más de 30 años?</li>
+<li>Finalmente, ¿a qué clase pertenecen los datos que quedan?</li>
+</ol>
+<p>Cada decisión crea una <strong>rama</strong>.
+El camino completo desde la raíz hasta la hoja es una <strong>regla</strong> del tipo:</p>
+<blockquote>
+<p>“Si <em>age</em> &gt; 30 entonces No compra”.</p>
+</blockquote>
+<p>Esto hace que el modelo sea fácil de explicar y de leer.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ventajas-principales">Ventajas principales<a href="#ventajas-principales" class="hash-link" aria-label="Enlace directo al Ventajas principales" title="Enlace directo al Ventajas principales">​</a></h2>
+<p>Los Árboles de Decisión destacan por:</p>
+<ul>
+<li><strong>Interpretabilidad:</strong> puedes ver exactamente qué reglas está usando el modelo.</li>
+<li><strong>Visualización sencilla:</strong> se pueden dibujar y entender en segundos.</li>
+<li><strong>No requieren escalado:</strong> esto se debe a que no miden distancias, a diferencia de KNN o SVM.</li>
+<li><strong>Pueden capturar relaciones no lineales</strong> sin esfuerzo.</li>
+<li><strong>Funcionan bien como modelo base</strong> y preparan el camino para Random Forest y Gradient Boosting.</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="dataset-de-ejemplo-iris">Dataset de ejemplo: Iris<a href="#dataset-de-ejemplo-iris" class="hash-link" aria-label="Enlace directo al Dataset de ejemplo: Iris" title="Enlace directo al Dataset de ejemplo: Iris">​</a></h2>
+<p>En estos apuntes utilizaremos el <strong>dataset Iris</strong>, uno de los conjuntos de datos más conocidos en Machine Learning por su simplicidad y porque permite visualizar muy bien cómo funcionan los modelos de clasificación.</p>
+<p>El dataset contiene <strong>150 observaciones</strong>, cada una correspondiente a una flor del género <em>Iris</em>, y está dividido en <strong>3 especies</strong>:</p>
+<ul>
+<li><strong>Iris setosa</strong></li>
+<li><strong>Iris versicolor</strong></li>
+<li><strong>Iris virginica</strong></li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Gráfico EDA" src="/DevTacora/assets/images/resumen-iris-68ba1114ed1e03d4f5cd98b39c5f4e94.png" width="700" height="313" class="img_ev3q"></p>
+<p>Cada flor está descrita mediante <strong>4 características numéricas</strong>, medidas en centímetros:</p>
+<table><thead><tr><th>sepal_length</th><th>sepal_width</th><th>petal_length</th><th>petal_width</th><th>species</th></tr></thead><tbody><tr><td>5.1</td><td>3.5</td><td>1.4</td><td>0.2</td><td>setosa</td></tr><tr><td>7.0</td><td>3.2</td><td>4.7</td><td>1.4</td><td>versicolor</td></tr><tr><td>6.3</td><td>3.3</td><td>6.0</td><td>2.5</td><td>virginica</td></tr><tr><td>4.9</td><td>3.1</td><td>1.5</td><td>0.1</td><td>setosa</td></tr><tr><td>5.8</td><td>2.7</td><td>5.1</td><td>1.9</td><td>virginica</td></tr></tbody></table>
+<p>Estas variables son ideales para aprender Árboles de Decisión porque:</p>
+<ul>
+<li>Las clases están <strong>bien separadas</strong>, sobre todo usando <em>petal_length</em> y <em>petal_width</em>.</li>
+<li>Se pueden generar árboles simples que explican muy bien cómo funciona el modelo.</li>
+<li>Todo el dataset es <strong>numérico y no tiene valores nulos</strong>, por lo que no requiere preprocesamiento.</li>
+</ul>
+<div class="theme-admonition theme-admonition-info admonition_xJq3 alert alert--info"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg></span>info</div><div class="admonitionContent_BuS1"><p>En los ejemplos visuales utilizaremos únicamente <strong>petal_length</strong> y <strong>petal_width</strong> para que se entienda claramente cómo el árbol divide los datos.</p></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="funcionamiento-y-componentes">Funcionamiento y componentes<a href="#funcionamiento-y-componentes" class="hash-link" aria-label="Enlace directo al Funcionamiento y componentes" title="Enlace directo al Funcionamiento y componentes">​</a></h2>
+<p>Los Árboles de Decisión funcionan dividiendo progresivamente los datos mediante <strong>preguntas simples</strong>, hasta que cada grupo final contiene observaciones mayoritariamente de una sola clase.</p>
+<p><img decoding="async" loading="lazy" alt="Gráfico EDA" src="/DevTacora/assets/images/componentes-ad-028144142d7d1fa918c746974e55e358.png" width="2048" height="1140" class="img_ev3q"></p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="componentes">Componentes<a href="#componentes" class="hash-link" aria-label="Enlace directo al Componentes" title="Enlace directo al Componentes">​</a></h3>
+<p>Un árbol está formado por:</p>
+<ul>
+<li>
+<p><strong>Nodo raíz</strong>. Es el punto de partida. Por este nodo pasan todos los elementos del dataset.<br>
+<!-- -->Aquí el modelo formula la <strong>primera pregunta</strong>, por ejemplo:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">¿petal_length ≤ 2.45?</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>Ramas</strong>. Cada respuesta a la condición crea una rama:</p>
+<ul>
+<li>Si se cumple → rama izquierda</li>
+<li>Si NO se cumple → rama derecha</li>
+</ul>
+</li>
+<li>
+<p><strong>Hojas</strong>. Son los nodos finales. Aquí el árbol <strong>asigna la clase</strong> (setosa, versicolor, virginica…).<br>
+<!-- -->En una hoja ya no se hacen más preguntas.</p>
+</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="split">Split<a href="#split" class="hash-link" aria-label="Enlace directo al Split" title="Enlace directo al Split">​</a></h3>
+<p>Un <em><strong>split</strong></em> es simplemente una <strong>división del nodo actual</strong> basada en una pregunta.</p>
+<p>Ejemplo:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">petal_width ≤ 1.75</span><br></span></code></pre></div></div>
+<p>Cada split:</p>
+<ul>
+<li>reduce la mezcla de clases</li>
+<li>produce nodos más “puros”</li>
+<li>mejora la capacidad del modelo para separar especies</li>
+</ul>
+<p>El árbol prueba muchos splits posibles y selecciona el que mejor separa las clases.</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="criterios-de-división-gini">Criterios de división: Gini<a href="#criterios-de-división-gini" class="hash-link" aria-label="Enlace directo al Criterios de división: Gini" title="Enlace directo al Criterios de división: Gini">​</a></h3>
+<p>Para decidir <strong>qué pregunta hacer</strong> en cada nodo, el árbol prueba distintas posibles divisiones (<em>splits</em>) y elige la que mejor separa las clases.
+La forma más común de medir qué tan “buena” es una división es usando la <strong>impureza Gini</strong>, que indica cuán mezcladas están las clases dentro de un nodo.</p>
+<p><img decoding="async" loading="lazy" alt="Gini" src="/DevTacora/assets/images/gini-e4c8f457bebd1f8333b23fb4ab7d2f91.png" width="1144" height="922" class="img_ev3q"></p>
+<p>La <strong>impureza Gini</strong> mide <strong>lo mezcladas que están las clases</strong> en un nodo.</p>
+<ul>
+<li><strong>Gini = 0</strong> → nodo completamente puro (solo una clase)</li>
+<li><strong>Gini alto</strong> → mucha mezcla de clases</li>
+</ul>
+<p>En el ejemplo de la imagen:</p>
+<ul>
+<li>Nodo raíz → <code>gini = 0.667</code> (máxima mezcla: 50 setosa, 50 versicolor, 50 virginica)</li>
+<li>Nodo naranja → <code>gini = 0.0</code> (todas son setosa → pureza total)</li>
+<li>Nodo verde → <code>gini = 0.168</code> (casi todas versicolor)</li>
+<li>Nodo morado → <code>gini = 0.043</code> (casi todas virginica)</li>
+</ul>
+<p>El árbol elige el split que <strong>reduce más la impureza</strong>, es decir, el que consigue nodos hijos más homogéneos.</p>
+<div class="theme-admonition theme-admonition-info admonition_xJq3 alert alert--info"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg></span>info</div><div class="admonitionContent_BuS1"><p>Existe otro criterio de decisión llamado <strong>entropía</strong>, que mide la mezcla de clases de forma similar, pero es más avanzado.
+En este curso solo usaremos <strong>Gini</strong>, que es más fácil de interpretar y es el valor por defecto en scikit-learn.</p></div></div>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ejemplo-funcionamiento">Ejemplo funcionamiento<a href="#ejemplo-funcionamiento" class="hash-link" aria-label="Enlace directo al Ejemplo funcionamiento" title="Enlace directo al Ejemplo funcionamiento">​</a></h3>
+<p>Cuando llega una nueva observación, el árbol:</p>
+<ol>
+<li>Empieza en la <strong>raíz</strong>.</li>
+<li>Evalúa la condición del nodo:<!-- -->
+<ul>
+<li>Si se cumple → rama izquierda</li>
+<li>Si no → rama derecha</li>
+</ul>
+</li>
+<li>Repite el proceso en los nodos siguientes.</li>
+<li>Termina en una <strong>hoja</strong>, que contiene la clase predicha.</li>
+</ol>
+<p>Es literalmente seguir un camino de decisiones <strong>“si… entonces…”</strong>.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="importancia-del-preprocesamiento">Importancia del preprocesamiento<a href="#importancia-del-preprocesamiento" class="hash-link" aria-label="Enlace directo al Importancia del preprocesamiento" title="Enlace directo al Importancia del preprocesamiento">​</a></h2>
+<p>Aunque los Árboles de Decisión son modelos muy flexibles y funcionan bien incluso sin un preprocesamiento complejo, es importante conocer sus necesidades básicas para evitar errores y obtener buenos resultados.</p>
+<p>Las reglas principales son las siguientes:</p>
+<table><thead><tr><th>Aspecto</th><th>¿Es necesario?</th><th>Explicación</th></tr></thead><tbody><tr><td><strong>Escalado (StandardScaler / MinMax)</strong></td><td><strong>❌ No</strong></td><td>Los árboles no usan distancias, solo comparaciones del tipo “¿feature ≤ umbral?”. La escala no afecta a las decisiones.</td></tr><tr><td><strong>Codificación de categóricas</strong></td><td><strong>✔ Sí</strong></td><td>Los árboles solo aceptan números. Se puede usar <strong>Label Encoding</strong> o <strong>One-Hot</strong>, ambas funcionan porque el árbol <strong>no interpreta orden</strong> entre los valores.</td></tr><tr><td><strong>Tratamiento de outliers</strong></td><td><strong>✔ A veces</strong></td><td>Los árboles son robustos, pero outliers muy extremos pueden causar splits raros. Menos crítico que en modelos basados en distancia.</td></tr><tr><td><strong>Eliminar nulos o imputarlos</strong></td><td><strong>✔ Sí</strong></td><td>Los Árboles de Decisión de scikit-learn <strong>no aceptan nulos</strong>. Es obligatorio imputar o eliminar filas.</td></tr><tr><td><strong>Eliminar columnas irrelevantes</strong></td><td><strong>✔ Recomendado</strong></td><td>Features totalmente inútiles pueden generar splits basados en ruido. No es crítico, pero mejora la calidad del árbol.</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ejemplo-básico-en-python">Ejemplo básico en Python<a href="#ejemplo-básico-en-python" class="hash-link" aria-label="Enlace directo al Ejemplo básico en Python" title="Enlace directo al Ejemplo básico en Python">​</a></h2>
+<p>Para entender mejor cómo se comporta un Árbol de Decisión, puedes ejecutar este ejemplo práctico con el dataset <strong>Iris</strong>.
+En él entrenamos un árbol <strong>sin limitar profundidad</strong> (muy grande → sobreajuste).</p>
+<p>👉 <strong>Puedes abrir el cuaderno aquí:</strong>
+<a href="/DevTacora/assets/files/ejemplo_decision_tree_iris-3639e240dd7db874a1fa3cc500890745.ipynb" target="_blank">Colab: Árbol de Decisión con Iris</a></p>
+<p>👉 <strong>Dataset utilizado:</strong>
+<a href="/DevTacora/assets/files/iris-11586a493a1db7736fce5ba6dc154074.csv" target="_blank">iris.csv</a></p>
+<p>Este ejemplo será la base para entender los conceptos de <strong>profundidad</strong>, <strong>sobreajuste</strong>, <strong>subajuste</strong>, y los <strong>hiperparámetros principales</strong> que veremos a continuación.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="visualización-del-árbol">Visualización del árbol<a href="#visualización-del-árbol" class="hash-link" aria-label="Enlace directo al Visualización del árbol" title="Enlace directo al Visualización del árbol">​</a></h2>
+<p>Una de las ventajas más grandes de los Árboles de Decisión es que podemos <strong>ver el modelo completo</strong>: todas sus decisiones, separaciones y clases finales. Esto hace que el aprendizaje sea muy visual y ayuda a entender cómo “piensa” el árbol.</p>
+<p>Scikit-learn permite dibujar el árbol directamente con <code>plot_tree</code>:</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"># Creamos una figura grande para que el árbol se vea bien</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">plt</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">figure</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">figsize</span><span class="token operator" style="color:#393A34">=</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">22</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">12</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Dibujamos el árbol de decisión entrenado</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">plot_tree</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    tree_full</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">                </span><span class="token comment" style="color:#999988;font-style:italic"># El modelo ya entrenado</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    feature_names</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">features</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">   </span><span class="token comment" style="color:#999988;font-style:italic"># Nombres de las columnas que estamos usando como X</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    class_names</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">iris</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;species&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">unique</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic"># Nombres de las clases (setosa, versicolor, virginica)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    filled</span><span class="token operator" style="color:#393A34">=</span><span class="token boolean" style="color:#36acaa">True</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">              </span><span class="token comment" style="color:#999988;font-style:italic"># Colorea los nodos según la clase predominante</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    rounded</span><span class="token operator" style="color:#393A34">=</span><span class="token boolean" style="color:#36acaa">True</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">             </span><span class="token comment" style="color:#999988;font-style:italic"># Esquinas redondeadas para mejorar la visualización</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    fontsize</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">10</span><span class="token plain">               </span><span class="token comment" style="color:#999988;font-style:italic"># Tamaño del texto dentro del árbol</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Mostramos la figura en pantalla</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">plt</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">show</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre></div></div>
+<p>Parámetros importantes:</p>
+<ul>
+<li><strong>feature_names</strong> → nombres de las columnas usadas para X (features)</li>
+<li><strong>class_names</strong> → nombres de las clases</li>
+<li><strong>filled=True</strong> → colorea los nodos según la especie predominante</li>
+<li><strong>rounded=True</strong> → mejora la legibilidad</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Árbol complejo" src="/DevTacora/assets/images/tree-full-a049202bfe4d4fc00afc35bde62114a1.png" width="1725" height="944" class="img_ev3q"></p>
+<p>🧠 <strong>Interpretación del gráfico</strong></p>
+<p>En cada nodo puedes ver:</p>
+<ul>
+<li><strong>la condición</strong> que divide los datos (por ejemplo, <code>petal_length ≤ 2.45</code>)</li>
+<li><strong>el valor de Gini</strong>, que indica la mezcla de clases</li>
+<li><strong>cuántas muestras</strong> llegan a ese nodo (<code>samples</code>)</li>
+<li><strong>la distribución por clases</strong> (<code>value = [...]</code>)</li>
+<li>y la <strong>clase asignada</strong> si es una hoja</li>
+</ul>
+<p>Gracias a esto podemos seguir el flujo de decisiones desde la raíz hasta cada hoja y entender <strong>exactamente</strong> por qué el árbol clasifica una flor como <em>setosa</em>, <em>versicolor</em> o <em>virginica</em>.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="profundidad-e-hiperparámetros">Profundidad e hiperparámetros<a href="#profundidad-e-hiperparámetros" class="hash-link" aria-label="Enlace directo al Profundidad e hiperparámetros" title="Enlace directo al Profundidad e hiperparámetros">​</a></h2>
+<p>Si observas el árbol que hemos generado en el ejemplo anterior, verás que tiene <strong>muchos nodos</strong>, algunas hojas con <strong>muy pocas muestras</strong> (incluso 1 o 2) y un gran número de decisiones encadenadas.</p>
+<p>Este tipo de árbol ocurre cuando dejamos que el modelo crezca <strong>sin ningún límite</strong>, intentando capturar todos los detalles de los datos. El problema es que esto suele llevar a un comportamiento llamado <strong>sobreajuste</strong> (<em>overfitting</em>): el modelo se adapta tanto al conjunto de entrenamiento que pierde capacidad para generalizar en datos nuevos.</p>
+<p>Para evitarlo, los Árboles de Decisión permiten ajustar distintos <strong>hiperparámetros</strong>, que actúan como “frenos” para controlar cuánto puede crecer el árbol.</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="profundidad-sobreajuste-vs-subajuste">Profundidad: sobreajuste vs subajuste<a href="#profundidad-sobreajuste-vs-subajuste" class="hash-link" aria-label="Enlace directo al Profundidad: sobreajuste vs subajuste" title="Enlace directo al Profundidad: sobreajuste vs subajuste">​</a></h3>
+<p>La <strong>profundidad</strong> de un árbol es el número de decisiones (splits) que hay desde la raíz hasta una hoja.</p>
+<ul>
+<li>
+<p><strong>Árbol muy profundo → Overfitting</strong></p>
+<ul>
+<li>Aprende reglas demasiado específicas.</li>
+<li>Crea nodos con muy pocas muestras.</li>
+<li>Captura ruido en lugar de patrones.</li>
+<li>Es exactamente lo que ocurre en el árbol grande de la imagen.</li>
+</ul>
+</li>
+<li>
+<p><strong>Árbol poco profundo → Underfitting</strong></p>
+<ul>
+<li>Modelo demasiado simple.</li>
+<li>No captura la estructura real de los datos.</li>
+<li>Su accuracy suele ser baja.</li>
+</ul>
+</li>
+<li>
+<p><strong>Objetivo:</strong>
+Encontrar un equilibrio: un árbol <strong>lo bastante profundo</strong> para aprender, pero <strong>no tanto</strong> como para memorizar.</p>
+</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="hiperparámetros-principales">Hiperparámetros principales<a href="#hiperparámetros-principales" class="hash-link" aria-label="Enlace directo al Hiperparámetros principales" title="Enlace directo al Hiperparámetros principales">​</a></h3>
+<p>Estos hiperparámetros permiten controlar el tamaño del árbol y evitar el sobreajuste. Son muy fáciles de entender si pensamos que todos ellos <strong>limitan cuánto puede dividirse el árbol</strong>.</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="max_depth"><code>max_depth</code><a href="#max_depth" class="hash-link" aria-label="Enlace directo al max_depth" title="Enlace directo al max_depth">​</a></h4>
+<p>Es el hiperparámetro más importante. Controla la <strong>profundidad máxima</strong> del árbol.</p>
+<ul>
+<li>Si es muy grande → árbol enorme → <em>overfitting</em>.</li>
+<li>Si es muy pequeño → árbol demasiado simple → <em>underfitting</em>.</li>
+<li>Es la herramienta principal para equilibrar el modelo.</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="min_samples_split"><code>min_samples_split</code><a href="#min_samples_split" class="hash-link" aria-label="Enlace directo al min_samples_split" title="Enlace directo al min_samples_split">​</a></h4>
+<p>Número mínimo de muestras necesarias para dividir un nodo.</p>
+<ul>
+<li>Si lo aumentas → el árbol solo divide cuando hay suficientes datos.</li>
+<li>Evita splits innecesarios o aleatorios.</li>
+</ul>
+<p>Ejemplo intuitivo:</p>
+<blockquote>
+<p>“No dividas este nodo si solo hay 3 muestras, espera a tener más.”</p>
+</blockquote>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="min_samples_leaf"><code>min_samples_leaf</code><a href="#min_samples_leaf" class="hash-link" aria-label="Enlace directo al min_samples_leaf" title="Enlace directo al min_samples_leaf">​</a></h4>
+<p>Número mínimo de muestras que debe contener una hoja.</p>
+<ul>
+<li>Evita hojas con 1 o 2 datos (muy inestables).</li>
+<li>Suaviza el árbol y reduce ruido.</li>
+<li>Mejora la generalización.</li>
+</ul>
+<p>Ejemplo intuitivo:</p>
+<blockquote>
+<p>“No permitas hojas que representen casos demasiado específicos.”</p>
+</blockquote>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cómo-saber-si-hay-overfitting-o-underfitting">¿Cómo saber si hay overfitting o underfitting?<a href="#cómo-saber-si-hay-overfitting-o-underfitting" class="hash-link" aria-label="Enlace directo al ¿Cómo saber si hay overfitting o underfitting?" title="Enlace directo al ¿Cómo saber si hay overfitting o underfitting?">​</a></h3>
+<p>Es muy fácil usando <strong>train vs test accuracy</strong>. La regla general es esta:</p>
+<p><strong>OVERFITTING (sobreajuste)</strong></p>
+<blockquote>
+<p>El modelo aprende demasiado bien el conjunto de <em>train</em> y generaliza mal.</p>
+</blockquote>
+<p>Señales claras:</p>
+<ul>
+<li>Accuracy <strong>muy alta en train</strong></li>
+<li>Accuracy <strong>claramente más baja en test</strong></li>
+</ul>
+<p>Ejemplo típico:</p>
+<table><thead><tr><th>Conjunto</th><th>Accuracy</th></tr></thead><tbody><tr><td>Train</td><td>1.00</td></tr><tr><td>Test</td><td>0.88</td></tr></tbody></table>
+<p>🔎 Interpretación:<br>
+<!-- -->El modelo <strong>memoriza</strong> los datos de entrenamiento (árbol muy profundo, nodos con 1 muestra, reglas muy específicas).</p>
+<p><strong>UNDERFITTING (subajuste)</strong></p>
+<blockquote>
+<p>Modelo demasiado simple: no aprende los patrones.</p>
+</blockquote>
+<p>Señales claras:</p>
+<ul>
+<li>Accuracy <strong>baja en train</strong></li>
+<li>Accuracy <strong>similarmente baja en test</strong></li>
+</ul>
+<p>Ejemplo típico:</p>
+<table><thead><tr><th>Conjunto</th><th>Accuracy</th></tr></thead><tbody><tr><td>Train</td><td>0.75</td></tr><tr><td>Test</td><td>0.72</td></tr></tbody></table>
+<p>🔎 Interpretación:<br>
+<!-- -->El modelo no está capturando bien la estructura de los datos (árbol demasiado pequeño, <code>max_depth</code> muy bajo).</p>
+<p><strong>Buen ajuste (lo ideal)</strong></p>
+<blockquote>
+<p>Train y test tienen accuracy <strong>parecida</strong> y <strong>ambas son razonablemente altas</strong>.</p>
+</blockquote>
+<p>Ejemplo:</p>
+<table><thead><tr><th>Conjunto</th><th>Accuracy</th></tr></thead><tbody><tr><td>Train</td><td>0.94</td></tr><tr><td>Test</td><td>0.92</td></tr></tbody></table>
+<p>✔ No memoriza<br>
+<!-- -->✔ Generaliza bien<br>
+<!-- -->✔ No está infraentrenado</p>
+<hr>
+<p><strong>Código Python para detectar overfitting o underfitting</strong></p>
+<p>A nivel de código, podemos comprobar si hay overfitting o underfitting comparando la <strong>accuracy en train</strong> con la <strong>accuracy en test</strong>.
+Para ello basta con evaluar el modelo con <code>score()</code> sobre ambos conjuntos:</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic"># Accuracy en entrenamiento y en test</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;Accuracy TRAIN:&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> tree_full</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">score</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">X_train</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> y_train</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;Accuracy TEST :&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> tree_full</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">score</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">X_test</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> y_test</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre></div></div>
+<p><strong>¿Qué hace este código?</strong></p>
+<ul>
+<li>
+<p><code>tree_full.score(X_train, y_train)</code>
+→ Calcula el porcentaje de aciertos del modelo sobre los datos <strong>con los que se entrenó</strong>.
+→ Si esta accuracy es muy alta (por ejemplo 1.00), el modelo está “memorizando”.</p>
+</li>
+<li>
+<p><code>tree_full.score(X_test, y_test)</code>
+→ Calcula el porcentaje de aciertos del modelo sobre <strong>datos nuevos</strong> que no ha visto antes.
+→ Si esta accuracy es claramente más baja que la de train, indica <strong>sobreajuste</strong>.</p>
+</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ejemplo-con-ajuste-de-hiperparámetros">Ejemplo con ajuste de hiperparámetros<a href="#ejemplo-con-ajuste-de-hiperparámetros" class="hash-link" aria-label="Enlace directo al Ejemplo con ajuste de hiperparámetros" title="Enlace directo al Ejemplo con ajuste de hiperparámetros">​</a></h2>
+<p>En este segundo ejemplo trabajaremos con el mismo <strong>Google Colab</strong> y el mismo <strong>dataset Iris</strong> utilizados anteriormente.
+El objetivo es ver cómo los hiperparámetros (<code>max_depth</code>, <code>min_samples_split</code>, <code>min_samples_leaf</code>) permiten controlar el tamaño del árbol y mejorar su capacidad de generalización.</p>
+<p>En el Colab encontrarás un apartado específico llamado “Ajuste de hiperparámetros – Decision Trees”.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="métricas-de-evaluación">Métricas de evaluación<a href="#métricas-de-evaluación" class="hash-link" aria-label="Enlace directo al Métricas de evaluación" title="Enlace directo al Métricas de evaluación">​</a></h2>
+<p>Para evaluar un Árbol de Decisión podemos utilizar <strong>las mismas métricas de clasificación</strong> que ya estudiamos en el apartado de <strong>KNN</strong>.</p>
+<ul>
+<li>
+<p><strong>Accuracy</strong>
+Proporción de aciertos del modelo.</p>
+</li>
+<li>
+<p><strong>Matriz de confusión</strong>
+Permite ver qué clases se confunden entre sí.</p>
+</li>
+<li>
+<p><strong>Classification report</strong> - <strong>Precision, Recall y F1-score</strong> (Más avanzadas)
+Útiles especialmente cuando las clases están desbalanceadas.</p>
+</li>
+</ul>
+<p>Estas métricas te permitirán saber si el árbol está funcionando bien, si confunde especies entre sí y si necesita un mejor ajuste de hiperparámetros.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="análisis-de-importancia">Análisis de importancia<a href="#análisis-de-importancia" class="hash-link" aria-label="Enlace directo al Análisis de importancia" title="Enlace directo al Análisis de importancia">​</a></h2>
+<p>Una de las grandes ventajas de los Árboles de Decisión es que no solo permiten visualizar las reglas que aprende el modelo, sino también <strong>medir qué variables han sido más importantes</strong> para tomar decisiones. Esto hace que los árboles sean modelos muy <strong>interpretables</strong>, especialmente en comparación con otros algoritmos.</p>
+<p><strong>Obtener la importancia de las variables</strong></p>
+<p>Una vez entrenado el árbol, scikit-learn nos da un atributo llamado <code>.feature_importances_</code>, que indica cuánto ha contribuido cada variable a las divisiones del árbol.</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">importances </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> tree_test</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">feature_importances_</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">for</span><span class="token plain"> name</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> value </span><span class="token keyword" style="color:#00009f">in</span><span class="token plain"> </span><span class="token builtin">zip</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">features</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> importances</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">name</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;:&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> value</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre></div></div>
+<p>Los valores están entre <strong>0 y 1</strong> y <strong>suman 1</strong>.
+Cuanto mayor es el valor, más ha utilizado el árbol esa feature para separar las clases.</p>
+<p>Podemos visualizar estas importancias con un <strong>gráfico</strong> muy sencillo:</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">plt</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">figure</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">figsize</span><span class="token operator" style="color:#393A34">=</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">6</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">4</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">plt</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">barh</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">features</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> importances</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">plt</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">xlabel</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;Importancia&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">plt</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">title</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;Importancia de las variables&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">plt</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">show</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre></div></div>
+<p>Este tipo de gráfico es ideal para ver de un vistazo cuáles son las variables clave.</p>
+<p><img decoding="async" loading="lazy" alt="Gráfico EDA" src="/DevTacora/assets/images/importancia-features-ff045b95878df6453fe29d4cc8cc17d4.png" width="586" height="393" class="img_ev3q"></p>
+<p>🧠 <strong>Interpretación</strong></p>
+<p>La importancia de una variable indica:</p>
+<ul>
+<li><strong>cuántas veces</strong> se ha usado esa feature para dividir el dataset</li>
+<li><strong>cuánto ha mejorado</strong> la pureza del árbol cuando se ha usado</li>
+<li><strong>qué papel juega</strong> en la separación de las clases</li>
+</ul>
+<p>Por ejemplo, si <code>petal_length</code> tiene la mayor importancia, significa que es la variable más útil para separar <em>setosa</em>, <em>versicolor</em> y <em>virginica</em>.</p>
+<div class="theme-admonition theme-admonition-warning admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>Importante</div><div class="admonitionContent_BuS1"><p>La <em>importancia</em> de una variable <strong>no implica causalidad</strong>.<br>
+<!-- -->Solo indica <strong>lo útil que ha sido esa feature para que el árbol separe las clases</strong>.<br>
+<!-- -->El modelo usa esa variable porque funciona bien <strong>en este dataset</strong>, no porque provoque el resultado.</p></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="automatización-búsqueda-hiperparámetros-gridsearchcv">Automatización búsqueda hiperparámetros (GridSearchCV)<a href="#automatización-búsqueda-hiperparámetros-gridsearchcv" class="hash-link" aria-label="Enlace directo al Automatización búsqueda hiperparámetros (GridSearchCV)" title="Enlace directo al Automatización búsqueda hiperparámetros (GridSearchCV)">​</a></h2>
+<p>Para encontrar la mejor combinación de hiperparámetros de un Árbol de Decisión, podemos utilizar <strong>GridSearchCV</strong>, una herramienta de scikit-learn que prueba automáticamente múltiples configuraciones y selecciona la que ofrece mejor rendimiento.</p>
+<p>Este método es especialmente útil cuando no sabemos qué valores de <code>max_depth</code>, <code>min_samples_split</code> o <code>min_samples_leaf</code> son los más adecuados.</p>
+<p><strong>Cómo hacer una búsqueda de hiperparámetros</strong></p>
+<p>GridSearchCV funciona así:</p>
+<ol>
+<li>Le damos un modelo base (por ejemplo, <code>DecisionTreeClassifier()</code>).</li>
+<li>Le pasamos un <strong>diccionario de hiperparámetros</strong> con los valores que queremos probar.</li>
+<li>Realiza validación cruzada para todas las combinaciones posibles. Ver 5-fold Cross-Validation en los apuntes de KNN.</li>
+<li>Devuelve el modelo que obtuvo mejor rendimiento.</li>
+</ol>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ejemplo-de-diccionario-de-parámetros">Ejemplo de diccionario de parámetros<a href="#ejemplo-de-diccionario-de-parámetros" class="hash-link" aria-label="Enlace directo al Ejemplo de diccionario de parámetros" title="Enlace directo al Ejemplo de diccionario de parámetros">​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">param_grid </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token string" style="color:#e3116c">&quot;max_depth&quot;</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">4</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">5</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">None</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic"># 5 opciones</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token string" style="color:#e3116c">&quot;min_samples_split&quot;</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">5</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">10</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic"># 3 opciones</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token string" style="color:#e3116c">&quot;min_samples_leaf&quot;</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">5</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain">           </span><span class="token comment" style="color:#999988;font-style:italic"># 3 opciones</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre></div></div>
+<p><strong>GridSearchCV va a probar absolutamente todas las combinaciones posibles</strong> de los valores que pongas en <code>param_grid</code>.
+Es decir: hace una <strong>búsqueda exhaustiva</strong> (<em>grid search</em>) por la rejilla de hiperparámetros.</p>
+<p>GridSearchCV hará:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">5 × 3 × 3 = 45 combinaciones</span><br></span></code></pre></div></div>
+<p>Es decir, <strong>45 árboles distintos</strong>. Si además usamos <code>cv=5</code>, entonces entrena cada uno <strong>5 veces</strong>, así que:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">45 modelos × 5 validaciones = 225 entrenamientos</span><br></span></code></pre></div></div>
+<p>Por eso <strong>no debes poner listas enormes</strong>, porque puede tardar mucho.</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cómo-obtener-el-mejor-árbol">Cómo obtener el mejor árbol<a href="#cómo-obtener-el-mejor-árbol" class="hash-link" aria-label="Enlace directo al Cómo obtener el mejor árbol" title="Enlace directo al Cómo obtener el mejor árbol">​</a></h3>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> sklearn</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">model_selection </span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> GridSearchCV</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> sklearn</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">tree </span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> DecisionTreeClassifier</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Creamos un árbol base (sin configurar hiperparámetros)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># GridSearchCV será quien pruebe distintas combinaciones</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">tree </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> DecisionTreeClassifier</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">random_state</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">42</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Configuramos GridSearchCV</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">grid </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> GridSearchCV</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    estimator</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">tree</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">      </span><span class="token comment" style="color:#999988;font-style:italic"># Modelo base que queremos optimizar</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    param_grid</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">param_grid</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic"># Diccionario con las combinaciones de hiperparámetros a probar</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    cv</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">5</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">                </span><span class="token comment" style="color:#999988;font-style:italic"># Validación cruzada de 5 particiones</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    scoring</span><span class="token operator" style="color:#393A34">=</span><span class="token string" style="color:#e3116c">&quot;accuracy&quot;</span><span class="token plain">   </span><span class="token comment" style="color:#999988;font-style:italic"># Métrica que usaremos para elegir el mejor modelo</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Entrenamos el GridSearch: prueba todas las combinaciones en param_grid</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">grid</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">fit</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">X_train</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> y_train</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Mostramos la mejor combinación encontrada</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;Mejores hiperparámetros:&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> grid</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">best_params_</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic"># Obtenemos directamente el árbol entrenado con los mejores parámetros</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">best_tree </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> grid</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">best_estimator_</span><br></span></code></pre></div></div>
+<p><code>best_tree</code> contiene el modelo óptimo encontrado por GridSearchCV, ya entrenado y listo para evaluar en el conjunto de test.</p>
+<div class="theme-admonition theme-admonition-tip admonition_xJq3 alert alert--success"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z"></path></svg></span>Cómo elegir los valores para GridSearch</div><div class="admonitionContent_BuS1"><p>No hay una fórmula mágica para elegir los valores de GridSearch.<br>
+<!-- -->Empieza con rangos <strong>pequeños y realistas</strong> según el dataset,<br>
+<!-- -->observa el comportamiento del árbol y amplía solo si hace falta.</p><p>En datasets sencillos como <strong>Iris</strong> suelen bastar profundidades entre <strong>2 y 5</strong>.<br>
+<!-- -->En datasets reales y más complejos puedes probar valores algo mayores, como <strong>5 a 12</strong>.</p></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="actividad-de-seguimiento-iris">Actividad de seguimiento: Iris<a href="#actividad-de-seguimiento-iris" class="hash-link" aria-label="Enlace directo al Actividad de seguimiento: Iris" title="Enlace directo al Actividad de seguimiento: Iris">​</a></h2>
+<p>Realiza un pequeño proyecto completo con el dataset <strong>Iris</strong> completo siguiendo los pasos vistos en clase.</p>
+<ol>
+<li><strong>EDA básico</strong></li>
+<li><strong>Preprocesamiento</strong></li>
+<li><strong>Modelado:</strong>
+<ul>
+<li>Entrena <strong>KNN</strong> (usando GridSearchCV)</li>
+<li>Entrena un <strong>Árbol de Decisión</strong>: busca la mejor selección de hiperparámetros, muestra la importancia de las features, el árbol de decisión generado, etc.</li>
+</ul>
+</li>
+<li><strong>Evaluación:</strong>
+<ul>
+<li>Accuracy</li>
+<li>Matriz de confusión</li>
+<li>Breve comparación entre ambos modelos</li>
+</ul>
+</li>
+</ol>
+<p><strong>Entrega:</strong> Notebook (Colab) con todos los pasos y conclusiones.</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Página del documento"><a class="pagination-nav__link pagination-nav__link--prev" href="/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/clasificacion/knn"><div class="pagination-nav__sublabel">Anterior</div><div class="pagination-nav__label">K-Nearest Neighbors (KNN)</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#ventajas-principales" class="table-of-contents__link toc-highlight">Ventajas principales</a></li><li><a href="#dataset-de-ejemplo-iris" class="table-of-contents__link toc-highlight">Dataset de ejemplo: Iris</a></li><li><a href="#funcionamiento-y-componentes" class="table-of-contents__link toc-highlight">Funcionamiento y componentes</a><ul><li><a href="#componentes" class="table-of-contents__link toc-highlight">Componentes</a></li><li><a href="#split" class="table-of-contents__link toc-highlight">Split</a></li><li><a href="#criterios-de-división-gini" class="table-of-contents__link toc-highlight">Criterios de división: Gini</a></li><li><a href="#ejemplo-funcionamiento" class="table-of-contents__link toc-highlight">Ejemplo funcionamiento</a></li></ul></li><li><a href="#importancia-del-preprocesamiento" class="table-of-contents__link toc-highlight">Importancia del preprocesamiento</a></li><li><a href="#ejemplo-básico-en-python" class="table-of-contents__link toc-highlight">Ejemplo básico en Python</a></li><li><a href="#visualización-del-árbol" class="table-of-contents__link toc-highlight">Visualización del árbol</a></li><li><a href="#profundidad-e-hiperparámetros" class="table-of-contents__link toc-highlight">Profundidad e hiperparámetros</a><ul><li><a href="#profundidad-sobreajuste-vs-subajuste" class="table-of-contents__link toc-highlight">Profundidad: sobreajuste vs subajuste</a></li><li><a href="#hiperparámetros-principales" class="table-of-contents__link toc-highlight">Hiperparámetros principales</a><ul><li><a href="#max_depth" class="table-of-contents__link toc-highlight"><code>max_depth</code></a></li><li><a href="#min_samples_split" class="table-of-contents__link toc-highlight"><code>min_samples_split</code></a></li><li><a href="#min_samples_leaf" class="table-of-contents__link toc-highlight"><code>min_samples_leaf</code></a></li></ul></li><li><a href="#cómo-saber-si-hay-overfitting-o-underfitting" class="table-of-contents__link toc-highlight">¿Cómo saber si hay overfitting o underfitting?</a></li></ul></li><li><a href="#ejemplo-con-ajuste-de-hiperparámetros" class="table-of-contents__link toc-highlight">Ejemplo con ajuste de hiperparámetros</a></li><li><a href="#métricas-de-evaluación" class="table-of-contents__link toc-highlight">Métricas de evaluación</a></li><li><a href="#análisis-de-importancia" class="table-of-contents__link toc-highlight">Análisis de importancia</a></li><li><a href="#automatización-búsqueda-hiperparámetros-gridsearchcv" class="table-of-contents__link toc-highlight">Automatización búsqueda hiperparámetros (GridSearchCV)</a><ul><li><a href="#ejemplo-de-diccionario-de-parámetros" class="table-of-contents__link toc-highlight">Ejemplo de diccionario de parámetros</a></li><li><a href="#cómo-obtener-el-mejor-árbol" class="table-of-contents__link toc-highlight">Cómo obtener el mejor árbol</a></li></ul></li><li><a href="#actividad-de-seguimiento-iris" class="table-of-contents__link toc-highlight">Actividad de seguimiento: Iris</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">
+        <section classname="bg-white border-t border-gray-100">
+      <div classname="max-w-4xl mx-auto px-6 py-16 text-center">
+        <h3 classname="text-2xl font-bold text-gray-900 mb-4">
+          Construyendo conocimiento, línea por línea
+        </h3>
+        <p classname="text-gray-600 leading-relaxed">
+          © 2025 Alicia Cámara Casares - Contenido bajo licencia 
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" classname="text-blue-600 hover:text-blue-700 underline">
+                CC BY-NC-SA 4.0
+              </a>.
+        </p>
+      </div>
+    </section>
+      </div></div></div></footer></div>
+</body>
+</html>
