@@ -1,0 +1,8 @@
+{
+  "label": "UT4. Componentes avanzados",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "En esta unidad aprenderemos qué es una API REST, cómo consumir servicios web desde Android utilizando Retrofit, cómo realizar llamadas asíncronas y gestionar sus respuestas, y desarrollaremos un ejemplo práctico completo utilizando la PokeAPI."
+  }
+}
