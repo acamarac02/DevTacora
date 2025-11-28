@@ -760,6 +760,21 @@ Si una clase tiene menos support (como “1” en Titanic), el modelo suele tene
 
 ---
 
+## Flujo recomendado en un problema de KNN
+
+El proceso para resolver un problema de clasificación con **K-Nearest Neighbors (KNN)** sigue una serie de pasos muy claros. El rendimiento de KNN depende fuertemente del **preprocesamiento** y de la **elección de k**, por lo que un flujo bien estructurado es fundamental.
+
+| Paso                                               | ¿Qué se hace?                                                                                                       | ¿Por qué es importante?                                                                         |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Paso 1. EDA**                                         | Analizar cada variable, ver distribuciones, relación con la target, detectar outliers.                              | KNN depende totalmente de las distancias: valores extremos o mezclados afectan mucho al modelo. |
+| **Paso 2. Preprocesamiento**                            | Imputación de nulos, One-Hot Encoding, **escalado**, eliminación de columnas irrelevantes, tratamiento de outliers. | KNN es extremadamente sensible a diferencias de escala y ruido. Buen prepro = buen modelo.      |
+| **Paso 3. Búsqueda de la mejor k**                      | Probar varios valores de k usando validación cruzada o GridSearchCV.                                                | Elegir k correctamente evita overfitting (k pequeño) y underfitting (k grande).                 |
+| **Paso 4. Entrenamiento del modelo final**              | Entrenar un KNN con el mejor valor de k usando todo el conjunto de entrenamiento.                                   | Se obtiene la versión definitiva del modelo, lista para evaluar.                                |
+| **Paso 5. Análisis overfitting / underfitting**         | Comparar accuracy en **train** y **test**. Según el resultado obtenido, deberíamos buscar una k mejor (no eberíamos tener este problema si usamos GridSearch)                                                                             | k muy pequeño → overfitting. k muy grande → underfitting.                                  |
+| **Paso 6. Métricas de evaluación**                      | Accuracy y matriz de confusión.                                                              | Permiten medir cómo rinde realmente KNN en datos nuevos y si confunde clases.                   |
+
+---
+
 ## Actividad de Seguimiento: Retención de empleados
 
 El objetivo de la actividad es realizar el **Preprocesamiento** sobre el dataset **Employee Attrition** y aplicar el modelo KNN sobre él, con el fin de **predecir la rotación laboral** (abandono o permanencia en la empresa).

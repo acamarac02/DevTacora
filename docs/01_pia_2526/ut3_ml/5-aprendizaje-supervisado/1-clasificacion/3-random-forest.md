@@ -510,6 +510,26 @@ best_rf = grid.best_estimator_
 
 ---
 
+## Flujo recomendado en un problema de Random Forest
+
+El proceso para resolver un problema con **Random Forest** se basa en los mismos pasos que los Árboles de Decisión, pero con el añadido de ajustar los hiperparámetros que controlan el comportamiento del bosque completo. Random Forest es robusto, maneja bien el ruido y suele generalizar mejor que un único árbol.
+
+<div class="texto-sin-justificar">
+
+| Paso                                                 | ¿Qué se hace?                                                                                                         | ¿Por qué es importante?                                                                                              |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **Paso 1. EDA**                                      | Analizar cada variable, distribuciones, relación con la target, detectar variables relevantes.                        | Permite entender el dataset y anticipar qué columnas pueden tener mayor importancia en el bosque.                    |
+| **Paso 2. Preprocesamiento**                         | Imputar nulos, codificar categóricas (One-Hot o LabelEncoding), eliminar columnas irrelevantes. No requiere escalado. | Random Forest no acepta nulos y necesita variables numéricas. El exceso de columnas inútiles puede introducir ruido. |
+| **Paso 3. Ajuste de hiperparámetros (GridSearchCV)** | Probar valores de `n_estimators`, `max_depth`, `min_samples_leaf`, `max_features`.                                    | Permite equilibrar el modelo: demasiada profundidad → sobreajuste, demasiada simplicidad → bajo rendimiento.         |
+| **Paso 4. Entrenamiento del modelo final**           | Entrenar un Random Forest con los **mejores hiperparámetros** encontrados.                                            | Garantiza que usamos el bosque más estable y efectivo para ese dataset.                                              |
+| **Paso 5. Análisis overfitting / underfitting**      | Comparar accuracy en **train** y **test**.                                                                            | Si train ≫ test → sobreajuste. Si ambos bajos → underfitting. Random Forest normalmente generaliza muy bien.         |
+| **Paso 6. Importancia de las variables**             | Revisar `feature_importances_` y representar sus valores.                                                             | Permite entender qué variables han sido más utilizadas por el bosque para tomar decisiones.                          |
+| **Paso 7. Métricas de evaluación**                   | Accuracy y matriz de confusión.                                                     | Permite evaluar el rendimiento final del modelo y ver qué clases confunde.                                           |
+
+</div>
+
+---
+
 ## Actividad de seguimiento: Titanic
 
 Realiza un proyecto completo con el dataset **Titanic** siguiendo los pasos vistos en clase.

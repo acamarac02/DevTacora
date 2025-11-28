@@ -568,6 +568,23 @@ En datasets reales y más complejos puedes probar valores algo mayores, como **5
 
 ---
 
+## Flujo recomendado en un problema de Árbol de Decisión
+
+El proceso para resolver un problema con **Decision Trees** es muy intuitivo y permite interpretar las reglas que el modelo aprende. Además, es importante ajustar sus hiperparámetros para evitar que el árbol crezca demasiado y sobreajuste.
+
+| Paso                                                 | ¿Qué se hace?                                                                                            | ¿Por qué es importante?                                                                                  |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **Paso 1. EDA**                                      | Analizar cada variable, distribuciones, relación con la target, identificar variables relevantes.        | Permite anticipar qué columnas podrían ser útiles para los splits del árbol.                             |
+| **Paso 2. Preprocesamiento**                         | Imputar nulos, codificar categóricas (One-Hot o LabelEncoding), eliminar columnas irrelevantes.          | Los árboles no aceptan nulos y necesitan todas las variables en formato numérico. No requieren escalado. |
+| **Paso 3. Ajuste de hiperparámetros (GridSearchCV)** | Usar una rejilla con `max_depth`, `min_samples_split`, `min_samples_leaf` para encontrar el mejor árbol. | Evita que el árbol crezca sin control, reduce el sobreajuste y mejora la generalización.                 |
+| **Paso 4. Entrenamiento del modelo final**           | Entrenar un árbol con los **mejores hiperparámetros** encontrados en el paso anterior.                   | Garantiza que usamos el árbol óptimo para ese dataset.                                                   |
+| **Paso 5. Análisis overfitting / underfitting**      | Comparar accuracy en **train** y **test**. Si se buscaron los mejores hiperparámetros, el modelo debería estar equilibrado.                                                              | Árbol demasiado profundo → overfitting. Árbol muy limitado → underfitting.                               |
+| **Paso 6. Visualización y análisis del árbol**                  | Mostrar y analizar el árbol entrenado con `plot_tree` (con profundidad limitada para que sea legible).              | Permite ver cómo decide el modelo, qué splits realiza y qué reglas aprende.                              |
+| **Paso 7. Importancia de las variables**             | Revisar `feature_importances_` y representar sus valores.                                                | Muestra qué variables son las más relevantes para el árbol y permite interpretar el modelo.              |
+| **Paso 8. Métricas de evaluación**                   | Accuracy, matriz de confusión.                                      | Permite medir el rendimiento final del modelo en datos nuevos.                                           |
+
+---
+
 ## Actividad de seguimiento: Iris
 
 Realiza un pequeño proyecto completo con el dataset **Iris** completo siguiendo los pasos vistos en clase.

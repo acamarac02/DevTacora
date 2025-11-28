@@ -282,7 +282,8 @@ img[alt="Demo bloqueo pantalla"],
 img[alt="Ciclo de vida del ViewModel"],
 img[alt="Demo favorito"],
 img[alt="Demo SearchView"],
-img[alt="Gini"] {
+img[alt="Gini"],
+img[alt="Gráfica"] {
   height: 500px;
   width: auto;
   display: block;
