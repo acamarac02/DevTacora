@@ -368,7 +368,7 @@ Con esto ya podemos mapear el JSON de cualquier Pokémon que consultemos a objet
 
 La interfaz define los endpoints que vamos a usar.
 
-Recuerda que, según la documentación, a la URL base debemos añadir /pokemon/{name}, siendo {name} un valor variable que coincide con el nombre del Pokémon.
+Recuerda que, según la documentación, a la URL base debemos añadir `/pokemon/{name}`,siendo `{name}` un valor variable que coincide con el nombre del Pokémon.
 
 ```
 https://pokeapi.co/api/v2/pokemon/{id or name}
@@ -385,9 +385,9 @@ public interface PokemonApi {
 ```
 
 * `@GET`: Es una anotación de Retrofit que especifica que este método realiza una solicitud HTTP de tipo GET.
-* `"pokemon/{name}"`: Es el endpoint de la API. La parte {name} es un placeholder que será reemplazado dinámicamente con el nombre del Pokémon cuando se invoque el método.
+* `"pokemon/{name}"`: Es el endpoint de la API. La parte `{name}` es un placeholder que será reemplazado dinámicamente con el nombre del Pokémon cuando se invoque el método.
 * `Call<Pokemon>` es la respuesta que esperamos. Call es una clase de Retrofit que representa una solicitud HTTP pendiente y Pokemon es el modelo de datos que creamos antes basándonos en el JSON que recibiremos.
-* `@Path("name")`: vincula el parámetro “name” del método al marcador {name} en el endpoint.
+* `@Path("name")`: vincula el parámetro “name” del método al marcador `{name}` en el endpoint.
 
 ---
 
