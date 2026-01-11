@@ -740,24 +740,24 @@ best_model = grid.best_estimator_
 
 ---
 
-## Ejemplo Regresión Lineal binaria
+## Ejemplo Regresión Logística binaria
 
-Para ver cómo funciona un **Linear Regression binario** en la práctica, puedes ejecutar este ejemplo utilizando el dataset **Titanic sucio**.
+Para ver cómo funciona un **Logistic Regression binario** en la práctica, puedes ejecutar este ejemplo utilizando el dataset **Titanic sucio**.
 
 👉 **Puedes abrir el cuaderno aquí:**
-[Colab: Linear Regression con Titanic](../../0-datasets/4_LR_Titanic.ipynb)
+[Colab: Logística Regression con Titanic](../../0-datasets/4_LR_Titanic.ipynb)
 
 👉 **Dataset utilizado:**
 [titanic_sucio.csv](../../0-datasets/titanic_sucio.csv)
 
 ---
 
-## Ejemplo Regresión Lineal multiclase
+## Ejemplo Regresión Logística multiclase
 
-Para ver cómo funciona un **Linear Regression multiclase** en la práctica, puedes ejecutar este ejemplo utilizando el dataset **iris**.
+Para ver cómo funciona un **Logística Regression multiclase** en la práctica, puedes ejecutar este ejemplo utilizando el dataset **iris**.
 
 👉 **Puedes abrir el cuaderno aquí:**
-[Colab: Linear Regression con iris](../../0-datasets/4_1_LR_iris.ipynb)
+[Colab: Logística Regression con iris](../../0-datasets/4_1_LR_iris.ipynb)
 
 👉 **Dataset utilizado:**
 [iris.csv](../../0-datasets/iris.csv)
