@@ -263,3 +263,193 @@ Un buen modelo sería aquel que **explica por qué unos sacan más y otros menos
 | **MSE** | Error medio al cuadrado | Alta | Alta | Media | Función de coste y entrenamiento |
 | **MAE** | Error medio absoluto | Baja | Media | Alta | Evaluación e interpretación |
 | **R²** | Variabilidad explicada | No aplica | Baja | Alta | Comparación de modelos |
+
+
+---
+
+### Interpretación práctica de MAE y MSE
+
+A diferencia de métricas como la accuracy en clasificación, en regresión **no existen valores absolutos de MAE o MSE que se consideren “buenos” o “malos” de forma universal**.  
+Su interpretación depende de la **escala y el rango de la variable objetivo**.
+
+---
+
+#### MAE en relación con el rango del target
+
+Una forma habitual y práctica de interpretar el **MAE** es compararlo con el **rango de valores de la variable objetivo**.
+
+| MAE respecto al rango del target | Interpretación |
+|--------------------------------|----------------|
+| < 5 % | Muy bueno |
+| 5–10 % | Bueno |
+| 10–20 % | Aceptable |
+| > 20 % | Malo |
+
+Por ejemplo, en el dataset **California Housing**:
+
+- Rango aproximado del target: **0 – 5**
+- MAE ≈ **0.53**
+
+Esto supone un error medio de alrededor del **10 % del rango**, lo que se considera un resultado **aceptable o razonable** para un modelo baseline como la Regresión Lineal.
+
+Este tipo de comparación permite contextualizar el error y evitar interpretaciones incorrectas basadas únicamente en el valor numérico del MAE.
+
+---
+
+#### Cómo interpretar el MSE correctamente
+
+El **Mean Squared Error (MSE)** penaliza de forma más severa los errores grandes, ya que eleva al cuadrado las diferencias entre valores reales y predichos.  
+Por este motivo, **no es una métrica intuitiva en términos de unidades**, pero resulta muy útil para analizar el comportamiento del modelo.
+
+En la práctica, el MSE se utiliza sobre todo para:
+
+- comparar distintos modelos entre sí
+- detectar la presencia de errores grandes u outliers
+
+Una interpretación práctica consiste en compararlo con el MAE:
+
+- **MSE ≫ MAE** → existen errores grandes frecuentes
+- **MSE ≈ MAE** → los errores son moderados y no hay muchos outliers extremos
+
+En el caso de California Housing:
+
+- MAE ≈ **0.53**
+- MSE ≈ **0.56**
+
+Esto indica que no hay una explosión de errores muy grandes, aunque sí existen algunos casos problemáticos que afectan al rendimiento global del modelo.
+
+---
+
+<!--
+
+## Detección de overfitting y underfitting
+
+Una forma práctica y habitual de detectar **overfitting** o **underfitting** en modelos de regresión consiste en **comparar las métricas de evaluación en el conjunto de entrenamiento y en el conjunto de test**.
+
+Para ello, se calculan las predicciones y las métricas en ambos conjuntos.
+
+---
+
+### Cálculo de métricas en train y test
+
+```python
+from sklearn.metrics import mean_absolute_error, r2_score
+
+# Predicciones
+y_train_pred = model.predict(X_train)
+y_test_pred = model.predict(X_test)
+
+# Métricas
+mae_train = mean_absolute_error(y_train, y_train_pred)
+mae_test = mean_absolute_error(y_test, y_test_pred)
+
+r2_train = r2_score(y_train, y_train_pred)
+r2_test = r2_score(y_test, y_test_pred)
+
+print(f"MAE TRAIN: {mae_train:.3f}")
+print(f"MAE TEST : {mae_test:.3f}")
+print(f"R² TRAIN : {r2_train:.3f}")
+print(f"R² TEST  : {r2_test:.3f}")
+```
+
+Este código permite evaluar **cómo cambia el rendimiento del modelo** al pasar de datos vistos (train) a datos no vistos (test).
+
+---
+
+### Interpretación de métricas (train vs test)
+
+La comparación de las métricas obtenidas en **entrenamiento** y **test** permite diagnosticar si un modelo presenta **overfitting**, **underfitting** o un **buen ajuste**.
+
+| Situación        | Qué se observa en las métricas                                                               | Ejemplo típico                                                           | Interpretación                                                                        |
+| ---------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| **Overfitting**  | MAE muy bajo en train y claramente mayor en test. R² alto en train y mucho más bajo en test. | MAE TRAIN = 0.20 - MAE TEST = 0.55 - R² TRAIN = 0.92 - R² TEST = 0.58 | El modelo se ajusta demasiado a los datos de entrenamiento y no generaliza bien.      |
+| **Underfitting** | MAE similar en train y test, pero ambos altos. R² bajo en ambos conjuntos.                   | MAE TRAIN = 0.60 - MAE TEST = 0.62 - R² TRAIN = 0.45 - R² TEST = 0.43 | El modelo es demasiado simple y no captura la relación real entre variables y target. |
+| **Buen ajuste**  | MAE similar y bajo en train y test. R² similar y razonablemente alto en ambos.               | MAE TRAIN = 0.48 - MAE TEST = 0.50 - R² TRAIN = 0.62 - R² TEST = 0.60 | El modelo aprende patrones útiles y generaliza correctamente.                         |
+
+---
+
+### Conclusión práctica
+
+Comparar métricas entre entrenamiento y test es una forma sencilla y efectiva de diagnosticar el comportamiento de un modelo de regresión:
+
+* **Gran diferencia train–test** → overfitting
+* **Mal rendimiento en ambos conjuntos** → underfitting
+* **Rendimiento similar y razonable** → buen ajuste
+
+Este análisis es fundamental antes de probar modelos más complejos o introducir regularización.
+
+---
+
+-->
+
+## Análisis gráfico del rendimiento en regresión
+
+Además de las métricas numéricas (MAE, MSE y R²), es habitual analizar el comportamiento de un modelo de regresión mediante **gráficos**, que permiten entender **dónde y cómo se equivoca el modelo**.
+
+Estas visualizaciones no sustituyen a las métricas, sino que las **complementan**, ofreciendo una interpretación más intuitiva del rendimiento del modelo.
+
+---
+
+### Valores reales vs valores predichos
+
+En este gráfico, cada punto representa una observación del conjunto de datos:
+
+- El eje horizontal muestra el **valor real** de la variable objetivo.
+- El eje vertical muestra el **valor predicho** por el modelo.
+
+La línea diagonal representa la **predicción perfecta**, es decir, los casos en los que el valor predicho coincide exactamente con el valor real.
+
+![Gráfico EDA](../../0-img/reales_vs_predichos.png)
+
+**Interpretación:**
+
+- Cuanto más cerca estén los puntos de la línea diagonal, **menor es el error de predicción**.
+- Si los puntos siguen una tendencia ascendente, el modelo captura la relación general entre las variables y la target.
+- Una gran dispersión alrededor de la línea indica que el modelo **no explica completamente la variabilidad** de los datos.
+
+Este gráfico está directamente relacionado con el **coeficiente de determinación (R²)**:
+- Un R² alto implica puntos más próximos a la diagonal.
+- Un R² bajo implica mayor dispersión y un ajuste más pobre.
+
+El objetivo de un buen modelo de regresión es conseguir que los puntos estén **lo más próximos posible a la línea diagonal**.
+
+---
+
+### Gráfico de residuos vs predicción
+
+El residuo se define como la diferencia entre el valor real y el valor predicho:
+
+$$
+\text{residuo} = y - \hat{y}
+$$
+
+En este gráfico:
+
+- El eje horizontal representa el **valor predicho**.
+- El eje vertical representa el **residuo**.
+- La línea horizontal en cero indica **error nulo**.
+
+![Gráfico EDA](../../0-img/residuos.png)
+
+**Interpretación:**
+
+- En un modelo adecuado, los residuos deberían distribuirse de forma **aleatoria** alrededor de cero, sin patrones claros.
+- La presencia de patrones (pendientes, formas de abanico, agrupaciones) indica que el modelo **no captura correctamente la relación real** entre las variables.
+- Residuos grandes implican errores elevados, que influyen especialmente en métricas como el **MSE**.
+
+Este gráfico permite detectar de forma visual:
+- relaciones no lineales
+- errores sistemáticos
+- limitaciones del modelo utilizado
+
+---
+
+### Relación entre métricas y gráficos
+
+Las métricas numéricas resumen el rendimiento global del modelo, mientras que los gráficos permiten analizar **la distribución y el comportamiento de los errores**.
+
+- **MAE y MSE** cuantifican cuánto se equivoca el modelo.
+- **R²** indica cuánta variabilidad explica el modelo.
+- Los gráficos muestran **dónde** se producen esos errores y **cómo** se distribuyen.
+
+Por este motivo, el análisis gráfico es una herramienta fundamental para evaluar modelos de regresión, independientemente del algoritmo utilizado.

@@ -218,8 +218,53 @@ Estos atributos permiten **entender cómo el modelo está tomando decisiones**.
 | 1. EDA              | Analizar variables y relaciones | Detecta linealidad y outliers |
 | 2. Preprocesamiento | Limpieza, escalado, selección   | Mejora estabilidad            |
 | 3. Entrenamiento    | Ajustar el modelo               | Obtener coeficientes          |
-| 4. Evaluación       | MAE, MSE, R²                    | Medir rendimiento             |
+| 4. Evaluación       | MAE, MSE, R²  + Análisis gráfico del rendimiento                   | Medir rendimiento             |
 | 5. Interpretación   | Analizar coeficientes           | Entender el modelo            |
 | 6. Comparación      | Probar modelos flexibles        | Ver si el problema es lineal  |
 
 ---
+
+## Ejemplo Regresión Lineal
+
+Para ver cómo funciona un **Linear Regression** en la práctica, puedes ejecutar este ejemplo utilizando el dataset **California Housing**.
+
+👉 **Puedes abrir el cuaderno aquí:**
+[Colab: Linear Regression con California Housing](../../0-datasets/ejemplo_regresion_lineal.ipynb)
+
+👉 **Dataset utilizado:**
+
+Se utiliza el dataset **California Housing**, incluido directamente en la librería **scikit-learn**.  
+Este dataset está basado en datos del **censo de California de 1990**.
+
+El objetivo es predecir el **valor medio de la vivienda** (`MedHouseVal`) a partir de variables socioeconómicas y geográficas de cada bloque censal, como:
+
+- ingresos medios (`MedInc`)
+- antigüedad media de las viviendas (`HouseAge`)
+- número medio de habitaciones (`AveRooms`) y dormitorios (`AveBedrms`)
+- población y ocupación media (`Population`, `AveOccup`)
+- localización geográfica (`Latitude`, `Longitude`)
+
+Todas las variables son **numéricas**, lo que lo convierte en un dataset adecuado para introducir modelos de regresión lineales y comparar posteriormente con modelos más complejos.
+
+---
+
+## Actividad de seguimiento: Bike Sharing Dataset
+
+Realiza un pequeño proyecto completo con el dataset [**Bike Sharing**](https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset) siguiendo los pasos vistos en clase. El dataset es un conjunto de datos realista que recoge información sobre el número de bicicletas alquiladas en un sistema de bike sharing.
+
+El objetivo es predecir el **número de alquileres** (atributo `cnt`) a partir de variables meteorológicas (temperatura, humedad, viento), variables temporales (estación, mes, día de la semana, hora) y variables contextuales (si es día laborable, condiciones climáticas).
+
+:::info Features de tipo fecha
+El dataset incluye una columna de fecha (`dteday`), que se proporciona con fines informativos y de análisis exploratorio, pero **no se utiliza directamente como variable de entrada**.  
+En su lugar, se emplean variables temporales derivadas ya incluidas en el dataset, que son más adecuadas para los modelos de Machine Learning.
+:::
+
+Pasos a seguir:
+
+1. **EDA básico**
+2. **Preprocesamiento**
+3. **Modelado:** entrena **Linear Regression**
+4. **Evaluación**
+5. **Análisis de atributos relevantes**
+
+**Entrega:** Notebook (Colab) con todos los pasos y conclusiones.
