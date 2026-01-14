@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="es" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-pia_2526/ut3_ml/aprendizaje-supervisado/regresion/arbol_decision_regresion" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.8.1">
+<title data-rh="true">Decision Trees Regresión | DevTacora</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://acamarac02.github.io/DevTacora/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://acamarac02.github.io/DevTacora/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/regresion/arbol_decision_regresion"><meta data-rh="true" property="og:locale" content="es"><meta data-rh="true" name="docusaurus_locale" content="es"><meta data-rh="true" name="docsearch:language" content="es"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Decision Trees Regresión | DevTacora"><meta data-rh="true" name="description" content="Introducción a Decision Tree Regression en Machine Learning. Funcionamiento del algoritmo, diferencias con árboles de clasificación, hiperparámetros principales, visualización del árbol, importancia de variables y métricas de evaluación."><meta data-rh="true" property="og:description" content="Introducción a Decision Tree Regression en Machine Learning. Funcionamiento del algoritmo, diferencias con árboles de clasificación, hiperparámetros principales, visualización del árbol, importancia de variables y métricas de evaluación."><meta data-rh="true" name="keywords" content="Decision Tree,Árboles de decisión,Regresión,Decision Tree Regression,Machine Learning,scikit-learn"><link data-rh="true" rel="icon" href="/DevTacora/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/regresion/arbol_decision_regresion"><link data-rh="true" rel="alternate" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/regresion/arbol_decision_regresion" hreflang="es"><link data-rh="true" rel="alternate" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/regresion/arbol_decision_regresion" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"UT3. Machine Learning","item":"https://acamarac02.github.io/DevTacora/docs/category/ut3-machine-learning"},{"@type":"ListItem","position":2,"name":"Aprendizaje supervisado","item":"https://acamarac02.github.io/DevTacora/docs/category/aprendizaje-supervisado"},{"@type":"ListItem","position":3,"name":"Regresión","item":"https://acamarac02.github.io/DevTacora/docs/category/regresión"},{"@type":"ListItem","position":4,"name":"Decision Trees Regresión","item":"https://acamarac02.github.io/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/regresion/arbol_decision_regresion"}]}</script><link rel="alternate" type="application/rss+xml" href="/DevTacora/blog/rss.xml" title="DevTacora RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/DevTacora/blog/atom.xml" title="DevTacora Atom Feed">
+
+
+
+
+<link rel="preconnect" href="https://www.google-analytics.com">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7WCKN9ZY1F"></script>
+<script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-7WCKN9ZY1F",{anonymize_ip:!0})</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css" integrity="sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM" crossorigin="anonymous"><link rel="stylesheet" href="/DevTacora/assets/css/styles.71ba2beb.css">
+<script src="/DevTacora/assets/js/runtime~main.108579e1.js" defer="defer"></script>
+<script src="/DevTacora/assets/js/main.e8974f30.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t="light";var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",e||t),document.documentElement.setAttribute("data-theme-choice",e||t)}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Saltar al contenido principal"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Saltar al contenido principal</a></div><nav aria-label="Principal" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Alternar barra lateral" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/DevTacora/"><div class="navbar__logo"><img src="/DevTacora/img/devtacora_logo.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/DevTacora/img/devtacora_logo.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">DevTacora</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/DevTacora/docs/pia_2526/">PIA</a><a class="navbar__item navbar__link" href="/DevTacora/docs/pmdm_2526/">PMDM</a><a class="navbar__item navbar__link" href="/DevTacora/docs/category/ut5-persistencia-de-datos">PMDM 24-25</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a class="navbar__item navbar__link" href="/DevTacora/docs/licencia">Licencia</a><a href="https://www.linkedin.com/in/aliciacamcas" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">LinkedIn<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Cambiar entre modo oscuro y claro (actualmente system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Volver al principio" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Barra lateral de Documentos" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/DevTacora/docs/pia_2526/">Presentación</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/DevTacora/docs/category/ut1-introducción-a-la-ia">UT1. Introducción a la IA</a><button aria-label="Ampliar la categoría &#x27;UT1. Introducción a la IA&#x27; de la barra lateral" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/DevTacora/docs/category/ut2-python-para-la-ia">UT2. Python para la IA</a><button aria-label="Ampliar la categoría &#x27;UT2. Python para la IA&#x27; de la barra lateral" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" href="/DevTacora/docs/category/ut3-machine-learning">UT3. Machine Learning</a><button aria-label="Colapsar categoría &#x27;UT3. Machine Learning&#x27; de la barra lateral" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/introduccion">Introducción</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/primer-modelo">Primer modelo de ML: Titanic</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/eda">Exploratory Data Analysis (EDA)</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/preprocesamiento">Preprocesamiento de Datos</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" tabindex="0" href="/DevTacora/docs/category/aprendizaje-supervisado">Aprendizaje supervisado</a><button aria-label="Colapsar categoría &#x27;Aprendizaje supervisado&#x27; de la barra lateral" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/tips-generales">Tips generales</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" tabindex="0" href="/DevTacora/docs/category/clasificación">Clasificación</a><button aria-label="Ampliar la categoría &#x27;Clasificación&#x27; de la barra lateral" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" tabindex="0" href="/DevTacora/docs/category/regresión">Regresión</a><button aria-label="Colapsar categoría &#x27;Regresión&#x27; de la barra lateral" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/regresion/intro_regresion">Ideas generales</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/regresion/regresion_lineal">Regresión Lineal</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/regresion/knn_regresion">KNN Regresión</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/regresion/arbol_decision_regresion">Decision Trees Regresión</a></li></ul></li></ul></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Rastro de navegación"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Página de Inicio" class="breadcrumbs__link" href="/DevTacora/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/DevTacora/docs/category/ut3-machine-learning"><span>UT3. Machine Learning</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/DevTacora/docs/category/aprendizaje-supervisado"><span>Aprendizaje supervisado</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/DevTacora/docs/category/regresión"><span>Regresión</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Decision Trees Regresión</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">En esta página</button></div><div class="theme-doc-markdown markdown"><header><h1>Decision Trees Regresión</h1></header><p>Los <strong>Árboles de Decisión para Regresión (Decision Tree Regression)</strong> son algoritmos de Machine Learning utilizados para <strong>predecir valores numéricos</strong> mediante una serie de <strong>reglas if–else</strong> aprendidas a partir de los datos.</p>
+<p>A diferencia de la Regresión Lineal, los árboles:</p>
+<ul>
+<li>No asumen una relación lineal</li>
+<li>Son <strong>modelos no lineales</strong></li>
+<li>Permiten una <strong>interpretación visual clara</strong></li>
+</ul>
+<p>Además, a diferencia de KNN, <strong>sí construyen un modelo explícito</strong>, que puede analizarse y visualizarse.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="idea-principal-del-algoritmo">Idea principal del algoritmo<a href="#idea-principal-del-algoritmo" class="hash-link" aria-label="Enlace directo al Idea principal del algoritmo" title="Enlace directo al Idea principal del algoritmo">​</a></h2>
+<p>La idea de un árbol de decisión para regresión es sencilla:</p>
+<blockquote>
+<p>“Dividir el espacio de datos en regiones donde los valores del target sean lo más parecidos posible.”</p>
+</blockquote>
+<p>El modelo aprende una serie de preguntas del tipo:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">¿feature ≤ valor?</span><br></span></code></pre></div></div>
+<p>Cada decisión divide los datos en dos grupos cada vez más homogéneos hasta llegar a una <strong>hoja</strong>, que devuelve un valor numérico.</p>
+<div class="theme-admonition theme-admonition-info admonition_xJq3 alert alert--info"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg></span>Los árboles de decisión son modelos no paramétricos</div><div class="admonitionContent_BuS1"><p>Los árboles de decisión para regresión son <strong>modelos no paramétricos</strong>:</p><ul>
+<li>No tienen una forma fija predefinida</li>
+<li>La estructura del modelo depende directamente de los datos</li>
+<li>Si cambian los datos, cambia el árbol</li>
+</ul><p>Esto los hace muy flexibles, pero también propensos al sobreajuste si no se controlan.</p></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="funcionamiento-del-modelo">Funcionamiento del modelo<a href="#funcionamiento-del-modelo" class="hash-link" aria-label="Enlace directo al Funcionamiento del modelo" title="Enlace directo al Funcionamiento del modelo">​</a></h2>
+<p>El árbol se construye de forma <strong>recursiva</strong>, siguiendo estos pasos:</p>
+<ol>
+<li>Seleccionar la mejor variable y el mejor punto de corte</li>
+<li>Dividir los datos en dos subconjuntos</li>
+<li>Repetir el proceso en cada rama</li>
+<li>Detener el crecimiento según ciertos criterios</li>
+<li>Asignar un valor numérico a cada hoja</li>
+</ol>
+<p>En <strong>regresión</strong>, el valor que devuelve cada hoja suele ser la <strong>media</strong> de los valores del target que contiene.</p>
+<p><img decoding="async" loading="lazy" alt="Gráfico EDA" src="/DevTacora/assets/images/dt_regressor-b734c726188357b4db9b2f25ffaa60f4.png" width="713" height="258" class="img_ev3q"></p>
+<div class="theme-admonition theme-admonition-info admonition_xJq3 alert alert--info"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg></span>¿Cómo se elige la“mejor división” en regresión?</div><div class="admonitionContent_BuS1"><p>Aquí está la diferencia clave con la clasificación.</p><ul>
+<li>En <strong>clasificación</strong>, el árbol minimiza la <strong>impureza</strong> (Gini, Entropía)</li>
+<li>En <strong>regresión</strong>, el árbol minimiza el <strong>error</strong> (normalmente <strong>MSE (Mean Squared Error)</strong>)</li>
+</ul><p>👉 En los problemas de <strong>regresión</strong>, el árbol de decisión construye sus divisiones buscando <strong>minimizar el error de predicción</strong>. Para ello, en cada posible split evalúa cuánto se reduce el error si los datos se separan en dos grupos. Habitualmente se utiliza el <strong>MSE (Mean Squared Error)</strong> como medida de ese error, ya que penaliza más los valores que se alejan mucho del valor medio. El árbol elige siempre la división que consigue que, dentro de cada grupo, los valores numéricos del target sean lo más parecidos posible, logrando así predicciones más precisas en las hojas.</p></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="entrenamiento-vs-predicción">Entrenamiento vs predicción<a href="#entrenamiento-vs-predicción" class="hash-link" aria-label="Enlace directo al Entrenamiento vs predicción" title="Enlace directo al Entrenamiento vs predicción">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="entrenamiento">Entrenamiento<a href="#entrenamiento" class="hash-link" aria-label="Enlace directo al Entrenamiento" title="Enlace directo al Entrenamiento">​</a></h3>
+<p>Durante el entrenamiento, el árbol:</p>
+<ul>
+<li>Prueba diferentes divisiones</li>
+<li>Evalúa cuánto reduce el error cada split</li>
+<li>Construye la estructura completa del árbol</li>
+</ul>
+<p>Este proceso puede ser <strong>costoso computacionalmente</strong> si el árbol crece mucho.</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="predicción">Predicción<a href="#predicción" class="hash-link" aria-label="Enlace directo al Predicción" title="Enlace directo al Predicción">​</a></h3>
+<p>Para predecir un nuevo dato:</p>
+<ol>
+<li>Se empieza en la raíz del árbol</li>
+<li>Se siguen las reglas if–else</li>
+<li>Se llega a una hoja</li>
+<li>Se devuelve el valor numérico asociado a esa hoja</li>
+</ol>
+<p>👉 La predicción es <strong>muy rápida</strong>, ya que solo implica recorrer el árbol.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="uso-de-árboles-de-decisión-en-regresión">Uso de Árboles de Decisión en Regresión<a href="#uso-de-árboles-de-decisión-en-regresión" class="hash-link" aria-label="Enlace directo al Uso de Árboles de Decisión en Regresión" title="Enlace directo al Uso de Árboles de Decisión en Regresión">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cuándo-sí-usarlos">Cuándo SÍ usarlos<a href="#cuándo-sí-usarlos" class="hash-link" aria-label="Enlace directo al Cuándo SÍ usarlos" title="Enlace directo al Cuándo SÍ usarlos">​</a></h3>
+<p>Funcionan bien cuando:</p>
+<ul>
+<li>La relación entre variables es no lineal</li>
+<li>Se busca <strong>interpretabilidad</strong></li>
+<li>Hay variables categóricas</li>
+<li>El preprocesamiento debe ser simple</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="cuándo-no-funcionan-bien">Cuándo NO funcionan bien<a href="#cuándo-no-funcionan-bien" class="hash-link" aria-label="Enlace directo al Cuándo NO funcionan bien" title="Enlace directo al Cuándo NO funcionan bien">​</a></h3>
+<p>Suelen rendir peor cuando:</p>
+<ul>
+<li>Hay mucho ruido</li>
+<li>El dataset es pequeño</li>
+<li>El árbol crece sin restricciones (overfitting)</li>
+</ul>
+<p>En la práctica:</p>
+<blockquote>
+<p>Un árbol de decisión suele ser un buen modelo base, pero rara vez el modelo final más robusto.</p>
+</blockquote>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="importancia-del-preprocesamiento">Importancia del preprocesamiento<a href="#importancia-del-preprocesamiento" class="hash-link" aria-label="Enlace directo al Importancia del preprocesamiento" title="Enlace directo al Importancia del preprocesamiento">​</a></h2>
+<table><thead><tr><th>Aspecto</th><th>¿Es necesario?</th><th>Explicación</th></tr></thead><tbody><tr><td>Tratamiento de nulos</td><td>✔ Sí</td><td>No admite valores nulos</td></tr><tr><td>Escalado</td><td>❌ No</td><td>No usa distancias</td></tr><tr><td>Outliers</td><td>⚠️ Importante</td><td>Pueden generar splits extremos</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="principales-hiperparámetros">Principales hiperparámetros<a href="#principales-hiperparámetros" class="hash-link" aria-label="Enlace directo al Principales hiperparámetros" title="Enlace directo al Principales hiperparámetros">​</a></h2>
+<p>El rendimiento de un árbol de decisión para regresión depende en gran medida de <strong>cómo se controla su complejidad</strong>.
+Si el árbol crece sin restricciones, puede aprender patrones muy específicos del conjunto de entrenamiento, perdiendo capacidad de generalización.</p>
+<p>Por este motivo, los hiperparámetros del árbol se centran principalmente en <strong>limitar su crecimiento</strong>, buscando un equilibrio entre:</p>
+<ul>
+<li><strong>Modelo demasiado simple</strong> → no captura bien la relación entre variables (underfitting)</li>
+<li><strong>Modelo demasiado complejo</strong> → se ajusta en exceso a los datos (overfitting)</li>
+</ul>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="profundidad-máxima-max_depth">Profundidad máxima (<code>max_depth</code>)<a href="#profundidad-máxima-max_depth" class="hash-link" aria-label="Enlace directo al profundidad-máxima-max_depth" title="Enlace directo al profundidad-máxima-max_depth">​</a></h3>
+<p>El hiperparámetro <code>max_depth</code> controla <strong>cuántos niveles puede tener el árbol</strong>, es decir, cuántas decisiones consecutivas puede tomar antes de llegar a una hoja.</p>
+<ul>
+<li>
+<p>Un <strong>árbol muy profundo</strong>:</p>
+<ul>
+<li>Aprende reglas muy específicas</li>
+<li>Puede ajustarse casi perfectamente a los datos de entrenamiento</li>
+<li>Tiene alto riesgo de <strong>overfitting</strong></li>
+</ul>
+</li>
+<li>
+<p>Un <strong>árbol poco profundo</strong>:</p>
+<ul>
+<li>Aprende reglas muy generales</li>
+<li>Puede no capturar relaciones importantes entre variables</li>
+<li>Produce <strong>underfitting</strong></li>
+</ul>
+</li>
+</ul>
+<p>Controlar la profundidad es la forma <strong>más directa y efectiva</strong> de regular un árbol de decisión.
+En la práctica, limitar <code>max_depth</code> ayuda a crear modelos más estables y con mejor capacidad de generalización.</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="muestras-mínimas-min_samples_split-min_samples_leaf">Muestras mínimas (<code>min_samples_split</code>, <code>min_samples_leaf</code>)<a href="#muestras-mínimas-min_samples_split-min_samples_leaf" class="hash-link" aria-label="Enlace directo al muestras-mínimas-min_samples_split-min_samples_leaf" title="Enlace directo al muestras-mínimas-min_samples_split-min_samples_leaf">​</a></h3>
+<p>Estos hiperparámetros controlan <strong>cuántos datos mínimos son necesarios para crear nuevas divisiones</strong> en el árbol.</p>
+<ul>
+<li>
+<p><code>min_samples_split</code>:</p>
+<ul>
+<li>Número mínimo de muestras que debe tener un nodo para poder dividirse</li>
+<li>Evita que el árbol siga creciendo cuando quedan muy pocos datos</li>
+</ul>
+</li>
+<li>
+<p><code>min_samples_leaf</code>:</p>
+<ul>
+<li>Número mínimo de muestras que debe contener una hoja</li>
+<li>Garantiza que cada predicción esté basada en suficientes datos</li>
+</ul>
+</li>
+</ul>
+<p>Establecer valores adecuados para estos parámetros:</p>
+<ul>
+<li>Reduce la creación de hojas con muy pocos datos</li>
+<li>Hace que las predicciones sean más robustas</li>
+<li>Mejora la <strong>generalización</strong> del modelo en datos no vistos</li>
+</ul>
+<p>En muchos casos, aumentar ligeramente estos valores reduce el overfitting sin perder demasiado rendimiento.</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="ajuste-de-hiperparámetros">Ajuste de hiperparámetros<a href="#ajuste-de-hiperparámetros" class="hash-link" aria-label="Enlace directo al Ajuste de hiperparámetros" title="Enlace directo al Ajuste de hiperparámetros">​</a></h3>
+<p>Al igual que en otros algoritmos:</p>
+<ul>
+<li>Se pueden ajustar con <strong>validación cruzada</strong></li>
+<li>Es habitual usar <strong>GridSearchCV</strong></li>
+</ul>
+<p>Esto permite encontrar un equilibrio entre sesgo y varianza.</p>
+<p>A cotinuación se muestra una <strong>tabla orientativa</strong> de valores a probar. No son valores óptimos, sino <strong>rangos razonables</strong> para empezar el GridSearch según el tamaño del dataset.</p>
+<table><thead><tr><th>Tamaño del dataset</th><th>Nº de registros</th><th><code>max_depth</code></th><th><code>min_samples_split</code></th><th><code>min_samples_leaf</code></th><th>Comentario</th></tr></thead><tbody><tr><td>Pequeño</td><td>&lt; 1.000</td><td>2 – 5</td><td>10 – 50</td><td>5 – 20</td><td>Alto riesgo de overfitting, conviene limitar mucho el árbol</td></tr><tr><td>Mediano</td><td>1.000 – 10.000</td><td>3 – 10</td><td>5 – 20</td><td>2 – 10</td><td>Buen equilibrio entre complejidad y generalización</td></tr><tr><td>Grande</td><td>&gt; 10.000</td><td>5 – 20</td><td>2 – 10</td><td>1 – 5</td><td>Más datos permiten árboles más profundos</td></tr></tbody></table>
+<blockquote>
+<p>Estos rangos sirven como punto de partida. El mejor conjunto de hiperparámetros siempre debe seleccionarse mediante validación cruzada, ya que depende de las características concretas del dataset y no solo de su tamaño.</p>
+</blockquote>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="visualización-del-árbol">Visualización del árbol<a href="#visualización-del-árbol" class="hash-link" aria-label="Enlace directo al Visualización del árbol" title="Enlace directo al Visualización del árbol">​</a></h2>
+<p>Una de las grandes ventajas de los árboles de decisión es que <strong>pueden visualizarse</strong>.</p>
+<p>Al representar el árbol, se puede observar:</p>
+<ul>
+<li>Las variables utilizadas en cada split</li>
+<li>Los valores de corte</li>
+<li>La profundidad del árbol</li>
+<li>El valor predicho en cada hoja</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="importancia-de-variables">Importancia de variables<a href="#importancia-de-variables" class="hash-link" aria-label="Enlace directo al Importancia de variables" title="Enlace directo al Importancia de variables">​</a></h2>
+<p>Los árboles permiten calcular la <strong>importancia de cada variable</strong>.</p>
+<p>Una variable será más importante si:</p>
+<ul>
+<li>Aparece frecuentemente en los splits</li>
+<li>Reduce mucho el error del modelo</li>
+</ul>
+<p>Esto permite:</p>
+<ul>
+<li>Interpretar el modelo</li>
+<li>Identificar variables relevantes</li>
+<li>Apoyar procesos de selección de variables</li>
+</ul>
+<p>A diferencia de KNN, aquí <strong>sí es posible analizar qué variables influyen más</strong> en la predicción.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="métricas-de-evaluación">Métricas de evaluación<a href="#métricas-de-evaluación" class="hash-link" aria-label="Enlace directo al Métricas de evaluación" title="Enlace directo al Métricas de evaluación">​</a></h2>
+<p>En problemas de regresión con árboles de decisión se utilizan las mismas métricas que en otros modelos:</p>
+<ul>
+<li><strong>MAE</strong> (Mean Absolute Error)</li>
+<li><strong>MSE</strong> (Mean Squared Error)</li>
+<li><strong>R²</strong> (Coeficiente de determinación)</li>
+</ul>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="flujo-recomendado-en-un-problema-de-árbol-de-decisión-regresión">Flujo recomendado en un problema de Árbol de Decisión (Regresión)<a href="#flujo-recomendado-en-un-problema-de-árbol-de-decisión-regresión" class="hash-link" aria-label="Enlace directo al Flujo recomendado en un problema de Árbol de Decisión (Regresión)" title="Enlace directo al Flujo recomendado en un problema de Árbol de Decisión (Regresión)">​</a></h2>
+<table><thead><tr><th>Paso</th><th>Qué se hace</th><th>Por qué es importante</th></tr></thead><tbody><tr><td>1. EDA</td><td>Analizar distribuciones y outliers</td><td>Evita splits extremos</td></tr><tr><td>2. Preprocesamiento</td><td>Limpieza de datos</td><td>El modelo no admite nulos</td></tr><tr><td>3. Entrenamiento</td><td>Ajustar hiperparámetros</td><td>Controla overfitting</td></tr><tr><td>4. Evaluación</td><td>MAE, MSE, R² + gráficos</td><td>Medir rendimiento</td></tr><tr><td>5. Interpretación</td><td>Árbol + importancia variables</td><td>Entender el modelo</td></tr><tr><td>6. Comparación</td><td>Comparar con otros modelos</td><td>Determina qué modelo se adapta mejor a nuestro dataset</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ejemplo-árbol-de-decisión-para-regresión">Ejemplo: Árbol de Decisión para Regresión<a href="#ejemplo-árbol-de-decisión-para-regresión" class="hash-link" aria-label="Enlace directo al Ejemplo: Árbol de Decisión para Regresión" title="Enlace directo al Ejemplo: Árbol de Decisión para Regresión">​</a></h2>
+<p>Para ver cómo funciona un <strong>Decision Tree Regressor</strong> en la práctica, puedes ejecutar este ejemplo utilizando el dataset <strong>California Housing</strong>.</p>
+<p>👉 <strong>Puedes abrir el cuaderno aquí:</strong>
+<a href="/DevTacora/assets/files/ejemplo_decision_tree_regresion-b2f7fb4bac90e4a7cc83b4883aa4f7c7.ipynb" target="_blank">Colab: Decision Tree Regression</a></p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="actividad-de-seguimiento-bike-sharing-dataset">Actividad de seguimiento: Bike Sharing Dataset<a href="#actividad-de-seguimiento-bike-sharing-dataset" class="hash-link" aria-label="Enlace directo al Actividad de seguimiento: Bike Sharing Dataset" title="Enlace directo al Actividad de seguimiento: Bike Sharing Dataset">​</a></h2>
+<p>Utiliza el <strong>Bike Sharing Dataset</strong> y compara:</p>
+<ul>
+<li>Regresión Lineal</li>
+<li>KNN Regresión</li>
+<li>Árbol de Decisión (Regresión)</li>
+</ul>
+<p>Incluye:</p>
+<ul>
+<li>Ajuste de hiperparámetros</li>
+<li>Métricas de evaluación</li>
+<li>Visualización del árbol</li>
+<li>Análisis de importancia de variables</li>
+<li>Conclusiones razonadas</li>
+</ul>
+<p><strong>Entrega:</strong> Notebook (Colab) con conclusiones claras y justificadas.</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Página del documento"><a class="pagination-nav__link pagination-nav__link--prev" href="/DevTacora/docs/pia_2526/ut3_ml/aprendizaje-supervisado/regresion/knn_regresion"><div class="pagination-nav__sublabel">Anterior</div><div class="pagination-nav__label">KNN Regresión</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#idea-principal-del-algoritmo" class="table-of-contents__link toc-highlight">Idea principal del algoritmo</a></li><li><a href="#funcionamiento-del-modelo" class="table-of-contents__link toc-highlight">Funcionamiento del modelo</a></li><li><a href="#entrenamiento-vs-predicción" class="table-of-contents__link toc-highlight">Entrenamiento vs predicción</a><ul><li><a href="#entrenamiento" class="table-of-contents__link toc-highlight">Entrenamiento</a></li><li><a href="#predicción" class="table-of-contents__link toc-highlight">Predicción</a></li></ul></li><li><a href="#uso-de-árboles-de-decisión-en-regresión" class="table-of-contents__link toc-highlight">Uso de Árboles de Decisión en Regresión</a><ul><li><a href="#cuándo-sí-usarlos" class="table-of-contents__link toc-highlight">Cuándo SÍ usarlos</a></li><li><a href="#cuándo-no-funcionan-bien" class="table-of-contents__link toc-highlight">Cuándo NO funcionan bien</a></li></ul></li><li><a href="#importancia-del-preprocesamiento" class="table-of-contents__link toc-highlight">Importancia del preprocesamiento</a></li><li><a href="#principales-hiperparámetros" class="table-of-contents__link toc-highlight">Principales hiperparámetros</a><ul><li><a href="#profundidad-máxima-max_depth" class="table-of-contents__link toc-highlight">Profundidad máxima (<code>max_depth</code>)</a></li><li><a href="#muestras-mínimas-min_samples_split-min_samples_leaf" class="table-of-contents__link toc-highlight">Muestras mínimas (<code>min_samples_split</code>, <code>min_samples_leaf</code>)</a></li><li><a href="#ajuste-de-hiperparámetros" class="table-of-contents__link toc-highlight">Ajuste de hiperparámetros</a></li></ul></li><li><a href="#visualización-del-árbol" class="table-of-contents__link toc-highlight">Visualización del árbol</a></li><li><a href="#importancia-de-variables" class="table-of-contents__link toc-highlight">Importancia de variables</a></li><li><a href="#métricas-de-evaluación" class="table-of-contents__link toc-highlight">Métricas de evaluación</a></li><li><a href="#flujo-recomendado-en-un-problema-de-árbol-de-decisión-regresión" class="table-of-contents__link toc-highlight">Flujo recomendado en un problema de Árbol de Decisión (Regresión)</a></li><li><a href="#ejemplo-árbol-de-decisión-para-regresión" class="table-of-contents__link toc-highlight">Ejemplo: Árbol de Decisión para Regresión</a></li><li><a href="#actividad-de-seguimiento-bike-sharing-dataset" class="table-of-contents__link toc-highlight">Actividad de seguimiento: Bike Sharing Dataset</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">
+        <section classname="bg-white border-t border-gray-100">
+      <div classname="max-w-4xl mx-auto px-6 py-16 text-center">
+        <h3 classname="text-2xl font-bold text-gray-900 mb-4">
+          Construyendo conocimiento, línea por línea
+        </h3>
+        <p classname="text-gray-600 leading-relaxed">
+          © 2026 Alicia Cámara Casares - Contenido bajo licencia 
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" classname="text-blue-600 hover:text-blue-700 underline">
+                CC BY-NC-SA 4.0
+              </a>.
+        </p>
+      </div>
+    </section>
+      </div></div></div></footer></div>
+</body>
+</html>
