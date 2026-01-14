@@ -16,6 +16,16 @@ Por su simplicidad conceptual, KNN Regresión suele utilizarse como:
 * Modelo de comparación frente a regresión lineal
 * Algoritmo introductorio para entender modelos basados en distancia
 
+:::info Lectura recomendada
+Para reforzar la comprensión de las diferencias entre **Regresión Lineal** y **KNN**, se recomienda la siguiente lectura:
+
+👉 **KNN vs Linear Regression: How to Choose the Right ML Algorithm**  
+https://medium.com/@skytoinds/knn-vs-linear-regression-how-to-choose-the-right-ml-algorithm-4f6bf01a4202
+
+El artículo compara ambos modelos desde un punto de vista conceptual, destacando aspectos como la forma de la función de predicción, la flexibilidad del modelo y el papel de los datos en cada enfoque.
+:::
+
+
 ---
 
 ## Idea principal del algoritmo
@@ -243,38 +253,34 @@ En KNN Regresión se utilizan las mismas métricas que en otros modelos de regre
 | 1. EDA              | Analizar escalas y outliers | KNN es sensible a ambos  |
 | 2. Preprocesamiento | Limpieza y escalado         | Hace válida la distancia |
 | 3. Entrenamiento    | Ajustar hiperparámetros         | Controla el sesgo        |
-| 4. Evaluación       | MAE, MSE, R²                | Medir rendimiento        |
+| 4. Evaluación       | MAE, MSE, R² + Análisis gráfico del rendimiento               | Medir rendimiento        |
 | 5. Comparación      | Comparar con otros modelos  | Determina qué modelo se adapta mejor a nuestro dataset |
 
 ---
 
 ## Ejemplo KNN Regresión
 
-En el cuaderno práctico se entrena un modelo **KNN Regressor** con **scikit-learn**, comparando su rendimiento frente a Regresión Lineal.
+Para ver cómo funciona un **KNN Regression** en la práctica, puedes ejecutar este ejemplo utilizando el dataset **California Housing**.
 
-👉 **Objetivo:** comprobar si un modelo basado en vecinos mejora la predicción cuando la relación no es lineal.
-
-👉 **Pasos:**
-
-1. Preprocesamiento y escalado
-2. Entrenamiento con distintos valores de k
-3. Evaluación con MAE, MSE y R²
-4. Comparación de resultados
+👉 **Puedes abrir el cuaderno aquí:**
+[Colab: KNN Regression con California Housing](../../0-datasets/ejemplo_knn_regresion.ipynb)
 
 ---
 
-## Actividad propuesta
+## Actividad de seguimiento: Bike Sharing Dataset
 
 Utiliza el **Bike Sharing Dataset** y compara:
 
 * Regresión Lineal
 * KNN Regresión
 
-Analiza:
+Recuerda que debes realizar:
 
-* Impacto del escalado
-* Influencia del valor de k
-* Diferencias de rendimiento
+* Entrenamiento con GridSearch
+* Análisis mejores hiperparámetros
+* Métricas de evaluación
+* Gráfica de análisis de resultados (Valores reales vs predichos; Residuos)
+
+**Usa el mismo Colab que la entrega anterior**.
 
 **Entrega:** Notebook (Colab) con conclusiones razonadas.
-

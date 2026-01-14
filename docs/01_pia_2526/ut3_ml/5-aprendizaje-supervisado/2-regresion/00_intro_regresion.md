@@ -442,6 +442,14 @@ Este gráfico permite detectar de forma visual:
 - errores sistemáticos
 - limitaciones del modelo utilizado
 
+:::info Lectura recomendada
+Si quieres profundizar en la interpretación de los **gráficos de residuos** y entender qué indican patrones como el abanico, la heterocedasticidad o posibles sesgos del modelo, puedes consultar el siguiente artículo:
+
+👉 **Cómo validar tu modelo de regresión**  
+https://www.maximaformacion.es/blog-dat/como-validar-tu-modelo-de-regresion/
+:::
+
+
 ---
 
 ### Relación entre métricas y gráficos
