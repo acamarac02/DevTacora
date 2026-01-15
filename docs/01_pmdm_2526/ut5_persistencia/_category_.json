@@ -1,0 +1,9 @@
+{
+    "label": "UT5. Persistencia de datos",
+    "position": 2,
+    "link": {
+      "type": "generated-index",
+      "description": "En este tema exploraremos las diferentes formas en que las aplicaciones de Android pueden guardar y recuperar datos de forma persistente, es decir, conservar información incluso cuando la aplicación se cierra o el dispositivo se reinicia. Estudiaremos soluciones sencillas como SharedPreferences, ideales para guardar configuraciones simples, hasta herramientas más avanzadas como Room, que permite manejar bases de datos complejas."
+   }
+  }
+  

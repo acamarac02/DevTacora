@@ -621,6 +621,10 @@ private void eventoEliminarElto(View view) {
 6. El `RecyclerView` redibuja la lista sin el elemento eliminado.
 :::
 
+:::info ACTIVIDAD DE SEGUIMIENTO 6 - FASE 1
+**Realiza la Actividad de Seguimiento 6 - Fase 1: Pokédex.**
+:::
+
 ---
 
 ## Tutorial de uso – Marcar como favorito
@@ -1003,6 +1007,10 @@ public class AnimalesRepository {
     }
 }
 ```
+
+:::info ACTIVIDAD DE SEGUIMIENTO 6 - FASE 2
+**Realiza la Actividad de Seguimiento 6 - Fase 2: Pokédex.**
+:::
 
 
 </div>

@@ -7,6 +7,10 @@ keywords: [API, REST, HTTP, JSON, Status Codes, Android, Cliente-Servidor, Backe
 
 <div class="justify-text">
 
+:::info PROYECTO 2
+**Lee atentamente el tema completo y realiza el proyecto 2: Consumo de API REST.**
+:::
+
 Una **API REST** (Representational State Transfer) es un conjunto de reglas y estándares para crear **servicios web** que permiten a diferentes sistemas comunicarse entre sí a través de internet de forma sencilla y escalable. REST se basa en principios arquitectónicos diseñados para sistemas distribuidos y utiliza los **protocolos HTTP**, que son fundamentales en la web.
 
 **REST** no es una tecnología concreta, sino un **estilo arquitectónico** que sigue un conjunto de principios:

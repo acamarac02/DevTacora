@@ -31,4 +31,8 @@ El componente `NavigationUI` (de Android Jetpack) permite **sincronizar automát
 Esto significa que la **Toolbar, el Drawer y el BottomNavigationView** se actualizan de forma automática al navegar, sin tener que gestionar manualmente los cambios de fragment ni los iconos de la AppBar.
 :::
 
+:::info ACTIVIDAD DE SEGUIMIENTO 5
+**Lee atentamente los distintos tipos de menús y realiza la Actividad de Seguimiento 5: Demo menús.**
+:::
+
 </div>

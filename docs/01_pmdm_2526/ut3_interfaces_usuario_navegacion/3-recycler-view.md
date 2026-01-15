@@ -724,4 +724,8 @@ Este sistema de gestos, tal y como lo hemos implementado, **solo elimina el elem
 Más adelante, cuando usemos bases de datos, haremos que los cambios se guarden de forma persistente.
 :::
 
+:::info PROYECTO 1
+**Realiza el proyecto 1: Generador de cartas.**
+:::
+
 </div>
