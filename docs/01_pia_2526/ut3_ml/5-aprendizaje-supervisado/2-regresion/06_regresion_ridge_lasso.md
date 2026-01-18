@@ -23,116 +23,23 @@ La idea central es sencilla:
 
 ## Idea principal de la regularización
 
-En una **regresión lineal clásica**, el objetivo del modelo es muy simple:
+En una **regresión lineal clásica**, el modelo busca los coeficientes que **minimizan el error de predicción en entrenamiento**, sin tener en cuenta la complejidad del modelo.
 
-> Encontrar los coeficientes que **minimizan el error de predicción** sobre los datos de entrenamiento.
+Cuando el dataset tiene **muchas variables**, **ruido** o **variables correlacionadas**, esto puede provocar:
 
-Es decir, el modelo solo se preocupa de **ajustarse lo mejor posible a los datos que ve**.
+* coeficientes excesivamente grandes
+* modelos muy sensibles a pequeñas variaciones de los datos
+* **overfitting** (buen rendimiento en entrenamiento, peor en test)
 
-### ¿Cuál es el problema de esto?
+La **regularización** añade un término de penalización que limita el tamaño de los coeficientes, basándose en las siguientes premisas:
 
-Cuando el dataset es complejo, tiene **muchas variables** o contiene **ruido**, el modelo puede:
+* Coeficientes grandes → modelo sensible e inestable
+* Coeficientes pequeños → modelo más suave y robusto
 
-* asignar **coeficientes muy grandes** a algunas variables
-* “forzar” el ajuste para explicar casos particulares
-* aprender patrones que no se repiten en nuevos datos
+La regularización actúa como una **fuerza que empuja los coeficientes hacia 0**:
 
-Esto provoca **overfitting**: el modelo funciona bien en entrenamiento, pero peor en test.
-
----
-
-### Ejemplo intuitivo
-
-Imaginemos un problema de predicción del precio de viviendas con estas variables:
-
-* superficie
-* número de habitaciones
-* distancia al centro
-* antigüedad
-* muchas variables adicionales poco relevantes
-
-En una regresión lineal **sin regularizar**:
-
-* el modelo puede asignar un coeficiente enorme a una variable poco importante
-* simplemente porque ayuda a reducir un poco el error en entrenamiento
-* aunque ese efecto no sea estable en datos nuevos
-
-El resultado es un modelo **demasiado sensible** a pequeñas variaciones del dataset.
-
----
-
-### Multicolinealidad: un caso típico
-
-Supongamos dos variables muy correlacionadas:
-
-* superficie en m²
-* superficie en pies cuadrados
-
-Ambas contienen casi la misma información.
-
-Una regresión lineal clásica puede:
-
-* dar un coeficiente muy grande a una
-* y otro muy grande (positivo o negativo) a la otra
-* compensándose entre sí
-
-Aunque la predicción sea correcta, el modelo se vuelve **inestable**:
-pequeños cambios en los datos pueden provocar grandes cambios en los coeficientes.
-
----
-
-## ¿Qué hace la regularización?
-
-La **regularización** introduce una idea clave:
-
-> *“Entre dos modelos que predicen parecido, preferimos el más simple.”*
-
-Para ello, el modelo no solo penaliza el error de predicción, sino también la **complejidad del modelo**, medida a través del tamaño de los coeficientes.
-
----
-
-### Qué significa “castigar coeficientes grandes”
-
-* Coeficientes grandes → modelo muy sensible
-* Coeficientes pequeños → modelo más estable y suave
-
-La regularización añade un **término de penalización** que hace que:
-
-* los coeficientes no crezcan sin control
-* el modelo prefiera repartir la información
-* se reduzca el impacto del ruido
-
-El objetivo pasa a ser:
-
-> Ajustar bien los datos **sin depender excesivamente de ninguna variable**.
-
----
-
-### Intuición visual (sin matemáticas)
-
-Puedes pensar en la regularización como:
-
-* una “fuerza” que empuja los coeficientes hacia 0
-* pero sin obligarlos a ser exactamente 0 (Ridge)
-* o permitiendo que algunos se anulen completamente (Lasso)
-
-Esto produce modelos:
-
-* más simples
-* más estables
-* que generalizan mejor
-
----
-
-### Resumen clave para el alumnado
-
-* La regresión lineal busca solo minimizar el error
-* Eso puede provocar modelos demasiado complejos
-* La regularización añade una penalización a los coeficientes grandes
-* El objetivo es **mejor generalización**, no solo buen entrenamiento
-
-Esta idea es la base tanto de **Ridge** como de **Lasso**; la diferencia entre ellos está en **cómo** penalizan los coeficientes, que veremos a continuación.
-
+* sin anularlos completamente (Ridge)
+* o permitiendo eliminar algunos (Lasso)
 
 ---
 
@@ -163,7 +70,7 @@ $$
 Donde:
 
 - $ beta_j $ son los coeficientes del modelo
-- $ alpha $ controla la fuerza de la regularización
+- $ alpha $ controla la fuerza de la regularización (hiperparámetro cuyo valor especificamos nosotros)
 
 ### Qué hace Ridge en la práctica
 
@@ -195,12 +102,6 @@ $$
 - **Fuerza a que algunos coeficientes sean exactamente 0**
 - Realiza **selección automática de variables**
 
-Esto convierte a Lasso en un modelo útil tanto para:
-
-- predicción
-- interpretación
-- reducción de dimensionalidad
-
 ---
 
 ## Diferencia clave entre Ridge y Lasso
@@ -213,6 +114,78 @@ Esto convierte a Lasso en un modelo útil tanto para:
 | Selección de features | ❌ No | ✔ Sí |
 | Estabilidad | Muy alta | Menor si variables están correlacionadas |
 
+
+:::tip ¿CÓMO FUNCIONAN RIDGE Y LASSO EN LA PRÁCTICA?
+
+Supongamos un modelo de **regresión lineal** con tres variables:
+
+* `x1`: superficie de la vivienda
+* `x2`: número de habitaciones
+* `x3`: una variable poco relevante (ruido)
+
+**Regresión lineal (sin regularización)**
+
+Tras entrenar el modelo, obtenemos estos coeficientes:
+
+| Variable          | Coeficiente |
+| ----------------- | ----------- |
+| x1 (superficie)   | 0.85        |
+| x2 (habitaciones) | 1.20        |
+| x3 (ruido)        | **4.50**    |
+
+📌 Observación:
+
+* El coeficiente de `x3` es muy grande
+* El modelo está usando una variable poco importante para ajustar mejor el entrenamiento
+* Esto suele indicar **overfitting**
+
+---
+
+**Ridge Regression (regularización L2)**
+
+Entrenamos ahora un modelo Ridge con un valor moderado de `alpha`.
+
+| Variable          | Coeficiente |
+| ----------------- | ----------- |
+| x1 (superficie)   | 0.72        |
+| x2 (habitaciones) | 0.98        |
+| x3 (ruido)        | **0.60**    |
+
+📌 Qué ha ocurrido:
+
+* Todos los coeficientes se han reducido
+* El coeficiente de la variable ruidosa ha bajado mucho
+* **Ninguna variable se elimina completamente**
+* El modelo es más estable y menos sensible al ruido
+
+---
+
+**Lasso Regression (regularización L1)**
+
+Entrenamos ahora un modelo Lasso con un valor similar de `alpha`.
+
+| Variable          | Coeficiente |
+| ----------------- | ----------- |
+| x1 (superficie)   | 0.70        |
+| x2 (habitaciones) | 0.95        |
+| x3 (ruido)        | **0.00**    |
+
+📌 Qué ha ocurrido:
+
+* Lasso ha reducido los coeficientes
+* La variable `x3` ha sido **eliminada automáticamente**
+* El modelo es más simple e interpretable
+
+---
+
+👉 Todos los modelos pueden predecir razonablemente bien, pero:
+
+* Ridge y Lasso suelen **generalizar mejor**
+* Lasso produce modelos más simples
+* Ridge es más estable cuando las variables están correlacionadas
+
+:::
+
 ---
 
 ## El hiperparámetro `alpha`
@@ -223,7 +196,7 @@ El parámetro **`alpha`** controla la intensidad de la regularización.
 - `alpha` pequeño → regularización suave
 - `alpha` grande → modelo muy simple
 
-### Efecto de alpha
+Efecto de alpha:
 
 - Si es **demasiado pequeño** → no soluciona overfitting
 - Si es **demasiado grande** → underfitting
@@ -238,21 +211,33 @@ Por eso **alpha debe ajustarse**, normalmente con validación cruzada.
 
 Durante el entrenamiento:
 
-1. El modelo busca coeficientes que minimicen:
-   - el error de predicción
-   - + el término de regularización
-2. Los coeficientes quedan penalizados según `alpha`
-3. El modelo aprende un equilibrio entre ajuste y simplicidad
+1. El modelo busca coeficientes que minimicen **una función de coste compuesta por dos partes**:
+
+   * el error de predicción (por ejemplo, MSE)
+   * un término de penalización que castiga coeficientes grandes
+2. La importancia de la penalización viene controlada por el hiperparámetro `alpha`
+3. El modelo aprende un equilibrio entre:
+
+   * ajustar bien los datos
+   * y mantener un modelo simple y estable
+
 
 ---
 
 ### Predicción
 
-En predicción:
+Una vez el modelo ha sido entrenado, la **regularización ya no interviene directamente** en el cálculo de las predicciones.
 
-- Se usa la misma ecuación lineal
-- No hay penalización explícita
-- La regularización solo afecta a los coeficientes aprendidos
+En la fase de predicción:
+
+* Se utiliza la **misma ecuación lineal** que en una regresión lineal clásica:
+  $$
+  \hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots
+  $$
+* No se añade ningún término de penalización al calcular la predicción.
+* La regularización ha actuado **solo durante el entrenamiento**, influyendo en los valores de los coeficientes.
+
+Es decir, el modelo predice igual que una regresión lineal, pero usando **coeficientes previamente regularizados**, que suelen ser más pequeños y estables.
 
 ---
 
@@ -270,16 +255,6 @@ A diferencia de árboles o Random Forest, **Ridge y Lasso son muy sensibles a la
 :::warning Escalado obligatorio
 Si las variables no están en la misma escala, la regularización penaliza más a unas que a otras de forma incorrecta.
 :::
-
----
-
-## Hiperparámetros principales
-
-### `alpha`
-
-- Controla la fuerza de la regularización
-- Es el hiperparámetro clave en ambos modelos
-- Se ajusta normalmente con `GridSearchCV` o validación cruzada
 
 ---
 
@@ -320,22 +295,22 @@ No hay métricas específicas para Ridge o Lasso.
 | 3. Entrenamiento | Ajustar `alpha` | Controlar complejidad |
 | 4. Evaluación | MAE, MSE, R² | Medir generalización |
 | 5. Interpretación | Coeficientes | Entender el modelo |
-| 6. Comparación | Ridge vs Lasso vs Linear | Elegir el mejor |
+| 6. Comparación | Comparar métricas y resultados de los diferentes modelos | Elegir el mejor |
 
 ---
 
-## Ridge y Lasso frente a otros modelos
+## Ejemplo: Ridge y Lasso
 
-- Son **más simples** que Random Forest o Boosting
-- Funcionan muy bien como **baseline fuerte**
-- Son rápidos de entrenar
-- Muy útiles para entender el efecto de la regularización
+Para ver cómo funcionan **Ridge y Lasso** en la práctica, puedes ejecutar este ejemplo utilizando el dataset **California Housing**.
+
+👉 **Puedes abrir el cuaderno aquí:**
+[Colab: Ridge y Lasso](../../0-datasets/ejemplo_ridge_lasso.ipynb)
 
 ---
 
-## Actividad de seguimiento
+## Actividad de seguimiento: Bike Sharing Dataset
 
-Utiliza el mismo dataset empleado en regresión lineal y compara:
+Utiliza el **Bike Sharing Dataset** y compara:
 
 - Regresión Lineal
 - Ridge Regression
@@ -343,8 +318,9 @@ Utiliza el mismo dataset empleado en regresión lineal y compara:
 
 Incluye:
 
-- Escalado de variables
 - Ajuste de `alpha`
 - Comparación de métricas
 - Análisis de coeficientes
 - Conclusiones razonadas
+
+**Entrega:** Notebook (Colab) con conclusiones claras y justificadas.
