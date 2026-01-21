@@ -33,8 +33,6 @@ Para ello, SVR introduce el concepto de **margen epsilon (ε)**:
 Estos puntos se denominan **vectores soporte** y son los que realmente determinan el modelo.
 
 
-
-
 ---
 
 ## SVR como modelo basado en márgenes
@@ -103,26 +101,7 @@ El proceso se basa en una **optimización matemática**, no en reglas ni árbole
 
 ### Predicción
 
-Para predecir un nuevo dato:
-
-* Se evalúa la función aprendida
-* La predicción depende de:
-  * los vectores soporte
-  * el kernel utilizado
-  * los hiperparámetros ajustados
-
----
-
-## SVR en regresión vs clasificación
-
-SVR y SVM comparten la misma base conceptual:
-
-* **Clasificación (SVC)** → maximiza el margen entre clases
-* **Regresión (SVR)** → maximiza el margen permitiendo errores ε
-
-La diferencia está en:
-* el tipo de error
-* la función objetivo
+Para predecir un nuevo dato se evalúa la función aprendida
 
 ---
 
@@ -211,14 +190,30 @@ Los más comunes son:
 
 El kernel permite a SVR modelar **relaciones no lineales**.
 
+![Gráfico EDA](../../0-img/kernel-svr.png)
+
+En el gráfico anterior:
+
+* (a) Linear 
+* (b) Polynomial 
+* (c) Gaussian RBF 
+* (d) Exponential RBF 
+
+Perfecto 👍
+Entonces la lectura correcta de la imagen sería esta (breve y clara, al nivel de apuntes):
+
+La imagen muestra cómo **SVR cambia la forma de la función aprendida según el kernel utilizado**. Con el **kernel lineal** (a), el modelo ajusta una recta con margen, por lo que solo puede capturar relaciones lineales. Con el **kernel polinómico** (b), la función se curva suavemente y permite modelar relaciones no lineales simples. El **kernel Gaussiano RBF** (c) ofrece mayor flexibilidad, adaptándose mejor a patrones no lineales complejos manteniendo una curva suave. Por último, el **kernel RBF exponencial** (d) genera un ajuste muy flexible y local, capaz de seguir variaciones muy finas de los datos, con mayor riesgo de sobreajuste si no se regulan bien los hiperparámetros.
+
 ---
 
 ### Parámetro gamma (en kernels no lineales)
 
-Controla el alcance de la influencia de cada punto:
+`gamma` indica **hasta qué distancia “se nota” la influencia de cada punto de entrenamiento** en los kernels no lineales (como RBF o polinómico).
 
-* gamma grande → influencia muy local
-* gamma pequeño → influencia más global
+* **gamma grande** → cada punto solo influye en una zona muy cercana. El modelo se vuelve muy sensible a cambios locales y puede generar curvas muy onduladas, con **riesgo de sobreajuste**.
+* **gamma pequeño** → cada punto influye en una región amplia. El modelo es más suave y generaliza mejor, pero puede **no capturar detalles importantes** y subajustar.
+
+En la práctica, `gamma` controla la **flexibilidad del modelo**: valores altos hacen el modelo más complejo y valores bajos lo hacen más simple.
 
 ---
 
@@ -274,19 +269,7 @@ Es importante evaluar el modelo en **train y test** para detectar:
 | 2. Preprocesamiento | Escalado + encoding             | Requisito fundamental           |
 | 3. Entrenamiento    | Ajuste de C, epsilon y kernel   | Modelo sensible                 |
 | 4. Evaluación       | MAE, MSE, R² + gráficos         | Detectar overfitting            |
-| 5. Comparación      | Comparar con árboles y GB       | Elegir mejor modelo             |
-
----
-
-## Comparación rápida: SVR vs Gradient Boosting
-
-| Aspecto                | SVR                     | Gradient Boosting        |
-| ---------------------- | ----------------------- | ------------------------ |
-| Tipo de modelo         | Margen / kernel         | Ensemble de árboles      |
-| Escalado necesario     | ✔ Sí                    | ❌ No                    |
-| Interpretabilidad      | Baja                    | Media                    |
-| Sensibilidad a hiperparámetros | Alta          | Alta                     |
-| Rendimiento máximo     | Bueno (datasets pequeños) | Muy alto (bien ajustado) |
+| 5. Comparación      | Comparar con otros modelos      | Elegir mejor modelo             |
 
 ---
 
@@ -294,8 +277,28 @@ Es importante evaluar el modelo en **train y test** para detectar:
 
 Para ver cómo funciona un **Support Vector Regressor** en la práctica, puedes ejecutar un ejemplo utilizando el dataset **California Housing**.
 
-La implementación se realiza con **:contentReference[oaicite:1]{index=1}**, combinando SVR con escalado previo.
-
 👉 **Puedes abrir el cuaderno aquí:**
-[Colab: Support Vector Regression](../../0-datasets/ejemplo_svr_regresion.ipynb)
-```
+[Colab: Support Vector Regression](../../0-datasets/ejemplo_svr.ipynb)
+
+
+---
+
+## Actividad de seguimiento: Bike Sharing Dataset
+
+Utiliza el **Bike Sharing Dataset** y compara:
+
+- Regresión Lineal
+- KNN Regresión
+- Árbol de Decisión (Regresión)
+- Random Forest (Regresión)
+- Gradient Boosting
+- SVR
+
+Incluye:
+
+- Ajuste de hiperparámetros
+- Métricas de evaluación
+- Análisis de overfitting
+- Conclusiones razonadas
+
+**Entrega:** Notebook (Colab) con conclusiones claras y justificadas.
