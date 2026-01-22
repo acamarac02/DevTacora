@@ -199,9 +199,6 @@ En el gráfico anterior:
 * (c) Gaussian RBF 
 * (d) Exponential RBF 
 
-Perfecto 👍
-Entonces la lectura correcta de la imagen sería esta (breve y clara, al nivel de apuntes):
-
 La imagen muestra cómo **SVR cambia la forma de la función aprendida según el kernel utilizado**. Con el **kernel lineal** (a), el modelo ajusta una recta con margen, por lo que solo puede capturar relaciones lineales. Con el **kernel polinómico** (b), la función se curva suavemente y permite modelar relaciones no lineales simples. El **kernel Gaussiano RBF** (c) ofrece mayor flexibilidad, adaptándose mejor a patrones no lineales complejos manteniendo una curva suave. Por último, el **kernel RBF exponencial** (d) genera un ajuste muy flexible y local, capaz de seguir variaciones muy finas de los datos, con mayor riesgo de sobreajuste si no se regulan bien los hiperparámetros.
 
 ---
