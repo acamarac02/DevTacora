@@ -1,16 +1,8 @@
 ---
-sidebar_position: 3
-sidebar_label: Shared preferences
-title: Shared preferences
+sidebar_position: 1
+sidebar_label: Conceptos teóricos
+title: Conceptos teóricos
 ---
-
-<div className="hidden-summary">
-Almacenamiento persistente de datos simples.
-</div>
-
-<div class="justify-text">
-
-## SharedPreferences
  
 `SharedPreferences` es una API de Android que permite almacenar datos **clave-valor** de manera persistente. Se usa para guardar configuraciones, preferencias del usuario o estados de la aplicación.  
 - **Ligero y rápido.**  
@@ -23,18 +15,28 @@ Algunos casos de uso de las `SharedPreferences` pueden ser:
 - **Guardar tokens o identificadores simples.**  
 - **Estados de conmutadores** (`Switch` o `CheckBox`).
 
+---
 
-### Crear SharedPreferences y guardar datos
+## Uso de las SharedPreferences
+
+### Creación y almacenamiento de datos
 
 Recuperamos las `SharedPreferences` con el método `getSharedPreferences`, que espera dos parámetros:
 - **Nombre del archivo**: "prefs" es simplemente el nombre del archivo donde se almacenarán los datos de `SharedPreferences`. Puedes usar cualquier nombre de archivo que desees y este se guardará en el almacenamiento interno de la app. Puedes tener múltiples archivos de preferencias, cada uno con un nombre diferente.
 - **Modo de apertura**: `MODE_PRIVATE` indica que las preferencias solo serán accesibles por la aplicación que las creó. Es la forma más segura y recomendada.
 
-Por otro lado, para almacenar datos necesitamos un `Editor`, a partir del cual usaremos los métodos `putBoolean`, `putString`, etc.
-
 ```java
 // El MODE_PRIVATE indica que las preferencias solo serán accesibles por la aplicación que las creó.
 SharedPreferences preferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+```
+
+---
+
+### Almacenamiento de datos
+
+Para almacenar datos necesitamos un `Editor`, a partir del cual usaremos los métodos `putBoolean`, `putString`, etc.
+
+```java
 // Editor para modificar los datos
 SharedPreferences.Editor editor = preferences.edit();
 
@@ -45,32 +47,36 @@ editor.putInt("nivel", 5);
 editor.apply();  // Guarda los cambios (asíncrono)
 ```
 
-### Leer datos
+---
+
+### Lectura de datos 
+
 Para la lectura podemos utilizar los métodos `getBoolean`, `getString`, etc. Como segundo parámetro admite un valor por defecto, que se asignará a la variable en caso de que la clave buscada no exista en las `SharedPreferences`.
 
 ```java
-// Asegúrate de usar el nombre del archivo correcto
-SharedPreferences preferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
-
 // Leer datos (con valores por defecto si no existe)
 boolean primerIngreso = preferences.getBoolean("primer_ingreso", false);
 String usuario = preferences.getString("usuario", "Desconocido");
 int nivel = preferences.getInt("nivel", 0);
 ```
 
-### Eliminar datos  
+---
+
+### Eliminación de datos  
 ```java
-SharedPreferences.Editor editor = preferences.edit();
 editor.remove("usuario");  // Elimina una clave específica
 editor.apply();
 ```
 
+---
 
 ### Limpiar todas las preferencias  
 ```java
 editor.clear();  // Elimina TODAS las claves guardadas
 editor.apply();
 ```
+
+---
 
 ### Tipos de datos que puedes guardar  
 - **String** → `putString("clave", "valor")`  
@@ -79,43 +85,15 @@ editor.apply();
 - **Float** → `putFloat("clave", 5.5f)`  
 - **Long** → `putLong("clave", System.currentTimeMillis())`  
 
-### Buenas prácticas
-
-Para centralizar la gestión de las preferencias es recomendable crear una clase que encapsule su lógica, utilizando constantes para las claves y métodos que establezcan los valores de cada clave y los devuelvan:
-
-```java title="SharedPreferencesHelper.java"
-public class SharedPreferencesHelper {
-
-    private SharedPreferences sharedPreferences;
-
-    private static final String PREFS_NAME = "prefs";
-    private static final String KEY_PRIMER_INGRESO = "primer_ingreso";
-
-    public SharedPreferencesHelper(Context context) {
-        sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-    }
-
-    public void guardarPrimerIngreso(boolean primerIngreso) {
-        sharedPreferences.edit().putBoolean(KEY_PRIMER_INGRESO, primerIngreso).apply();
-    }
-    
-    public boolean obtenerPrimerIngreso() {
-        // Si no existe en el almacenamiento, consideramos que es el primer ingreso
-        return sharedPreferences.getBoolean(KEY_PRIMER_INGRESO, true);
-    }
-
-}
-```
-
-Su uso sería similar al siguiente:
-
-```java
-SharedPreferencesHelper helper = new SharedPreferencesHelper(this);
-boolean isPrimerIngreso = helper.obtenerPrimerIngreso();
-helper.guardarPrimerIngreso(false);
-```
-
 ---
+
+## Arquitectura
+
+Vamos a usar **SharedPreferences** siguiendo el patrón que ya conocemos: **MVVM + Repository**. La idea es mantener una app **modular**, donde cada capa tenga una responsabilidad clara y donde la **UI (Fragment)** no se acople a detalles de almacenamiento.
+
+![Arquitectura SharedPreferences](../0-img/arquitectura-sp.png)
+
+<!--
 
 ## AlertDialog
 Un **`AlertDialog`** es una ventana emergente (popup) que aparece sobre la interfaz de usuario para mostrar mensajes, advertencias o pedir confirmación al usuario.  
@@ -220,4 +198,5 @@ Otras herramientas que puedes utilizar para crear mensajes con botones de acció
 **Realiza la Actividad de Seguimiento 8: Movie App con SharedPreferences**
 :::
 
-</div>
+
+-->
