@@ -1,10 +1,9 @@
 ---
-sidebar_label: Firebase Authentication
-title: Firebase Authentication
+title: "Conceptos teóricos"
+sidebar_position: 1
+description: "Fundamentos de Firebase Authentication y su integración en aplicaciones Android utilizando email y contraseña, siguiendo una arquitectura MVVM con Repository."
+keywords: [Firebase Authentication, Firebase Auth, Android, Login, Registro, Email, Password, MVVM, Repository]
 ---
-
-<div class="justify-text">
-# Firebase Authentication
 
 **Firebase Authentication** es un servicio de autenticación seguro y fácil de integrar que permite a los usuarios iniciar sesión en una aplicación con diferentes métodos. **Elimina la necesidad de gestionar un backend para la autenticación**, ya que Firebase se encarga de la infraestructura, la seguridad y la validación de credenciales.
 
@@ -75,6 +74,7 @@ Desde la **Firebase Console** puedes:
 ✔ **Desactivar usuarios** sin eliminarlos.  
 ✔ **Revocar tokens** de usuarios si hay sospecha de actividad no autorizada.  
 
+---
 
 ## Principales Métodos de Firebase Authentication en Android  
 
@@ -250,6 +250,3 @@ private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
 📌 **Explicación:**  
 ✔ Usa la API de Google para obtener la cuenta del usuario.  
 ✔ `signInWithCredential()` autentica al usuario en Firebase.  
-
-
-</div>

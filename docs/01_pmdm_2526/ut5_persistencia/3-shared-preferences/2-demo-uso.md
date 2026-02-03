@@ -23,6 +23,10 @@ El comportamiento esperado es:
 * Cuando el usuario confirma el diálogo → se guarda que ya no es primer ingreso.
 * En aperturas posteriores → el diálogo **no vuelve a mostrarse**.
 
+:::info ACTIVIDAD DE SEGUIMIENTO 8
+**Analiza atentamente el código de este tutorial y realiza la Actividad de Seguimiento 8: Movie App con SharedPreferences**
+:::
+
 ---
 
 ## Paso 1. Estructura inicial

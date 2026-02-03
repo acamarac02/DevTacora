@@ -1,6 +1,6 @@
 {
   "label": "SharedPreferences",
-  "position": 5,
+  "position": 3,
   "link": {
     "type": "generated-index",
     "description": "En esta unidad aprenderemos qué son las SharedPreferences y cómo utilizarlas para almacenar datos simples de forma persistente en Android. Veremos cómo integrarlas correctamente dentro de una arquitectura MVVM con Repository, aplicándolas a casos reales como la detección del primer ingreso, la gestión de preferencias de usuario y el almacenamiento de estados de la aplicación."
