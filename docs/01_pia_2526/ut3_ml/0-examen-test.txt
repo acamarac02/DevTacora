@@ -1,0 +1,258 @@
+¿Qué tipo de problema es la regresión en Machine Learning?
+{
+=Un problema de aprendizaje supervisado con variable objetivo numérica
+~%-25%Un problema de aprendizaje no supervisado
+~%-25%Un problema de clasificación binaria
+~%-25%Un problema de reducción de dimensionalidad
+}
+
+¿Qué métrica de regresión penaliza más los errores grandes?
+{
+=Mean Squared Error (MSE)
+~%-25%Mean Absolute Error (MAE)
+~%-25%Coeficiente de determinación (R²)
+~%-25%Accuracy
+}
+
+¿Qué indica un valor de R² negativo?
+{
+=Que el modelo es peor que predecir siempre la media del target
+~%-25%Que el modelo explica toda la variabilidad
+~%-25%Que el error medio es cero
+~%-25%Que el modelo está perfectamente ajustado
+}
+
+
+En un problema de regresión, la variable objetivo puede ser determinar si un correo es "spam" o "no spam".
+{
+=Falso
+~%-25%Verdadero
+}
+
+Si en el gráfico de residuos aparecen patrones claros, es una señal de que el modelo está capturando adecuadamente la relación entre las variables.
+{
+~%-25%Verdadero
+=Falso
+}
+
+¿Cuál de los siguientes casos corresponde a una regresión lineal múltiple?
+{
+=Predecir el precio de una vivienda usando m², número de habitaciones y zona
+~%-25%Predecir la nota a partir de las horas de estudio
+~%-25%Estimar la temperatura a partir del día del año
+~%-25%Calcular el consumo eléctrico usando la potencia contratada
+}
+
+En la ecuación de la regresión lineal, el término w₀ representa:
+{
+=El término independiente del modelo, que indica el valor predicho cuando todas las variables de entrada son cero
+~%-25%El coeficiente asociado a la primera variable explicativa
+~%-25%El error cometido por el modelo en una observación concreta
+~%-25%El valor real de la variable objetivo
+}
+
+¿Qué indica un coeficiente negativo (wᵢ < 0) en regresión lineal?
+{
+=Que al aumentar esa variable, el valor predicho disminuye
+~%-25%Que la variable no aporta información al modelo
+~%-25%Que el modelo es no lineal
+~%-25%Que la variable es irrelevante
+}
+
+¿Cuál de las siguientes combinaciones incluye únicamente modelos que necesitan que las variables estén escaladas para funcionar correctamente?
+{
+=KNN y Support Vector Machines (SVR)
+~%-25%Regresión Lineal y Árbol de Decisión
+~%-25%Random Forest y Árbol de Decisión
+~%-25%KNN y Random Forest
+}
+
+En KNN Regresión, la predicción de un nuevo punto se obtiene:
+{
+=Calculando la media de los valores objetivo de los k vecinos más cercanos
+~%-25%Ajustando una recta que minimiza el error cuadrático
+~%-25%Usando únicamente el vecino más cercano
+~%-25%Ajustando una función lineal a partir de los k vecinos seleccionados
+}
+
+KNN Regresión es un modelo no paramétrico.
+{
+=Verdadero
+~%-25%Falso
+}
+
+Un valor de k muy grande en KNN Regresión suele producir underfitting.
+{
+=Verdadero
+~%-25%Falso
+}
+
+¿Qué hiperparámetro controla el número de vecinos utilizados en la predicción?
+{
+=n_neighbors
+~%-25%weights
+~%-25%metric
+~%-25%intercept
+}
+
+El coste computacional de KNN Regresión es mayor en la fase de entrenamiento que en la de predicción.
+{
+~%-25%Verdadero
+=Falso
+}
+
+¿Cuál es la idea principal de un árbol de decisión para regresión?
+{
+=Dividir el espacio de datos en regiones donde los valores del target sean lo más homogéneos posible
+~%-25%Ajustar una función lineal global
+~%-25%Buscar los k vecinos más cercanos
+~%-25%Reducir la dimensionalidad del dataset
+}
+
+¿Qué criterio se utiliza habitualmente para elegir la mejor división en un árbol de decisión para regresión?
+{
+=Minimizar el error, normalmente el Mean Squared Error (MSE)
+~%-25%Maximizar la ganancia de información
+~%-25%Minimizar la entropía
+~%-25%Maximizar el coeficiente R²
+}
+
+En un árbol de decisión para regresión, el valor que devuelve una hoja suele ser:
+{
+=La media de los valores del target de las muestras que llegan a esa hoja
+~%-25%El valor máximo del target
+~%-25%El valor del vecino más cercano
+~%-25%Un coeficiente aprendido por el modelo
+}
+
+¿Cuál de las siguientes es una ventaja clara de los árboles de decisión para regresión?
+{
+=Su interpretabilidad y facilidad de visualización
+~%-25%Su bajo coste computacional en entrenamiento
+~%-25%Su necesidad de escalado obligatorio
+~%-25%Su robustez frente a datasets muy pequeños
+}
+
+¿Cuál es el efecto combinado del bootstrap de filas y el submuestreo de variables en Random Forest?
+{
+=Generar árboles distintos que cometen errores diferentes y cuya combinación reduce la varianza del modelo
+~%-25%Garantizar que todos los árboles aprendan las mismas reglas pero con distinto orden
+~%-25%Asegurar que cada árbol utilice exactamente las mismas variables pero con distintos pesos
+~%-25%Reducir el número de muestras necesarias para entrenar cada árbol
+}
+
+En Random Forest para regresión, la predicción final se obtiene:
+{
+=Calculando la media de las predicciones de todos los árboles
+~%-25%Seleccionando la predicción del mejor árbol
+~%-25%Aplicando una votación mayoritaria
+~%-25%Ajustando una recta a las salidas de los árboles
+}
+
+¿Qué hiperparámetro controla el número de árboles que componen el bosque?
+{
+=n_estimators
+~%-25%max_depth
+~%-25%max_features
+~%-25%min_samples_leaf
+}
+
+Random Forest suele ser menos interpretable que un único árbol de decisión.
+{
+=Verdadero
+~%-25%Falso
+}
+
+La regularización (Ridge y Lasso) actúa empujando los coeficientes del modelo hacia cero.
+{
+=Verdadero
+~%-25%Falso
+}
+
+¿Cuál de las siguientes afirmaciones describe mejor el efecto práctico de Ridge?
+{
+=Reduce el tamaño de los coeficientes sin eliminarlos completamente
+~%-25%Elimina automáticamente variables irrelevantes
+~%-25%Fuerza coeficientes exactamente iguales a cero
+~%-25%Convierte el modelo en no paramétrico
+}
+
+Lasso Regression puede realizar selección automática de variables.
+{
+=Verdadero
+~%-25%Falso
+}
+
+¿Qué ocurre cuando alpha = 0 en Ridge o Lasso?
+{
+=El modelo se comporta como una regresión lineal clásica
+~%-25%Todos los coeficientes se anulan
+~%-25%El modelo se convierte en no lineal
+~%-25%Se elimina automáticamente la multicolinealidad
+}
+
+¿Qué hiperparámetro controla la intensidad de la regularización en Ridge y Lasso?
+{
+=alpha
+~%-25%learning_rate
+~%-25%n_estimators
+~%-25%max_depth
+}
+
+¿Cuál es la idea central del Gradient Boosting?
+{
+=Entrenar modelos de forma secuencial para corregir los errores cometidos previamente
+~%-25%Entrenar muchos modelos independientes y promediar sus predicciones
+~%-25%Ajustar una única función compleja desde el inicio
+~%-25%Eliminar automáticamente variables irrelevantes
+}
+
+¿Qué diferencia fundamental existe entre Random Forest y Gradient Boosting?
+{
+=En Gradient Boosting los árboles dependen de los errores de los anteriores
+~%-25%En Random Forest los árboles se entrenan secuencialmente
+~%-25%Gradient Boosting no utiliza árboles de decisión
+~%-25%Random Forest no es un modelo ensemble
+}
+
+En Gradient Boosting, la predicción final se obtiene:
+{
+=Sumando la predicción inicial y las correcciones aportadas por cada árbol
+~%-25%Promediando las predicciones de todos los árboles
+~%-25%Seleccionando la predicción del último árbol entrenado
+~%-25%Ajustando una función lineal sobre los árboles
+}
+
+¿Qué representa el margen epsilon (ε) en SVR?
+{
+=Una zona de tolerancia donde los errores no se penalizan
+~%-25%El error máximo permitido en el modelo
+~%-25%La distancia entre observaciones
+~%-25%El valor medio de la variable objetivo
+}
+
+
+Analiza este cálculo:
+<pre><code>r2_gap = r2_train - r2_test</code></pre>
+¿Qué interpretación es correcta si r2_gap es grande y positivo?
+{
+=El modelo probablemente está sobreajustando (overfitting)
+~%-25%El modelo generaliza perfectamente
+~%-25%El modelo está subajustando (underfitting)
+~%-25%El modelo no depende de los hiperparámetros
+}
+
+Observa el siguiente espacio de búsqueda de hiperparámetros:
+<pre><code>param_distributions = &#123;
+    "C": [0.1, 1, 10, 100],
+    "epsilon": [0.01, 0.1, 0.2],
+    "gamma": ["scale", "auto"]
+&#125;</code></pre>
+¿A qué modelo corresponde este espacio de búsqueda?
+{
+=Support Vector Regression (SVR)
+~%-25%Regresión Ridge
+~%-25%Random Forest Regressor
+~%-25%Gradient Boosting Regressor
+}
+

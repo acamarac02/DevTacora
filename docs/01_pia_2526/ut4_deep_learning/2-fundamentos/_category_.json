@@ -1,0 +1,9 @@
+{
+  "label": "Fundamentos",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "title": "Fundamentos de las Redes Neuronales",
+    "description": "En esta sección aprenderás los conceptos esenciales que permiten entender cómo funcionan las redes neuronales: el perceptrón, el cálculo del error, el proceso de aprendizaje y los principios básicos que hacen posible el entrenamiento de modelos de Deep Learning."
+  }
+}
