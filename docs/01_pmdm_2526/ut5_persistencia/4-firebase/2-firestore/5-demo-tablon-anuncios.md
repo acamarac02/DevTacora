@@ -86,21 +86,24 @@ public class MainActivity extends AppCompatActivity {
 Se trata de la clase Java que representa la información que se almacena en cada documento de tu colección:
 ```java title="model/Anuncio.java"
 public class Anuncio {
+
     private String id;
     private String contenido;
     private long fecha;
+    private String uidAutor;
     private String emailAutor;
 
     // Constructor vacío requerido por Firestore
     public Anuncio() {}
 
-    public Anuncio(String contenido, long fecha, String emailAutor) {
+    public Anuncio(String contenido, long fecha, String uidAutor, String emailAutor) {
         this.contenido = contenido;
         this.fecha = fecha;
+        this.uidAutor = uidAutor;
         this.emailAutor = emailAutor;
     }
 
-    // Getters y setters
+    // Getter y setters
 }
 ```
 :::warning CUIDADO
@@ -236,7 +239,11 @@ public class AnunciosViewModel extends AndroidViewModel {
 ## 6. Implementar `TablonFragment`
 ### 6.1. Layout
 En el layout vamos a contar con un EditText para escribir el contenido del anuncio, un botón para guardarlo y el RecyclerView que muestre todos los anuncios.
+
+También tendremos un ProgressBar, que marca el estado de carga y un TextView para mostrar un mensaje de error en caso de que no se carguen los anuncios.
+
 ```xml title="fragment_tablon.xml"
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -256,11 +263,36 @@ En el layout vamos a contar con un EditText para escribir el contenido del anunc
         android:layout_height="wrap_content"
         android:text="Publicar" />
 
+    <!-- Estado: cargando -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:visibility="gone" />
+
+    <!-- Estado: error -->
+    <TextView
+        android:id="@+id/tvError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="Ha ocurrido un error al cargar los anuncios"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="@android:color/holo_red_dark"
+        android:visibility="gone" />
+
+    <!-- Estado: success -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerAnuncios"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
 </LinearLayout>
 ```
 
@@ -327,7 +359,7 @@ El código del Adaptador y ViewHolder puede quedar así:
 public class AnuncioAdapter extends RecyclerView.Adapter<AnuncioAdapter.AnuncioViewHolder> {
 
     // Lista de anuncios que se muestra en el RecyclerView
-    List<Anuncio> anunciosList;
+    private List<Anuncio> anunciosList;
 
     @NonNull
     @Override
@@ -355,13 +387,13 @@ public class AnuncioAdapter extends RecyclerView.Adapter<AnuncioAdapter.AnuncioV
     }
 
     // Devuelve el anuncio que esté en la posición pasada por parámetro
-    // Lo utilizamos para saber qué anuncio eliminar con el gesto de desplazar
+// Lo utilizamos para saber qué anuncio eliminar con el gesto de desplazar
     public Anuncio obtenerAnuncio(int posicion) {
         return this.anunciosList.get(posicion);
     }
 
     // Elimina el anuncio que esté en la posición pasada por parámetro
-    // Lo utilizamos para eliminar el anuncio de la lista
+// Lo utilizamos para eliminar el anuncio de la lista
     public void eliminarAnuncio(int posicion) {
         this.anunciosList.remove(posicion);
         notifyItemRemoved(posicion);
