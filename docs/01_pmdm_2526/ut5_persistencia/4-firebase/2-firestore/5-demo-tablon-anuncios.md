@@ -9,6 +9,8 @@ title: Lectura en Tiempo Real de un Tablón de Anuncios
 
 En este ejemplo, implementaremos un **Tablón de Anuncios**. Partiremos de la aplicación anterior en la que contamos con `LoginActivity` que se encarga de gestionar el registro del usuario. En `MainActivity` cargaremos `TablonFragment`, que permite insertar anuncios y consultar los últimos publicados. Además, el usuario propietario de un anuncio podrá eliminarlo si deliza el elemento a derecha o izquierda.
 
+En el siguiente GIF podéis observar la lectura en tiempo real desde dos dispositivos:
+
 ![UT5. GIF resumen de la aplicación](../../0-img/demo-anuncios.gif)
 
 **Estructura del proyecto:**  
@@ -37,27 +39,41 @@ Esta `Activity` contiene el **`FragmentContainerView`** donde se cargará `Tablo
 ### 3.1. Layout 
 ```xml title="activity_main.xml"
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- AppBar superior -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:titleCentered="true"
+            app:titleTextColor="@android:color/white" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Contenedor principal de fragments -->
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
-        app:navGraph="@navigation/navigation_graph"
-        app:defaultNavHost="true"
+        android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 ```
 
 :::info RECUERDA...
@@ -69,14 +85,31 @@ Recuerda crear el grafo de navegación y añadir `TablonFragment` en él.
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private NavController navController;
+    private AppBarConfiguration appBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView((binding = ActivityMainBinding.inflate(getLayoutInflater())).getRoot());
+
+        // 1. Obtenemos la referencia de la Toolbar del layout
+        setSupportActionBar(binding.toolbar);
+
+        // 2. Obtenemos el NavController desde el contenedor del grafo
+        navController = ((NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment)).getNavController();
+
+        // 3. Configuramos la AppBar para que el título y el botón de navegación
+        // se actualicen automáticamente al navegar entre fragments
+        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
 }
 ```
 
@@ -114,122 +147,209 @@ Al igual que sucede con MongoDB, nuestro modelo debe tener el **contructor por d
 
 ## 5. Implementar el acceso a datos
 
-### 5.1. Código de AnunciosRepository
-Recuerda que el **Repository** en el patrón MVVM (Model-View-ViewModel) actúa como **intermediario entre el ViewModel y las fuentes de datos** (Firestore, API, Room, etc.). Por este motivo, AnunciosRepository contiene una instancia de `FirebaseFirestore`, a partir de la que se implementan los métodos para obtener todos los anuncios, insertar uno nuevo y eliminar uno existente. Además, contiene una instancia de `FirebaseAuth` para devolver la información del usuario conectado cuando sea necesario.
+### 5.1. Clase Resource (gestión de estados)
 
-```java title="repository/AnunciosRepository.java"
-public class AnunciosRepository {
-    // Instancia de Firestore para acceder a la base de datos de anuncios
-    private FirebaseFirestore db;
-    // Instancia de Authentication para consultar el usuario conectado
-    private FirebaseAuth mAuth;
-    // Referencia a la colección de anuncios
-    private CollectionReference coleccionAnuncios;
+Igual que hicimos con Retrofit, creamos una clase para representar el estado de la petición:
 
+```java title="Resource.java"
+public class Resource<T> {
 
-    public AnunciosRepository() {
-        // Inicialización de los atributos de clase
-        db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
-        coleccionAnuncios = db.collection("anuncios");
+    public enum Status { LOADING, SUCCESS, ERROR }
+
+    public final Status status;
+    public final T data;
+    public final String message;
+
+    private Resource(Status status, T data, String message) {
+        this.status = status;
+        this.data = data;
+        this.message = message;
     }
 
-    // Devuelve el email del usuario conectado
-    // Útil para saber si el usuario conectado es el propietario de un anuncio
-    public String getConnectedUserEmail() {
-        if (mAuth.getCurrentUser() != null) {
-            return mAuth.getCurrentUser().getEmail();
-        }
-        return null;
+    public static <T> Resource<T> loading() {
+        return new Resource<>(Status.LOADING, null, null);
     }
 
-    public LiveData<List<Anuncio>> obtenerAnuncios() {
-        // LiveData que devolveremos con la lista de anuncio
-        MutableLiveData<List<Anuncio>> anunciosLiveData = new MutableLiveData<>();
-
-        // Consulta en tiempo real, ordenada por fecha
-        // Esta query devuelve todos los anuncios
-        coleccionAnuncios.orderBy("fecha", Query.Direction.DESCENDING)
-                .addSnapshotListener((querySnapshot, e) -> {
-            if (e != null) {
-                Log.e("Firestore", "Error al obtener anuncios", e);
-                return;
-            }
-
-            if (querySnapshot != null) {
-                List<Anuncio> lista = new ArrayList<>();
-                // Recorremos todos los documentos y los añadimos a la lista
-                for (DocumentSnapshot doc : querySnapshot) {
-                    Anuncio anuncio = doc.toObject(Anuncio.class);
-                    if (anuncio != null) {
-                        lista.add(anuncio);
-                    }
-                }
-                // Actualiza el LiveData con los datos devueltos por la consulta
-                anunciosLiveData.setValue(lista);
-            }
-        });
-
-        // Devuelve el LiveData que la UI observará
-        return anunciosLiveData;
+    public static <T> Resource<T> success(T data) {
+        return new Resource<>(Status.SUCCESS, data, null);
     }
 
-    public void agregarAnuncio(Anuncio anuncio) {
-        // Generar un nuevo ID para el documento en Firestore
-        String idGenerado = coleccionAnuncios.document().getId();
-
-        // Asignar el ID generado al anuncio antes de guardarlo
-        anuncio.setId(idGenerado);
-
-        // Insertar el anuncio con el ID generado
-        coleccionAnuncios.document(idGenerado)
-                .set(anuncio)
-                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Anuncio agregado con ID: " + idGenerado))
-                .addOnFailureListener(e -> Log.e("Firestore", "Error al agregar anuncio", e));
-    }
-
-    public void eliminarAnuncio(Anuncio anuncio) {
-        // Elimina el anuncio cuyo id coincide con el anuncio que se recibe por parámetro
-        coleccionAnuncios.document(anuncio.getId())
-                .delete()
-                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Anuncio eliminado correctamente"))
-                .addOnFailureListener(e -> Log.e("Firestore", "Error al eliminar anuncio", e));
+    public static <T> Resource<T> error(String message) {
+        return new Resource<>(Status.ERROR, null, message);
     }
 }
 ```
 
 ---
 
-### 5.2. Código de AnunciosViewModel
+### 5.2. Código de AnunciosRepository
+
+En esta clase implementamos el **Repository**, cuya función dentro de la arquitectura MVVM es actuar como intermediario entre el ViewModel y Firestore.
+
+En el constructor inicializamos la instancia de `FirebaseFirestore` y obtenemos la referencia a la colección `anuncios`. A partir de ahí, todas las operaciones (consultar, insertar y eliminar) se realizan sobre esa colección.
+
+El método más importante es `obtenerAnuncios()`. En lugar de hacer una petición puntual, utilizamos `addSnapshotListener()`, que establece una **suscripción en tiempo real**. Esto significa que:
+
+* Firestore envía inicialmente el estado actual de la colección.
+* Cada vez que se añade, modifica o elimina un documento, el listener se ejecuta automáticamente.
+* No es necesario volver a llamar al método tras insertar o borrar datos.
+
+Cada vez que el listener se activa, recibimos un `QuerySnapshot` con el estado actual completo de la consulta. Recorremos sus documentos, los convertimos a objetos `Anuncio` mediante `toObject()` y enviamos la lista resultante al `LiveData` usando `Resource.success(lista)`. Si ocurre un error, enviamos `Resource.error(...)`, y antes de iniciar la escucha notificamos `Resource.loading()` para que la interfaz pueda mostrar un indicador de carga.
+
+El listener se crea solo una vez (comprobando que sea `null`) para evitar múltiples suscripciones. Además, el método `stopListening()` permite eliminar la suscripción cuando el ViewModel se destruye.
+
+Por último, los métodos `agregarAnuncio()` y `eliminarAnuncio()` insertan o eliminan documentos en Firestore. No es necesario actualizar manualmente la lista después, ya que el listener detectará automáticamente los cambios y notificará a la interfaz.
+
+```java title="repository/AnunciosRepository.java"
+public class AnunciosRepository {
+
+    // Instancia de Firestore para acceder a la base de datos de anuncios
+    private FirebaseFirestore db;
+
+    // Referencia a la colección de anuncios
+    private CollectionReference coleccionAnuncios;
+
+    // Colección de anuncios cacheada
+    private final MutableLiveData<Resource<List<Anuncio>>> anunciosLiveData = new MutableLiveData<>();
+
+    // Referencia al listener en tiempo real
+    private ListenerRegistration listener;
+
+    public AnunciosRepository() {
+        // Inicialización de los atributos de clase
+        db = FirebaseFirestore.getInstance();
+        // Obtenemos la colección "anuncios"
+        coleccionAnuncios = db.collection("anuncios");
+    }
+
+    /**
+     * Devuelve un LiveData con los anuncios en tiempo real.
+     * Solo se crea el listener una vez.
+     */
+    public LiveData<Resource<List<Anuncio>>> obtenerAnuncios() {
+        // Si el listener todavía no ha sido creado, lo creamos
+        if (listener == null) {
+
+            // Indicamos a la UI que estamos cargando datos
+            anunciosLiveData.setValue(Resource.loading());
+
+            // Solicitamos la consulta de anuncios ordenada por fecha descendente
+            listener = coleccionAnuncios
+                    .orderBy("fecha", Query.Direction.DESCENDING)
+                    .addSnapshotListener((querySnapshot, e) -> {
+
+                        // Si ocurre un error, notificamos a la UI
+                        if (e != null) {
+                            anunciosLiveData.setValue(
+                                    Resource.error("Error al obtener anuncios")
+                            );
+                            return;
+                        }
+
+                        // Si la consulta devuelve datos
+                        if (querySnapshot != null) {
+                            List<Anuncio> lista = new ArrayList<>();
+
+                            // Recorremos todos los documentos del snapshot
+                            for (DocumentSnapshot doc : querySnapshot) {
+                                // Convertimos cada documento en un objeto Anuncio y lo añadimos a la lista
+                                Anuncio anuncio = doc.toObject(Anuncio.class);
+                                if (anuncio != null) {
+                                    lista.add(anuncio);
+                                }
+                            }
+
+                            // Enviamos los datos actualizados a la UI
+                            anunciosLiveData.setValue(
+                                    Resource.success(lista)
+                            );
+                        }
+                    });
+        }
+
+        // Devolvemos el LiveData que será observado desde el ViewModel / Fragment
+        return anunciosLiveData;
+    }
+
+    // Detiene la escucha en tiempo real
+    // Se suele llamar cuando el ViewModel se destruye
+    public void stopListening() {
+        if (listener != null) {
+            listener.remove(); // Elimina la suscripción
+            listener = null;
+        }
+    }
+
+    public void agregarAnuncio(Anuncio anuncio) {
+        // Generamos un ID único para el documento
+        String idGenerado = coleccionAnuncios.document().getId();
+        // Asignamos ese ID al objeto antes de guardarlo
+        anuncio.setId(idGenerado);
+
+        // Guardamos el anuncio en la base de datos
+        coleccionAnuncios.document(idGenerado).set(anuncio);
+
+        // OJO: No necesitamos actualizar la lista manualmente:
+        // el listener detectará el cambio automáticamente.
+    }
+
+    public void eliminarAnuncio(Anuncio anuncio) {
+        // Eliminamos el documento cuyo ID coincide con el anuncio recibido
+        coleccionAnuncios.document(anuncio.getId()).delete();
+    }
+
+}
+```
+
+---
+
+### 5.3. Código de AnunciosViewModel
 El ViewModel contiene una instancia de `AnunciosRepository` e invoca sus métodos, actuando así de intermediario entre la vista y la fuente de datos.
 
 ```java title="viewmodel/AnunciosViewModel.java"
 public class AnunciosViewModel extends AndroidViewModel {
 
-    private AnunciosRepository repository;
+    private final AnunciosRepository anunciosRepository;
+    private final LiveData<Resource<List<Anuncio>>> anuncios;
+
+    // Referencia al repository de Authentication
+    private AuthRepository authRepository;
 
     public AnunciosViewModel(@NonNull Application application) {
         super(application);
-        repository = new AnunciosRepository();
+        anunciosRepository = new AnunciosRepository();
+        authRepository = new AuthRepository();
+
+        // Recuperamos todos los anuncios al inicio al ser consultas en tiempo real
+        anuncios = anunciosRepository.obtenerAnuncios();
     }
 
-    public String getConnectedUserEmail() {
-        return repository.getConnectedUserEmail();
-    }
-
-    public LiveData<List<Anuncio>> obtenerAnuncios() {
-        return repository.obtenerAnuncios();
+    public LiveData<Resource<List<Anuncio>>> getAnuncios() {
+        return anuncios;
     }
 
     public void agregarAnuncio(String contenido) {
-        // Creamos la instancia del anuncio
-        Anuncio anuncio = new Anuncio(contenido, System.currentTimeMillis(), FirebaseAuth.getInstance().getCurrentUser().getEmail());
-        // Llamamos al método del repository
-        repository.agregarAnuncio(anuncio);
+
+        FirebaseUser user = authRepository.getCurrentUser();
+
+        Anuncio anuncio = new Anuncio(
+                contenido,
+                System.currentTimeMillis(),
+                user.getUid(),
+                user.getEmail()
+        );
+
+        anunciosRepository.agregarAnuncio(anuncio);
     }
 
     public void eliminarAnuncio(Anuncio anuncio) {
-        repository.eliminarAnuncio(anuncio);
+        anunciosRepository.eliminarAnuncio(anuncio);
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        anunciosRepository.stopListening();
     }
 }
 ```
@@ -354,7 +474,9 @@ Este contendrá la información que se muestra de cada Anuncio en el RecyclerVie
 ---
 
 ### 6.3. Código de `AnuncioAdapter`
+
 El código del Adaptador y ViewHolder puede quedar así:
+
 ```java title="recyclerview/AnuncioAdapter"
 public class AnuncioAdapter extends RecyclerView.Adapter<AnuncioAdapter.AnuncioViewHolder> {
 
@@ -387,13 +509,13 @@ public class AnuncioAdapter extends RecyclerView.Adapter<AnuncioAdapter.AnuncioV
     }
 
     // Devuelve el anuncio que esté en la posición pasada por parámetro
-// Lo utilizamos para saber qué anuncio eliminar con el gesto de desplazar
+    // Lo utilizamos para saber qué anuncio eliminar con el gesto de desplazar
     public Anuncio obtenerAnuncio(int posicion) {
         return this.anunciosList.get(posicion);
     }
 
     // Elimina el anuncio que esté en la posición pasada por parámetro
-// Lo utilizamos para eliminar el anuncio de la lista
+    // Lo utilizamos para eliminar el anuncio de la lista
     public void eliminarAnuncio(int posicion) {
         this.anunciosList.remove(posicion);
         notifyItemRemoved(posicion);
@@ -428,6 +550,7 @@ public class TablonFragment extends Fragment {
 
     private FragmentTablonBinding binding;
     private AnunciosViewModel anunciosViewModel;
+    private AuthViewModel authViewModel;
     private AnuncioAdapter adapter;
 
     @Override
@@ -445,18 +568,47 @@ public class TablonFragment extends Fragment {
         binding.recyclerAnuncios.setAdapter(adapter);
 
         anunciosViewModel = new ViewModelProvider(requireActivity()).get(AnunciosViewModel.class);
+        authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
         binding.btnPublicar.setOnClickListener(v -> publicarAnuncio());
 
-        // Recuperamos los anuncios
-        anunciosViewModel.obtenerAnuncios().observe(getViewLifecycleOwner(), new Observer<List<Anuncio>>() {
-            @Override
-            public void onChanged(List<Anuncio> anuncios) {
-                // Establecemos la lista en el adapter
-                adapter.setAnunciosList(anuncios);
-            }
-        });
+        inicializarObservadorAnuncios();
+        inicializarGestoEliminar();
+    }
 
+    private void inicializarObservadorAnuncios() {
+        // Recuperamos los anuncios
+        anunciosViewModel.getAnuncios()
+                .observe(getViewLifecycleOwner(), resource -> {
+
+                    switch (resource.status) {
+
+                        case LOADING:
+                            binding.progressBar.setVisibility(View.VISIBLE);
+                            binding.recyclerAnuncios.setVisibility(View.GONE);
+                            binding.tvError.setVisibility(View.GONE);
+                            break;
+
+                        case SUCCESS:
+                            binding.progressBar.setVisibility(View.GONE);
+                            binding.recyclerAnuncios.setVisibility(View.VISIBLE);
+                            binding.tvError.setVisibility(View.GONE);
+
+                            adapter.setAnunciosList(resource.data);
+                            break;
+
+                        case ERROR:
+                            binding.progressBar.setVisibility(View.GONE);
+                            binding.recyclerAnuncios.setVisibility(View.GONE);
+                            binding.tvError.setVisibility(View.VISIBLE);
+                            binding.tvError.setText(resource.message);
+                            break;
+                    }
+                });
+
+    }
+
+    private void inicializarGestoEliminar() {
         // Gesto para eliminar anuncio
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                 ItemTouchHelper.UP | ItemTouchHelper.DOWN,
@@ -469,19 +621,23 @@ public class TablonFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 // Recuperamos el anuncio seleccionado
-                int posicion = viewHolder.getAdapterPosition();
-                Anuncio anuncio = adapter.obtenerAnuncio(posicion);
+                int posicion = viewHolder.getBindingAdapterPosition();
 
-                // Recuperamos el email del usuario conectado para evitar
-                // que los usuarios eliminen anuncios de los que no son propietarios
-                String emailUsuarioActual = anunciosViewModel.getConnectedUserEmail();
-                if (anuncio.getEmailAutor().equalsIgnoreCase(emailUsuarioActual)) {
-                    mostrarDialogoAvisoEliminado(anuncio, posicion);
-                } else {
-                    Toast.makeText(requireContext(), "No eres el propietario del anuncio", Toast.LENGTH_SHORT).show();
-                    // Restaurar el elemento si el usuario no es el propietario
-                    adapter.notifyItemChanged(posicion);
+                if (posicion != RecyclerView.NO_POSITION) {
+                    Anuncio anuncio = adapter.obtenerAnuncio(posicion);
+
+                    // Recuperamos el uid del usuario conectado para evitar
+                    // que los usuarios eliminen anuncios de los que no son propietarios
+                    String uidUsuarioActual = authViewModel.getCurrentUser().getUid();
+                    if (anuncio.getUidAutor().equalsIgnoreCase(uidUsuarioActual)) {
+                        mostrarDialogoAvisoEliminado(anuncio, posicion);
+                    } else {
+                        Toast.makeText(requireContext(), "No eres el propietario del anuncio", Toast.LENGTH_SHORT).show();
+                        // Restaurar el elemento si el usuario no es el propietario
+                        adapter.notifyItemChanged(posicion);
+                    }
                 }
+
             }
         });
         itemTouchHelper.attachToRecyclerView(binding.recyclerAnuncios);
@@ -495,7 +651,7 @@ public class TablonFragment extends Fragment {
                     // Eliminamos el anuncio de la BBDD
                     anunciosViewModel.eliminarAnuncio(anuncio);
                     // Eliminamos el anuncio directamente de la lista, así evitamos repetir consulta a la BBDD
-                    adapter.eliminarAnuncio(posicion);
+                    //adapter.eliminarAnuncio(posicion);
                     Toast.makeText(requireContext(), "Anuncio eliminado", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("Cancelar", (dialog, which) -> {
