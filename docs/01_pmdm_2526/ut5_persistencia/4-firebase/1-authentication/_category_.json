@@ -1,6 +1,6 @@
 {
   "label": "Firebase Authentication",
-  "position": 3,
+  "position": 1,
   "link": {
     "type": "generated-index",
     "description": "En este apartado aprenderemos qué es Firebase Authentication y cómo implementar un sistema de autenticación con email y contraseña en aplicaciones Android. Estudiaremos los conceptos teóricos fundamentales, la gestión de sesión de usuario y su integración correcta dentro de una arquitectura MVVM con Repository, aplicándolo a casos reales como el registro, el inicio de sesión y el cierre de sesión."
