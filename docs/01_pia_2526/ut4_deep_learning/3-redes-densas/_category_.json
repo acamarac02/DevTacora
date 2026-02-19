@@ -1,0 +1,9 @@
+{
+  "label": "UT4. Deep Learning",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "UT4. Deep Learning",
+    "description": "En esta unidad aprenderás los fundamentos de las redes neuronales y el deep learning, desde el perceptrón hasta las redes convolucionales. Implementarás modelos con TensorFlow y Keras para regresión, clasificación e imágenes, y los prepararás para su uso en aplicaciones reales."
+  }
+}
