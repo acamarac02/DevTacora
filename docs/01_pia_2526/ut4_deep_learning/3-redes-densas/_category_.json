@@ -1,9 +1,9 @@
 {
-  "label": "UT4. Deep Learning",
+  "label": "Redes Densas",
   "position": 2,
   "link": {
     "type": "generated-index",
-    "title": "UT4. Deep Learning",
-    "description": "En esta unidad aprenderás los fundamentos de las redes neuronales y el deep learning, desde el perceptrón hasta las redes convolucionales. Implementarás modelos con TensorFlow y Keras para regresión, clasificación e imágenes, y los prepararás para su uso en aplicaciones reales."
+    "title": "Redes Neuronales Densas",
+    "description": "Implementación y entrenamiento de redes neuronales densas (Multi-Layer Perceptrons). En esta sección veremos cómo aplicar estas redes a problemas de regresión y clasificación, el uso de diferentes arquitecturas y técnicas de regularización para optimizar los modelos."
   }
 }
