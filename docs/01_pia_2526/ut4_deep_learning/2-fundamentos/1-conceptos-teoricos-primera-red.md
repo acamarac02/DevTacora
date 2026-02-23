@@ -326,7 +326,7 @@ Eso es entrenar una red neuronal: ajustar parámetros internos hasta minimizar e
 Más adelante probaremos también una red ligeramente más compleja, con una capa oculta. Resolverá el mismo problema, pero con una estructura más potente. Sin embargo, al aumentar el número de pesos y sesgos, la solución deja de ser tan fácilmente interpretable como una simple ecuación lineal.
 
 👉 **Puedes abrir el cuaderno aquí:**
-[Colab: Primera red neuronal](../0-datasets/primera-red-neuronal.ipynb)
+[Colab: Primera red neuronal](../0-colab/primera-red-neuronal.ipynb)
 
 ---
 
