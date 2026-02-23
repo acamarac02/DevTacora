@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="es" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-pia_2526/ut4_deep_learning/fundamentos/conceptos-teoricos-primera-red" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.8.1">
+<title data-rh="true">Conceptos teóricos y primera red neuronal | DevTacora</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://acamarac02.github.io/DevTacora/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://acamarac02.github.io/DevTacora/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut4_deep_learning/fundamentos/conceptos-teoricos-primera-red"><meta data-rh="true" property="og:locale" content="es"><meta data-rh="true" name="docusaurus_locale" content="es"><meta data-rh="true" name="docsearch:language" content="es"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Conceptos teóricos y primera red neuronal | DevTacora"><meta data-rh="true" name="description" content="Fundamentos de cómo funciona una red neuronal por dentro: perceptrón, neurona artificial, pesos, sesgo, función de pérdida y learning rate."><meta data-rh="true" property="og:description" content="Fundamentos de cómo funciona una red neuronal por dentro: perceptrón, neurona artificial, pesos, sesgo, función de pérdida y learning rate."><meta data-rh="true" name="keywords" content="perceptrón,neurona artificial,pesos,bias,función de pérdida,learning rate,tensores,red neuronal"><link data-rh="true" rel="icon" href="/DevTacora/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut4_deep_learning/fundamentos/conceptos-teoricos-primera-red"><link data-rh="true" rel="alternate" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut4_deep_learning/fundamentos/conceptos-teoricos-primera-red" hreflang="es"><link data-rh="true" rel="alternate" href="https://acamarac02.github.io/DevTacora/docs/pia_2526/ut4_deep_learning/fundamentos/conceptos-teoricos-primera-red" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"UT4. Deep Learning","item":"https://acamarac02.github.io/DevTacora/docs/category/ut4-deep-learning"},{"@type":"ListItem","position":2,"name":"Fundamentos","item":"https://acamarac02.github.io/DevTacora/docs/category/fundamentos"},{"@type":"ListItem","position":3,"name":"Conceptos teóricos y primera red neuronal","item":"https://acamarac02.github.io/DevTacora/docs/pia_2526/ut4_deep_learning/fundamentos/conceptos-teoricos-primera-red"}]}</script><link rel="alternate" type="application/rss+xml" href="/DevTacora/blog/rss.xml" title="DevTacora RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/DevTacora/blog/atom.xml" title="DevTacora Atom Feed">
+
+
+
+
+<link rel="preconnect" href="https://www.google-analytics.com">
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7WCKN9ZY1F"></script>
+<script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-7WCKN9ZY1F",{anonymize_ip:!0})</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css" integrity="sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM" crossorigin="anonymous"><link rel="stylesheet" href="/DevTacora/assets/css/styles.71ba2beb.css">
+<script src="/DevTacora/assets/js/runtime~main.1886696e.js" defer="defer"></script>
+<script src="/DevTacora/assets/js/main.89999667.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t="light";var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",e||t),document.documentElement.setAttribute("data-theme-choice",e||t)}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Saltar al contenido principal"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Saltar al contenido principal</a></div><nav aria-label="Principal" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Alternar barra lateral" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/DevTacora/"><div class="navbar__logo"><img src="/DevTacora/img/devtacora_logo.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/DevTacora/img/devtacora_logo.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">DevTacora</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/DevTacora/docs/pia_2526/">PIA</a><a class="navbar__item navbar__link" href="/DevTacora/docs/pmdm_2526/">PMDM</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a class="navbar__item navbar__link" href="/DevTacora/docs/licencia">Licencia</a><a href="https://www.linkedin.com/in/aliciacamcas" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">LinkedIn<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Cambiar entre modo oscuro y claro (actualmente system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Volver al principio" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Barra lateral de Documentos" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/DevTacora/docs/pia_2526/">Presentación</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/DevTacora/docs/category/ut1-introducción-a-la-ia">UT1. Introducción a la IA</a><button aria-label="Ampliar la categoría &#x27;UT1. Introducción a la IA&#x27; de la barra lateral" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/DevTacora/docs/category/ut2-python-para-la-ia">UT2. Python para la IA</a><button aria-label="Ampliar la categoría &#x27;UT2. Python para la IA&#x27; de la barra lateral" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist" href="/DevTacora/docs/category/ut3-machine-learning">UT3. Machine Learning</a><button aria-label="Ampliar la categoría &#x27;UT3. Machine Learning&#x27; de la barra lateral" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" href="/DevTacora/docs/category/ut4-deep-learning">UT4. Deep Learning</a><button aria-label="Colapsar categoría &#x27;UT4. Deep Learning&#x27; de la barra lateral" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/DevTacora/docs/pia_2526/ut4_deep_learning/introduccion">Introducción</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--active" tabindex="0" href="/DevTacora/docs/category/fundamentos">Fundamentos</a><button aria-label="Colapsar categoría &#x27;Fundamentos&#x27; de la barra lateral" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/DevTacora/docs/pia_2526/ut4_deep_learning/fundamentos/conceptos-teoricos-primera-red">Conceptos teóricos y primera red neuronal</a></li></ul></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Rastro de navegación"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Página de Inicio" class="breadcrumbs__link" href="/DevTacora/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/DevTacora/docs/category/ut4-deep-learning"><span>UT4. Deep Learning</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/DevTacora/docs/category/fundamentos"><span>Fundamentos</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Conceptos teóricos y primera red neuronal</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">En esta página</button></div><div class="theme-doc-markdown markdown"><header><h1>Conceptos teóricos y primera red neuronal</h1></header><p>En este apartado vamos a entender cómo funciona una red neuronal por dentro.<br>
+<!-- -->No vamos a usar todavía matemáticas complejas, pero sí vamos a abrir la “caja negra”.</p>
+<p>Nuestro objetivo es que entiendas:</p>
+<ul>
+<li>Qué calcula realmente una neurona</li>
+<li>Qué son los pesos y el sesgo</li>
+<li>Cómo se mide el error</li>
+<li>Qué significa entrenar un modelo</li>
+<li>Qué papel juega el <em>learning rate</em></li>
+</ul>
+<p>Usaremos como ejemplo una red muy sencilla que aprende a convertir grados <strong>Celsius a Fahrenheit</strong>.</p>
+<div class="theme-admonition theme-admonition-info admonition_xJq3 alert alert--info"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg></span>Vídeo recomendado</div><div class="admonitionContent_BuS1"><p>Si quieres reforzar lo explicado en este apartado, este vídeo explica de forma muy clara y visual las bases de las redes neuronales y cómo aprende una primera red sencilla:</p><p><a href="https://www.youtube.com/watch?v=iX_on3VxZzk" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=iX_on3VxZzk</a></p><p>Es especialmente útil para entender el ejemplo de Celsius a Fahrenheit y visualizar cómo se ajustan los pesos durante el entrenamiento.</p></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="qué-significa-entrenar-una-red-neuronal">¿Qué significa entrenar una red neuronal?<a href="#qué-significa-entrenar-una-red-neuronal" class="hash-link" aria-label="Enlace directo al ¿Qué significa entrenar una red neuronal?" title="Enlace directo al ¿Qué significa entrenar una red neuronal?">​</a></h2>
+<p>Entrenar una red neuronal significa <strong>ajustar sus parámetros internos para que haga buenas predicciones</strong>.</p>
+<p>Para poder hacer esto necesitamos datos etiquetados, es decir, ejemplos en los que conocemos tanto la entrada como la respuesta correcta. A este tipo de enfoque se le llama <strong>aprendizaje supervisado</strong>, porque el modelo aprende comparando sus predicciones con un valor real que actúa como referencia.</p>
+<p>El proceso general es siempre el mismo:</p>
+<ol>
+<li>Introducimos un dato o conjuntos de datos (entrada).</li>
+<li>La red calcula una predicción.</li>
+<li>Comparamos la predicción con el valor real.</li>
+<li>Medimos el error.</li>
+<li>Ajustamos los parámetros internos.</li>
+<li>Repetimos muchas veces.</li>
+</ol>
+<p>En el ejemplo que veremos en Colab:</p>
+<ul>
+<li>Entrada → grados Celsius</li>
+<li>Salida esperada → grados Fahrenheit</li>
+</ul>
+<p>La red intentará aprender la relación correcta entre ambas.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="el-perceptrón-la-neurona-más-simple">El perceptrón: la neurona más simple<a href="#el-perceptrón-la-neurona-más-simple" class="hash-link" aria-label="Enlace directo al El perceptrón: la neurona más simple" title="Enlace directo al El perceptrón: la neurona más simple">​</a></h2>
+<p>Un perceptrón es la forma más simple de red neuronal: una única neurona conectada a las entradas, sin capas ocultas. Es el bloque básico sobre el que se construyen las redes neuronales profundas.</p>
+<p>Su funcionamiento es muy sencillo:</p>
+<ul>
+<li>Recibe uno o varios valores de entrada.</li>
+<li>Cada entrada tiene un peso asociado.</li>
+<li>Calcula una suma ponderada.</li>
+<li>Produce una salida.</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Gráfico EDA" src="/DevTacora/assets/images/perceptron-1004a8efe1b6b4aaa91f0b0d5627f811.png" width="800" height="400" class="img_ev3q"></p>
+<p>Matemáticamente, el cálculo básico es:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>s</mi><mi>a</mi><mi>l</mi><mi>i</mi><mi>d</mi><mi>a</mi><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>x</mi><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo>+</mo><mi>s</mi><mi>e</mi><mi>s</mi><mi>g</mi><mi>o</mi></mrow><annotation encoding="application/x-tex">salida = \sum_{i=1}^{n} x_i w_i + sesgo</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:2.9291em;vertical-align:-1.2777em"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6514em"><span style="top:-1.8723em;margin-left:0em"><span class="pstrut" style="height:3.05em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em"><span class="pstrut" style="height:3.05em"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em"><span class="pstrut" style="height:3.05em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em"><span style="top:-2.55em;margin-left:-0.0269em;margin-right:0.05em"><span class="pstrut" style="height:2.7em"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em"></span><span class="mord mathnormal">ses</span><span class="mord mathnormal" style="margin-right:0.03588em">g</span><span class="mord mathnormal">o</span></span></span></span></span>
+<p>Si solo tenemos una entrada (como Celsius), el modelo es simplemente:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>=</mo><mo stretchy="false">(</mo><mi>C</mi><mo>×</mo><mi>w</mi><mo stretchy="false">)</mo><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">F = (C × w) + b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em"></span><span class="mord mathnormal" style="margin-right:0.13889em">F</span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em">C</span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em"></span><span class="mord mathnormal" style="margin-right:0.02691em">w</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.6944em"></span><span class="mord mathnormal">b</span></span></span></span></p>
+<p>Donde:</p>
+<ul>
+<li><code>w</code> es el peso</li>
+<li><code>b</code> es el sesgo (bias)</li>
+</ul>
+<p>Curiosamente, la fórmula real de conversión es:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>=</mo><mn>1.8</mn><mi>C</mi><mo>+</mo><mn>32</mn></mrow><annotation encoding="application/x-tex">F = 1.8C + 32</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em"></span><span class="mord mathnormal" style="margin-right:0.13889em">F</span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em"></span><span class="mord">1.8</span><span class="mord mathnormal" style="margin-right:0.07153em">C</span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">32</span></span></span></span></p>
+<p>Eso significa que la red deberá aprender:</p>
+<ul>
+<li>Peso (<code>w</code>) ≈ 1.8</li>
+<li>Sesgo (<code>b</code>) ≈ 32</li>
+</ul>
+<div class="theme-admonition theme-admonition-warning admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>Limitación importante</div><div class="admonitionContent_BuS1"><p>El perceptrón solo puede resolver <strong>problemas lineales</strong>.</p><p>Esto significa que únicamente puede aprender relaciones que puedan representarse mediante una recta (o un hiperplano en dimensiones mayores). En nuestro ejemplo de Celsius → Fahrenheit esto funciona perfectamente, porque la relación entre ambas variables es lineal.</p><p>Sin embargo, si el problema requiere una frontera de decisión curva o una relación no lineal más compleja, un único perceptrón no será suficiente. Para resolver esos casos necesitaremos redes con varias capas, capaces de modelar relaciones más sofisticadas.</p></div></div>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="la-neurona-artificial">La neurona artificial<a href="#la-neurona-artificial" class="hash-link" aria-label="Enlace directo al La neurona artificial" title="Enlace directo al La neurona artificial">​</a></h3>
+<p>Una neurona artificial moderna sigue la misma idea que el perceptrón, pero se usa como bloque de construcción de redes más grandes.</p>
+<p>Cada neurona:</p>
+<ol>
+<li>Recibe entradas.</li>
+<li>Multiplica cada entrada por su peso.</li>
+<li>Suma los resultados.</li>
+<li>Añade un sesgo.</li>
+<li>Produce una salida.</li>
+</ol>
+<p>En redes más complejas se añade una <strong>función de activación</strong>, pero en nuestro ejemplo de Celsius → Fahrenheit estamos ante un problema lineal, por lo que basta con una relación lineal simple.</p>
+<p>Lo importante aquí es entender que:</p>
+<p>👉 Una neurona no “entiende” los datos.<br>
+<!-- -->👉 Solo hace operaciones matemáticas simples.</p>
+<hr>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="pesos-y-sesgo">Pesos y sesgo<a href="#pesos-y-sesgo" class="hash-link" aria-label="Enlace directo al Pesos y sesgo" title="Enlace directo al Pesos y sesgo">​</a></h3>
+<p>Los <strong>pesos</strong> determinan cuánto influye cada entrada en el resultado final.</p>
+<ul>
+<li>Si un peso es grande, esa entrada tiene mucha influencia.</li>
+<li>Si es pequeño, tiene poca.</li>
+</ul>
+<p>El <strong>sesgo (bias)</strong> permite desplazar la función.<br>
+<!-- -->Sin él, la recta siempre pasaría por el origen.</p>
+<p><img decoding="async" loading="lazy" alt="Gráfico EDA" src="/DevTacora/assets/images/grafica-lineal-caacc4a8f16c602b573915676b0a57d4.png" width="686" height="386" class="img_ev3q"></p>
+<p>En nuestro ejemplo:</p>
+<ul>
+<li>El peso ajusta la pendiente.</li>
+<li>El sesgo ajusta el desplazamiento vertical.</li>
+</ul>
+<p>Y lo más importante:</p>
+<p>👉 Los pesos y el sesgo son lo que la red aprende durante el entrenamiento.</p>
+<div class="theme-admonition theme-admonition-info admonition_xJq3 alert alert--info"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg></span>Relación con la regresión lineal</div><div class="admonitionContent_BuS1"><p>Como ya has trabajado con regresión lineal, notarás que esto es exactamente la misma estructura matemática:</p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>y</mi><mo>=</mo><mi>m</mi><mi>x</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">y = mx + b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em"></span><span class="mord mathnormal" style="margin-right:0.03588em">y</span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.6944em"></span><span class="mord mathnormal">b</span></span></span></span></span><p>En regresión lineal:</p><ul>
+<li><code>m</code> es la pendiente.</li>
+<li><code>b</code> es la ordenada en el origen.</li>
+</ul><p>En una neurona:</p><ul>
+<li>El peso (<code>w</code>) cumple el papel de la pendiente.</li>
+<li>El sesgo (<code>b</code>) cumple el papel del término independiente.</li>
+</ul><p>De hecho, un perceptrón sin función de activación no lineal es, en esencia, un modelo de regresión lineal expresado en forma de neurona artificial.</p></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="de-una-neurona-a-una-red">De una neurona a una red<a href="#de-una-neurona-a-una-red" class="hash-link" aria-label="Enlace directo al De una neurona a una red" title="Enlace directo al De una neurona a una red">​</a></h2>
+<p>Una red neuronal no es más que muchas neuronas conectadas entre sí y organizadas en capas:</p>
+<ul>
+<li>Capa de entrada</li>
+<li>Capas ocultas</li>
+<li>Capa de salida</li>
+</ul>
+<p>La información fluye desde la entrada hasta la salida. A este proceso se le llama <strong>forward pass</strong>.</p>
+<p>En nuestro primer ejemplo solo usamos:</p>
+<ul>
+<li>Una entrada</li>
+<li>Una neurona</li>
+<li>Una salida</li>
+</ul>
+<p>Pero el mecanismo interno es el mismo que en redes más profundas.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="función-de-pérdida-loss-function">Función de pérdida (loss function)<a href="#función-de-pérdida-loss-function" class="hash-link" aria-label="Enlace directo al Función de pérdida (loss function)" title="Enlace directo al Función de pérdida (loss function)">​</a></h2>
+<p>Para que la red pueda mejorar, necesita saber qué tan mal lo está haciendo. Ahí entra la <strong>función de pérdida (loss function)</strong>.</p>
+<p>La función de pérdida mide la diferencia entre:</p>
+<ul>
+<li>El valor real</li>
+<li>El valor predicho</li>
+</ul>
+<p>En problemas de <strong>regresión</strong>, como Celsius → Fahrenheit, es común usar el <strong>error cuadrático medio (MSE)</strong>. Esta función penaliza más los errores grandes y permite medir qué tan lejos están nuestras predicciones de los valores reales.</p>
+<p>En problemas de <strong>clasificación</strong>, las funciones de pérdida más habituales son <strong>Binary Cross-Entropy</strong> (para clasificación binaria) y <strong>Categorical Cross-Entropy</strong> (para múltiples clases). Estas funciones no miden simplemente una distancia numérica, sino qué tan buena es la probabilidad que el modelo asigna a la clase correcta.</p>
+<p>Por ello, el resultado de la función de pérdida dependerá de:</p>
+<ul>
+<li>Si la predicción está muy lejos del valor real → pérdida alta.</li>
+<li>Si está cerca → pérdida baja.</li>
+</ul>
+<p>El objetivo del entrenamiento es <strong>minimizar la función de pérdida</strong>.</p>
+<p>Ahora bien, ¿debe llegar a cero?</p>
+<ul>
+<li>En algunos problemas simples (como nuestro ejemplo lineal), podría acercarse mucho a 0.</li>
+<li>En problemas reales, especialmente con datos complejos, lo normal es que nunca llegue exactamente a 0.</li>
+</ul>
+<p>De hecho, una pérdida exactamente 0 en datos de entrenamiento puede ser una señal de que el modelo está memorizando los datos en lugar de aprender patrones generales. Por eso, más adelante veremos la importancia de evaluar también el rendimiento en datos que el modelo no ha visto (test).</p>
+<p>En la práctica, el modelo se entrena con un conjunto de datos (train) y se evalúa con otro distinto (test) para comprobar que generaliza correctamente.</p>
+<p>En resumen, la red intenta encontrar los valores de los pesos y el sesgo que hagan que la pérdida sea lo más pequeña posible.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="épocas-epochs">Épocas (Epochs)<a href="#épocas-epochs" class="hash-link" aria-label="Enlace directo al Épocas (Epochs)" title="Enlace directo al Épocas (Epochs)">​</a></h2>
+<p>Una red neuronal no aprende con una sola pasada por los datos.</p>
+<p>El entrenamiento consiste en repetir el proceso completo varias veces. Cada vez que el modelo recorre todo el conjunto de datos una vez, decimos que ha completado una <strong>época (epoch)</strong>.</p>
+<p>En cada época:</p>
+<ol>
+<li>La red hace predicciones.</li>
+<li>Se calcula la pérdida.</li>
+<li>Se ajustan los pesos y el sesgo.</li>
+</ol>
+<p>Al principio la pérdida suele ser alta.<br>
+<!-- -->A medida que avanzan las épocas, el modelo debería ir reduciendo esa pérdida progresivamente.</p>
+<p>Elegir el número de épocas es importante:</p>
+<ul>
+<li>Muy pocas → el modelo no aprende lo suficiente.</li>
+<li>Demasiadas → puede empezar a memorizar los datos (sobreajuste).</li>
+</ul>
+<p>En nuestro ejemplo de Celsius → Fahrenheit, veremos cómo tras varias épocas el modelo ajusta sus parámetros hasta aproximarse a la fórmula correcta.</p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="learning-rate">Learning rate<a href="#learning-rate" class="hash-link" aria-label="Enlace directo al Learning rate" title="Enlace directo al Learning rate"> ​</a></h2>
+<p>El <strong>learning rate (tasa de aprendizaje)</strong> controla cuánto se ajustan los pesos en cada época.</p>
+<p>Si es:</p>
+<ul>
+<li>🔺 Muy grande → el modelo puede volverse inestable y no converger.</li>
+<li>🔻 Muy pequeño → el entrenamiento será muy lento.</li>
+</ul>
+<p>Es como bajar una montaña:</p>
+<ul>
+<li>Pasos demasiado grandes → puedes tropezar y caerte.</li>
+<li>Pasos demasiado pequeños → tardas mucho en llegar.</li>
+</ul>
+<p>Elegir bien el learning rate es clave para que el modelo aprenda correctamente.</p>
+<div class="theme-admonition theme-admonition-info admonition_xJq3 alert alert--info"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg></span>¿Cómo se ajustan realmente los pesos?</div><div class="admonitionContent_BuS1"><p>El ajuste de los pesos no ocurre “mágicamente”. Intervienen dos elementos clave:</p><ol>
+<li><strong>Backpropagation</strong>: calcula cuánto ha contribuido cada peso al error cometido. Es decir, determina en qué dirección deberían modificarse los pesos para reducir la pérdida.</li>
+<li><strong>Optimizador</strong> (como el descenso por gradiente o Adam): utiliza esa información para actualizar los pesos y el sesgo.</li>
+</ol><p>Aquí es donde entra el <strong>learning rate</strong>: controla el tamaño del paso que da el optimizador en cada actualización.</p><ul>
+<li>Si el learning rate es grande → los pesos cambian mucho en cada paso.</li>
+<li>Si es pequeño → los cambios son más suaves y controlados.</li>
+</ul><p>En resumen:
+Backpropagation calcula <em>cómo</em> deben cambiar los pesos, el optimizador decide <em>actualizarlos</em>, y el learning rate determina <em>cuánto</em> se modifican en cada paso.</p><p>En el siguiente apartado veremos este proceso con más detalle.</p></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="el-ciclo-de-entrenamiento">El ciclo de entrenamiento<a href="#el-ciclo-de-entrenamiento" class="hash-link" aria-label="Enlace directo al El ciclo de entrenamiento" title="Enlace directo al El ciclo de entrenamiento">​</a></h2>
+<p>Podemos resumir todo el proceso así:</p>
+<ol>
+<li>La red recibe una entrada.</li>
+<li>Calcula una predicción.</li>
+<li>Se calcula la pérdida.</li>
+<li>Se ajustan pesos y sesgo.</li>
+<li>Se repite muchas veces.</li>
+</ol>
+<p>Tras suficientes iteraciones, el modelo encuentra valores de peso y sesgo que minimizan el error.</p>
+<p>En nuestro ejemplo, idealmente terminará cerca de:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">peso ≈ 1.8</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">sesgo ≈ 32</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="ejemplo-práctico-celsius--fahrenheit">Ejemplo práctico: Celsius → Fahrenheit<a href="#ejemplo-práctico-celsius--fahrenheit" class="hash-link" aria-label="Enlace directo al Ejemplo práctico: Celsius → Fahrenheit" title="Enlace directo al Ejemplo práctico: Celsius → Fahrenheit">​</a></h2>
+<p>En el Colab implementaremos una red neuronal muy simple (un perceptrón) con:</p>
+<ul>
+<li>Una entrada</li>
+<li>Una neurona</li>
+<li>Un peso</li>
+<li>Un sesgo</li>
+</ul>
+<p>El modelo comenzará con valores aleatorios, por lo que al principio sus predicciones serán incorrectas. A medida que avancen las épocas, irá ajustando el peso y el sesgo para reducir la pérdida y aproximarse a la relación real entre Celsius y Fahrenheit.</p>
+<p>Sin que le proporcionemos explícitamente la ecuación, la red terminará encontrando valores cercanos a:</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>F</mi><mo>=</mo><mn>1.8</mn><mi>C</mi><mo>+</mo><mn>32</mn></mrow><annotation encoding="application/x-tex">F = 1.8C + 32</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em"></span><span class="mord mathnormal" style="margin-right:0.13889em">F</span><span class="mspace" style="margin-right:0.2778em"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em"></span><span class="mord">1.8</span><span class="mord mathnormal" style="margin-right:0.07153em">C</span><span class="mspace" style="margin-right:0.2222em"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em"></span></span><span class="base"><span class="strut" style="height:0.6444em"></span><span class="mord">32</span></span></span></span></span>
+<p>Eso es entrenar una red neuronal: ajustar parámetros internos hasta minimizar el error.</p>
+<p>Más adelante probaremos también una red ligeramente más compleja, con una capa oculta. Resolverá el mismo problema, pero con una estructura más potente. Sin embargo, al aumentar el número de pesos y sesgos, la solución deja de ser tan fácilmente interpretable como una simple ecuación lineal.</p>
+<p>👉 <strong>Puedes abrir el cuaderno aquí:</strong>
+<a href="/DevTacora/assets/files/primera_red_neuronal-607ce1a1053bfd3d4b9ee3ac21f6fb74.ipynb" target="_blank">Colab: Primera red neuronal</a></p>
+<hr>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="actividad-de-seguimiento">Actividad de seguimiento<a href="#actividad-de-seguimiento" class="hash-link" aria-label="Enlace directo al Actividad de seguimiento" title="Enlace directo al Actividad de seguimiento">​</a></h2>
+<p>Piensa en <strong>otro problema que tenga una relación lineal</strong> entre la entrada y la salida.</p>
+<p>Una vez elegido el problema:</p>
+<ol>
+<li>Define un pequeño conjunto de datos de ejemplo (entrada y salida esperada).</li>
+<li>Crea una red neuronal sencilla (un perceptrón).</li>
+<li>Entrena el modelo.</li>
+<li>Comprueba qué peso y sesgo ha aprendido.</li>
+<li>Verifica si se aproxima a la fórmula real.</li>
+<li>Prueba con una arquitectura más compleja.</li>
+</ol>
+<p>Ve jugando con los hiperparámetros para conseguir los mejores resultados.</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Página del documento"><a class="pagination-nav__link pagination-nav__link--prev" href="/DevTacora/docs/category/fundamentos"><div class="pagination-nav__sublabel">Anterior</div><div class="pagination-nav__label">Fundamentos</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#qué-significa-entrenar-una-red-neuronal" class="table-of-contents__link toc-highlight">¿Qué significa entrenar una red neuronal?</a></li><li><a href="#el-perceptrón-la-neurona-más-simple" class="table-of-contents__link toc-highlight">El perceptrón: la neurona más simple</a><ul><li><a href="#la-neurona-artificial" class="table-of-contents__link toc-highlight">La neurona artificial</a></li><li><a href="#pesos-y-sesgo" class="table-of-contents__link toc-highlight">Pesos y sesgo</a></li></ul></li><li><a href="#de-una-neurona-a-una-red" class="table-of-contents__link toc-highlight">De una neurona a una red</a></li><li><a href="#función-de-pérdida-loss-function" class="table-of-contents__link toc-highlight">Función de pérdida (loss function)</a></li><li><a href="#épocas-epochs" class="table-of-contents__link toc-highlight">Épocas (Epochs)</a></li><li><a href="#learning-rate" class="table-of-contents__link toc-highlight">Learning rate</a></li><li><a href="#el-ciclo-de-entrenamiento" class="table-of-contents__link toc-highlight">El ciclo de entrenamiento</a></li><li><a href="#ejemplo-práctico-celsius--fahrenheit" class="table-of-contents__link toc-highlight">Ejemplo práctico: Celsius → Fahrenheit</a></li><li><a href="#actividad-de-seguimiento" class="table-of-contents__link toc-highlight">Actividad de seguimiento</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">
+        <section classname="bg-white border-t border-gray-100">
+      <div classname="max-w-4xl mx-auto px-6 py-16 text-center">
+        <h3 classname="text-2xl font-bold text-gray-900 mb-4">
+          Construyendo conocimiento, línea por línea
+        </h3>
+        <p classname="text-gray-600 leading-relaxed">
+          © 2026 Alicia Cámara Casares - Contenido bajo licencia 
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" classname="text-blue-600 hover:text-blue-700 underline">
+                CC BY-NC-SA 4.0
+              </a>.
+        </p>
+      </div>
+    </section>
+      </div></div></div></footer></div>
+</body>
+</html>
