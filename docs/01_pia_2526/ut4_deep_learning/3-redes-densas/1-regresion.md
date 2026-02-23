@@ -242,7 +242,12 @@ model.fit(
 
 ### ¿En qué fijarnos en TensorBoard?
 
-Una vez que se abre el panel, la pestaña más importante es **Scalars**. Aunque verás varias gráficas, las más útiles son:
+Una vez que se abre el panel, puedes elegir entre visualizar los datos en diferentes pestañas. Las más útiles para monitorizar la evolución del entrenamiento son **Time Series** (vista moderna recomendada) o **Scalars** (vista clásica):
+
+1.  **Time Series:** Es la mejor vista para observar cómo evolucionan las métricas a lo largo del tiempo (épocas). Te permite ver claramente la curva de entrenamiento y validación superpuestas.
+2.  **Scalars:** Muestra exactamente la misma información pero con la interfaz clásica. Es útil si necesitas ajustar el *smoothing* (suavizado) de las curvas de forma más manual.
+
+En cualquiera de las dos pestañas, las gráficas fundamentales a vigilar son:
 1.  **`epoch_loss` / `val_loss`**: Es la gráfica fundamental. Nos dice el error (MSE) en cada época. Es la que usamos para ver si el modelo converge.
 2.  **`epoch_mae` / `val_mae`**: Es la métrica que nosotros entendemos (error en unidades reales). Es muy útil para comunicar resultados.
 
