@@ -248,7 +248,7 @@ Sigue estos pasos para ponerla en línea:
 Puedes descargar el código fuente de este ejemplo en los siguientes enlaces:
 
 👉 **Colab con la exporación del modelo**
-[Colab: Primera red neuronal exportada](../0-colab/primera-red-neuronal-exportada.ipynb)
+[Colab: Primera red neuronal exportada](../0-colab/primera_red_neuronal_exportada.ipynb)
 
 👉 **Código fuente de la página web**
 [VS Code: Celsius a Farenheit](../0-colab/Celsius_Farenheit.zip)
