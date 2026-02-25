@@ -15,7 +15,7 @@ En este apartado veremos cómo utilizar técnicas de **Regularización**, cuyo o
 
 ---
 
-## 1. El Diagnóstico del Overfitting
+## El Diagnóstico del Overfitting
 
 Sabemos que nuestra arquitectura sufre de overfitting cuando observamos una divergencia clara en el panel "Time Series" de TensorBoard:
 
@@ -28,7 +28,7 @@ En el momento en que la curva de validación empieza a empeorar, cada nueva épo
 
 ---
 
-## 2. Parada Temprana (Early Stopping)
+## Parada Temprana (Early Stopping)
 
 Es la técnica de regularización más recomendada, sencilla y efectiva. Si sabemos matemáticamente que el modelo empezará a empeorar a partir de cierta época, ¿por qué no pedimos a Keras que detenga el entrenamiento exactamente en ese punto?
 
@@ -62,7 +62,7 @@ Si **NO** activamos `restore_best_weights=True`, el modelo final en memoria alma
 
 ---
 
-## 3. Dropout (Deserción)
+## Dropout (Deserción)
 
 El **Dropout** es posiblemente la innovación en regularización más popular y replicada del Deep Learning moderno. Su funcionamiento conceptual es sorprendentemente simple pero increíblemente efectivo: consiste en **"apagar" u omitir aleatoriamente un porcentaje de las neuronas** durante cada paso de actualización (*batch*) del entrenamiento.
 
@@ -96,7 +96,7 @@ Cuando pasamos a la fase de evaluación del modelo (`.evaluate()`) o lanzamos pr
 
 ---
 
-## 4. Regularización de Pesos (L1 y L2)
+## Regularización de Pesos (L1 y L2)
 
 A diferencia del Dropout, que altera las rutas computacionales dinámicamente, L1 y L2 son penalizaciones directas incluidas en la Función de Pérdida final que se intenta optimizar. Añaden un castigo matemático proporcional a la magnitud (*tamaño*) de los pesos de nuestra red.
 
@@ -118,7 +118,7 @@ model = tf.keras.Sequential([
 
 ---
 
-## 5. Batch Normalization (Normalización por Lotes)
+## Batch Normalization (Normalización por Lotes)
 
 :::note Diferencias fundamentales en terminología
 Es imprescindible recordar que la capa especial de *Batch Normalization* no tiene absolutamente nada en común con configurar en Keras nuestro tamaño de lote en el `.fit()` (`batch_size=32`).
@@ -142,34 +142,57 @@ model = tf.keras.Sequential([
 
 ---
 
-## 6. Mejores Prácticas: ¿Cuándo y cómo combinarlas?
+## Metodología de Trabajo
 
-Construir correctamente y ajustar por primera vez hiperparámetros se siente más como intuición artística. Especialmente para quienes inician proyectos, surge rápidamente una duda clave frente a las variables disponibles: ¿Cuándo empleo cuál, y bajo qué criterios? Aquí está tu mapa guía sobre estas técnicas fundado sobre estándares del sector corporativo de datos de esta época.
+A la hora de enfrentarnos a un nuevo problema de Deep Learning, la tentación de crear desde el primer momento una red gigantesca repleta de capas de Dropout y Batch Normalization es enorme. Sin embargo, en la práctica profesional se sigue una metodología iterativa y estructurada. El flujo de trabajo habitual se resume en los siguientes pasos:
 
-1.  **Regla maestra universal constante: Early Stopping.**
-    *   **Cuándo usarlo:** **SIEMPRE**. Literalmente, siempre. Nunca restará calidad a la red. Te protege ante tu propio olvido salvando la calidad de los pesos máximos del overfitting pasivo si exageras tus límites.
-2.  **Si evidencias visualmente el Overfitting: Dropout.**
-    *   **Cuándo usarlo:** Ante un diagnóstico transparente por observación en la curva remarcada de `val_loss` que deambula lejos de la zona de confort del conjunto nativo de `loss` interno.
-    *   **Consejo Base:** Ensayos escalonados e incrementales. Entra directamente sumergiendo tasas controladas de castigo modesto inicial (`layers.Dropout(0.2)`). Escala de un máximo extremo hasta ratios del 50% si el dolor a posteriori continúa latente.
-3.  **Para un modelo rígido, largo y bloqueado: Batch Normalization.**
-    *   **Cuándo usarlo:** Si el aprendizaje se traba, y arrancar el `.fit()` no consigue más que gráficas completamente desbocadas con picos caóticos. Aporta estabilización masiva e impone paz inmediata a modelos reacios.
-4.  **¿L1 y L2 (Weight Decays) en redes profundas generales?**
-    *   **Cuándo usarlas:** Salvo que estemos adaptando arquitectos en particular, hoy en día se hallan en posición puramente marginal debido a la gigantesca y versátil competencia del esquema de simple exclusión del *Dropout*.  Basta conocer que existen, pero resérvalos excepcionalmente como arma extra contra un modelo al que una capa normal extrema de un factor superior al 50% en *dropout* le rompa o incapacite sus lógicas conjuntas de aprendizaje final.
-5.  **¿Añadir y engrosarlas en la red libremente fusionando técnicas?**
-    *   **¡Luz Roja! Cuidado absoluto.** Por reflejo asumimos equivocadamente sumar capas de *Dropout* entrelazadas activamente frente a capas puras de *Batch Normalization*. Paradójicamente (y por evidencias en investigación técnica directa) chocan radicalmente y empobrecen dramáticamente su función debido a que cada una le miente o trastoca la distribución base pre-modificada con la que intenta predecir o calibrar el anterior componente.
-    *   **Protocolo Base recomendatorio de progreso escalable:**
-        1. Encendido inicial con Early Stopping.
-        2. Detectado el desbalance: Inclusión escalable en porcentajes controlados de capas de separación (Dropout).
-        3. ¿Resultados sin solventar o no convergen?  Intercambia. Descarta los porcentajes agresivos perjudiciales y en este otro experimento diferente, substituye de golpe el componente y ensaya insertando *Batch Normalization* para obligar a empujar la estabilización desde otro camino distinto a las bajas estadísticas.
+1. **Construir un modelo base simple (Baseline):**
+   Comienza con una arquitectura muy sencilla, sin regularización. Tu único objetivo inicial es lograr que el modelo "aprenda" algo, es decir, que la pérdida en entrenamiento (`loss`) empiece a disminuir y sus métricas superen el rendimiento de hacer predicciones aleatorias.
+
+2. **Forzar el Overfitting (Escalar la capacidad):**
+   Para poder regularizar una red, primero debes asegurarte de que tiene la capacidad suficiente para asimilar toda la complejidad de los datos (y de sobra). Si tu modelo base no sufre de *overfitting*, amplía la arquitectura (añade más capas o más neuronas por capa). Debes llegar a ese punto en el que TensorBoard te muestre de manera evidente que el modelo está memorizando: el `loss` de entrenamiento cae hacia cero, mientras que el `val_loss` se estanca o asciende.
+
+3. **Aplicar Regularización para "domar" el modelo:**
+   Una vez que dispones de un modelo musculoso que claramente está sobreajustando, es el momento de aplicar las técnicas descritas en este apartado para cerrarle el paso a la memorización en crudo y obligarlo a generalizar:
+   * **Reduce su tamaño:** La regularización más elemental es simplemente podar capas o neuronas si la ampliación del paso 2 fue desmesurada.
+   * **Introduce Early Stopping:** Añádelo siempre como medida de seguridad, aunque sea con una "paciencia" holgada.
+   * **Introduce Dropout:** Añádelo gradualmente (ej. tasas del 20% al 30%) a continuación de las capas densas más voluminosas.
+   * **Suma Batch Normalization:** Si aprecias mucha inestabilidad o picos abruptos en las curvas durante el entrenamiento.
+
+4. **Iterar y refinar (Tuning):**
+   Aquí entra el ciclo de validación empírica. Analiza las gráficas en TensorBoard de cada prueba, ajusta la severidad de tus capas de Dropout o prueba alternativas como regularizadores de peso (L2) si es imperativo. El estado óptimo se alcanza cuando las curvas de entrenamiento y validación logran descender de la mano manteniéndose lo más cerca la una de la otra antes de que el Early Stopping decida intervenir.
+
+:::tip En resumen
+La filosofía de trabajo se condensa en tres fases:   
+**1.** Haz un modelo mínimo que sea capaz de aprender algo.   
+**2.** Hazlo tan grande que acabe memorizando (y sobreajustando).   
+**3.** Somételo a regularización matemática para forzarlo a generalizar.  
+:::
+
+
+## Caso Práctico
+
+En este caso práctico, vamos a consolidar lo aprendido trabajando nuevamente sobre el conjunto de datos de viviendas. Nuestro objetivo será construir primero una red demasiado compleja para forzar de manera deliberada el sobreajuste (*overfitting*). A continuación, aplicaremos la metodología de trabajo introduciendo progresivamente **Early Stopping** y **Dropout** para observar empíricamente en TensorBoard cómo logramos controlar esas curvas de validación.
+
+Puedes acceder al notebook con el código completo desde este enlace:
+
+👉 [Google Colab: regularizacion_california_housing_redes_densas](../0-colab/regularizacion_california_housing_redes_densas.ipynb)
 
 ---
 
-## 7. Caso Práctico: Comparativa en TensorBoard
+## Actividad de Seguimiento
 
-La asimilación e internalización definitiva de regularizadores abstractos resulta siempre imprecisa leyéndolos bajo textos que puramente operables mediante demostraciones reales visualizando contrastes dinámicos.
+Es tu turno de aplicar esta misma metodología de regularización a los ejercicios que ya resolviste en los dos apartados anteriores. Tu misión es recuperar esos notebooks y tratar de mejorar el rendimiento y la generalización de tus modelos:
 
-En las correspondientes tutorías adjuntas que realizaremos, someteremos esto al escenario final práctico, trazando el experimento explícito bajo estas directrices:
+1. **Problema de Regresión (Bike Sharing Dataset):**
+   * Recupera tu notebook de la primera práctica.
+   * Modifica la arquitectura para forzar un claro *overfitting* observable en TensorBoard.
+   * Aplica **Early Stopping** y combínalo con capas de **Dropout** para acotar el problema. 
+   * Compara los resultados: ¿Has conseguido un error (RMSE o MAE) en validación/test mejor que en tus primeros intentos sin regularizar?
 
-1.  **El "Gran Memorizador Descontrolado":** Levantaremos un diseño intencionadamente saturado en exceso para el pequeño desafío (una red de más de 6 capas apiladas con cientos de neuronas por tramo). Procederemos a entrenarlo sin limitación. Registraremos la gráfica resultante donde veremos qué significa descaradamente forzar un memorizado puro con "Overfitting" fulminante hacia los datos internos desde cero sin importar reevaluaciones nuevas a la muestra apartada de monitorización local.
-2.  **El Sistema Penalizado y Corregido (Regularizado):** Copiaremos integral y ciegamente el volumen arquitectónico inicial anterior agregando los correctores: Introducción activa en capas de Dropout intermedio para desactivar ese comportamiento de dependencias directas de memoria. Por fin, envolveremos el proceso blindado aplicando su Early Stopping correspondiente.
-3.  **Estudio Clínico Final Combinado:** Sobre nuestro servidor gráfico uniremos interponiendo las firmas estadísticas y en el punto concreto donde originalmente la estructura de red del experimento de partida sufría sin fin un desajuste y destrozos contundentes de rendimiento se convertirá a tiempo total, al aplicar penalizaciones, como una progresión lineal equilibrada que garantiza y retiene la valía predictiva del conjunto sin destruir el resultado a aplicar exteriormente.
+2. **Problema de Clasificación (Employees Dataset):**
+   * Abre tu notebook de la práctica de clasificación (predicción de abandono o *attrition*).
+   * Aplica la estrategia de escalado y posterior regularización.
+   * Aprovecha para experimentar también con **Batch Normalization** dentro de la arquitectura.
+   * Analiza cómo impacta esta regularización en tu matriz de confusión final y en las métricas de clasificación sobre los datos de test.
+
