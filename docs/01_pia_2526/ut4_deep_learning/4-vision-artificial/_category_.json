@@ -1,9 +1,0 @@
-{
-    "label": "Visión Artificial",
-    "position": 3,
-    "link": {
-        "type": "generated-index",
-        "title": "Visión Artificial con Deep Learning",
-        "description": "Exploración de técnicas de visión artificial, desde el tratamiento de imágenes con redes densas hasta arquitecturas avanzadas como CNNs, Data Augmentation y Transfer Learning para el reconocimiento visual."
-    }
-}
