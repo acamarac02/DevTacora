@@ -11,7 +11,21 @@ Si entrenamos un modelo complejo con un dataset pequeño, la red acabará memori
 
 ---
 
-## 1. El Problema: El Overfitting y la Escasez de Datos
+## 1. Preprocesamiento Base: Unificando la Entrada
+
+Antes de hablar de "aumentar" los datos, debemos asegurar que todos nuestros datos tengan el mismo formato. En un proyecto real, las imágenes pueden venir de diferentes cámaras, móviles o internet, cada una con una resolución distinta.
+
+Las redes neuronales convolucionales requieren que la entrada sea **fija** (ej: todas las imágenes deben ser de 180x180 píxeles).
+
+### Resizing y Rescaling
+Para que la red aprenda mejor, solemos aplicar tres pasos en este orden:
+
+1.  **Resizing**: Ajusta el tamaño de la imagen (ej: 180x180). Tip: usa `crop_to_aspect_ratio=True` para no distorsionar.
+2.  **Rescaling**: Comprime los píxeles de [0, 255] al rango [0, 1] o [-1, 1].
+
+---
+
+## 2. El Problema: El Overfitting y la Escasez de Datos
 
 Cuando una red neuronal tiene millones de parámetros pero solo unos pocos miles de imágenes para entrenar, ocurre lo siguiente:
 *   La red detecta detalles irrelevantes (ej: una mancha específica en el fondo de una foto de un perro).
@@ -22,7 +36,7 @@ Cuando una red neuronal tiene millones de parámetros pero solo unos pocos miles
 
 ---
 
-## 2. ¿Qué es el Data Augmentation?
+## 3. ¿Qué es el Data Augmentation?
 
 Consiste en **generar nuevas muestras de entrenamiento a partir de las existentes**, aplicándoles transformaciones aleatorias que no cambian el significado de la imagen (la etiqueta).
 
@@ -30,9 +44,9 @@ Si a una foto de un gato le aplicamos una rotación de 10 grados, **sigue siendo
 
 ---
 
-## 3. Técnicas de Transformación Comunes
+## 4. Técnicas de Transformación Comunes
 
-### 3.1. Transformaciones Geométricas
+### 4.1. Transformaciones Geométricas
 Son las más utilizadas ya que alteran la posición de los objetos:
 *   **Horizontal / Vertical Flip**: Voltear la imagen como en un espejo. (Cuidado: en dígitos como el "7", un flip horizontal lo convierte en algo irreconocible, pero en fotos de perros es perfecto).
 *   **Rotation**: Rotar la imagen un número aleatorio de grados.
@@ -40,7 +54,7 @@ Son las más utilizadas ya que alteran la posición de los objetos:
 *   **Width/Height Shift**: Desplazar la imagen horizontal o verticalmente.
 *   **Shear**: Aplicar una distorsión de "cizalla" (inclinar el objeto).
 
-### 3.2. Transformaciones de Color y Brillo
+### 4.2. Transformaciones de Color y Brillo
 Ayudan a que el modelo sea robusto a las condiciones ambientales:
 *   Cambiar el brillo (*brightness*).
 *   Ajustar el contraste o la saturación.
@@ -50,7 +64,7 @@ Ayudan a que el modelo sea robusto a las condiciones ambientales:
 
 ---
 
-## 4. Implementación Moderna en Keras (Preprocessing Layers)
+## 5. Implementación Moderna en Keras (Preprocessing Layers)
 
 Tradicionalmente se usaba `ImageDataGenerator`, pero la forma moderna y recomendada en TensorFlow 2.x es usar **Capas de Preprocesamiento**. Se añaden directamente al modelo como si fueran capas `Conv2D`.
 
@@ -65,23 +79,30 @@ data_augmentation = models.Sequential([
 
 # Se integra al principio del modelo
 model = models.Sequential([
-  data_augmentation, # <--- ¡Aquí ocurre la magia!
-  layers.Conv2D(32, (3, 3), activation='relu', input_shape=(180, 180, 3)),
+  # 1. Capas de Preprocesamiento Base
+  layers.Resizing(180, 180, crop_to_aspect_ratio=True),
+  layers.Rescaling(1/255.0),
+
+  # 2. Capas de Data Augmentation (solo activas en entrenamiento)
+  data_augmentation, 
+  
+  # 3. Resto de la arquitectura CNN
+  layers.Conv2D(32, (3, 3), activation='relu'), # Ya no hace falta input_shape aquí
   layers.MaxPooling2D((2, 2)),
-  # ... resto de la red ...
+  # ...
 ])
 ```
 
-> [!TIP]
-> **¿Esto ocurre en el disco?**  
-> No. Las transformaciones se calculan **en memoria y en tiempo real** (normalmente en la GPU) mientras el modelo está entrenando. El dataset original en el disco no cambia.
->
-> **¿Y en la fase de test?**  
-> Keras es inteligente: estas capas de "Random" **solo se activan durante el entrenamiento**. Al usar `model.evaluate()` o `model.predict()`, las capas se desactivan automáticamente para no alterar las imágenes de prueba.
+:::tip
+**¿Esto ocurre en el disco?**  
+No. Las transformaciones se calculan **en memoria y en tiempo real** (normalmente en la GPU) mientras el modelo está entrenando. El dataset original en el disco no cambia.
 
+**¿Y en la fase de test?**  
+Keras es inteligente: estas capas de "Random" **solo se activan durante el entrenamiento**. Al usar `model.evaluate()` o `model.predict()`, las capas se desactivan automáticamente para no alterar las imágenes de prueba.
+:::
 ---
 
-## 5. Impacto en la Generalización
+## 6. Impacto en la Generalización
 
 Al usar Data Augmentation, la curva de pérdida (*loss*) de entrenamiento bajará más despacio (porque el problema se ha vuelto "más difícil" al variar las imágenes), pero la curva de validación se mantendrá mucho más cerca de la de entrenamiento.
 
@@ -89,7 +110,7 @@ Al usar Data Augmentation, la curva de pérdida (*loss*) de entrenamiento bajar�
 
 ---
 
-## 6. Demo: Clasificador de Perros y Gatos
+## 7. Demo: Clasificador de Perros y Gatos
 
 Para ver esto en acción, utilizaremos un dataset clásico de Kaggle: **Dogs vs Cats**. Es un dataset donde las imágenes tienen diferentes tamaños, luces y fondos, lo que lo hace ideal para aplicar estas técnicas.
 
