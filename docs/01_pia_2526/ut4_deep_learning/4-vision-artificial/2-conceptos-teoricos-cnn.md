@@ -136,7 +136,7 @@ Ahora que conocemos la teoría, vamos a aplicarla al mismo problema de los dígi
 
 *   👉 **[Abrir Cuaderno: MNIST Dígitos con CNN](../0-colab/mnist_digitos_cnn.ipynb)**
 *   🌐 **[Web App: Prueba el modelo desplegado](https://pia-mnist-cnn.netlify.app/)**
-*   📦 **[Descargar Código Fuente de la Web](../0-colab/mnist_cnn-web.zip)**
+*   📦 **[Descargar Código Fuente de la Web](../0-colab/mnist_cnn_web.zip)**
 
 ---
 
