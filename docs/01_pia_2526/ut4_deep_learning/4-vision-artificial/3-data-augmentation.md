@@ -109,7 +109,7 @@ No todas las técnicas son útiles para todos los problemas. La elección depend
 
 ---
 
-## 6. Implementación Moderna en Keras (Preprocessing Layers)
+## 6. Implementación Moderna en Keras
 
 Tradicionalmente se usaba `ImageDataGenerator`, pero la forma moderna y recomendada en TensorFlow 2.x es usar **Capas de Preprocesamiento**. Se añaden directamente al modelo como si fueran capas `Conv2D`.
 
@@ -127,8 +127,8 @@ data_augmentation = models.Sequential([
 model = models.Sequential([
   # --- BLOQUE DE PREPROCESAMIENTO ---
   # Unificamos tamaño y normalizamos píxeles
-  layers.Resizing(180, 180, crop_to_aspect_ratio=True),
-  layers.Rescaling(1./255),
+  # Esta capa la creamos en apartados anteriores
+  preprocessing_base,
   
   # Aplicamos el aumento de datos (solo se activará en entrenamiento)
   data_augmentation,
@@ -199,7 +199,7 @@ Para ver esto en acción, utilizaremos un dataset clásico de Kaggle: **Dogs vs 
 
 ---
 
-## Actividad Sugerida: El Reto de las Manos
+## Actividad Sugerida: Aplicación a Fashion MNIST
 
 ¿Recuerdas el dataset de **Fashion MNIST**? Aunque las prendas suelen estar centradas, podrías probar lo siguiente:
 
