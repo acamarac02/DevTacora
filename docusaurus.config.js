@@ -132,7 +132,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ['java', 'groovy', 'bash', 'gradle']
+        additionalLanguages: ['java', 'groovy', 'bash', 'gradle', 'docker']
       },
     }),
   plugins: [
@@ -156,7 +156,7 @@ const config = {
 
 
 
-  
+
 };
 
 export default config;
