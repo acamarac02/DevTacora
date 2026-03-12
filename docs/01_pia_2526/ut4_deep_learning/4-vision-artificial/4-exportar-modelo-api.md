@@ -344,7 +344,7 @@ CMD ["python", "main.py"]
 
 Puedes descargar el proyecto completo listo para funcionar desde el siguiente enlace:
 
-👉 **[Descargar Proyecto: PerrosGatos.zip](../0-colab/perros_gatos_api.zip)**
+👉 **[Descargar Proyecto: PerrosGatos.zip](../0-colab/PerrosGatos.zip)**
 
 :::info 
 **Nota sobre los modelos:** Debido a que GitHub no permite subir archivos que superen los 100MB, la carpeta `modelos` del zip no contiene todos los archivos `.keras` necesarios. 
