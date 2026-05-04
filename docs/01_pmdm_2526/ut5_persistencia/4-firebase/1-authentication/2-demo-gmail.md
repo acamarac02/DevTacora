@@ -23,6 +23,33 @@ El uso de estas dos tecnologías independientes supone que el login con Google e
 
 - **Autenticar el usuario en Firebase Auth**: Se usa el ID Token obtenido para crear una credencial (`AuthCredential`), que luego se envía a Firebase para autenticar al usuario dentro de la app.  
 
+Para entender mejor cómo interactúan los distintos componentes de nuestra arquitectura (MVVM + Repository) con Google y Firebase, observa el siguiente diagrama de secuencia:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Usuario
+    participant UI as LoginActivity
+    participant Google as Google Sign-In
+    participant VM as AuthViewModel
+    participant Repo as AuthRepository
+    participant Firebase as Firebase Auth
+
+    Usuario->>UI: Clic en botón de Google
+    UI->>Google: Solicita selector de cuentas
+    Google-->>Usuario: Muestra ventana de cuentas
+    Usuario->>Google: Selecciona cuenta
+    Google-->>UI: Devuelve ID Token (idToken)
+    UI->>VM: loginWithGoogle(idToken)
+    VM->>Repo: loginWithGoogle(idToken)
+    Repo->>Repo: Crea AuthCredential(idToken)
+    Repo->>Firebase: signInWithCredential(credential)
+    Firebase-->>Repo: Retorna FirebaseUser
+    Repo-->>VM: Notifica éxito (callback)
+    VM-->>UI: Actualiza estado a Success
+    UI-->>Usuario: Navega a MainActivity
+```
+
 ---
 
 ## Paso 1. Habilitar Google Sign-In en Firebase
