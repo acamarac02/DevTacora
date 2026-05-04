@@ -1,0 +1,8 @@
+{
+  "label": "Automatización (n8n)",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Implementación del mismo bot de Telegram utilizando flujos visuales en n8n."
+  }
+}

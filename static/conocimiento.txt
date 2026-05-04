@@ -1,0 +1,49 @@
+# GUÍA DEL ESTUDIANTE - CURSO DE ESPECIALIZACIÓN EN IA Y BIG DATA
+
+## 1. Introducción al Curso
+Bienvenido al Curso de Especialización en Inteligencia Artificial y Big Data. Este programa está diseñado para dotar al alumnado de las competencias necesarias para desarrollar sistemas de IA, procesar grandes volúmenes de datos y aplicar modelos de Machine Learning y Deep Learning en entornos empresariales reales.
+
+## 2. Horarios y Asistencia
+El curso se imparte en modalidad presencial de lunes a viernes.
+* **Horario de clases:** De 15:30 a 21:30 horas.
+* **Puntualidad:** No se permitirá la entrada al aula pasados 10 minutos del inicio de la clase para no interrumpir el ritmo docente.
+* **Asistencia:** La asistencia es obligatoria.
+  * Para mantener el derecho a la **evaluación continua**, el alumno no debe superar el **15% de faltas injustificadas** sobre el total de horas de cada módulo.
+  * Las faltas médicas deben justificarse mediante un documento oficial firmado en un plazo máximo de 3 días hábiles.
+
+## 3. Estructura de Módulos y Profesores
+El curso se divide en los siguientes módulos profesionales:
+
+* **Programación de Inteligencia Artificial (PIA):** 
+  * Profesor: Jorge Castro.
+  * Horas semanales: 6 horas.
+  * Temario: Python avanzado, Transformers, LLMs, Visión Artificial (YOLO) e Integración de APIs.
+* **Sistemas de Big Data:**
+  * Profesora: Ana Martínez.
+  * Horas semanales: 5 horas.
+  * Temario: Arquitecturas Hadoop, Spark, bases de datos NoSQL y Cloud Computing.
+* **Modelos de Inteligencia Artificial:**
+  * Profesor: Carlos Ruiz.
+  * Horas semanales: 5 horas.
+  * Temario: Matemáticas para IA, Estadística, Regresiones, Árboles de Decisión y Redes Neuronales.
+
+## 4. Criterios de Evaluación y Calificación
+Para superar cada módulo, es necesario obtener una calificación mínima de **5.0 puntos** sobre 10.
+
+La nota final de cada módulo se compone de:
+* **Exámenes teóricos/prácticos:** 50% de la nota.
+* **Proyectos y entregas continuas:** 40% de la nota.
+* **Actitud y participación en clase:** 10% de la nota.
+
+*Nota sobre el fraude académico:* Copiar en un examen o plagiar un proyecto (incluyendo el uso de herramientas de IA sin citar o sin permiso del profesor) conllevará un **0.0 automático** en la convocatoria actual, sin derecho a recuperación.
+
+## 5. El Proyecto Final
+Al terminar el segundo trimestre, los alumnos deberán desarrollar un Proyecto Integrador de Inteligencia Artificial y Big Data.
+* **Grupos:** Máximo 3 personas por grupo.
+* **Fecha de entrega:** Primera semana de junio.
+* **Defensa:** Exposición oral de 15 minutos ante un tribunal de profesores, seguida de 10 minutos de preguntas.
+
+## 6. Normas de Uso del Aula de Informática
+* No está permitido comer ni beber cerca de los equipos informáticos.
+* Los ordenadores del centro deben utilizarse exclusivamente para fines educativos. Queda prohibido el uso de videojuegos o la descarga de software no autorizado.
+* Al finalizar la clase, cada alumno debe dejar su puesto ordenado y el equipo correctamente apagado.

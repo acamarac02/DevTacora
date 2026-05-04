@@ -1,0 +1,8 @@
+{
+  "label": "Vía Tradicional (Python)",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Implementación de un bot de Telegram con RAG utilizando Python y librerías estándar."
+  }
+}

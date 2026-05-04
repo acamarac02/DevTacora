@@ -1,0 +1,8 @@
+{
+  "label": "Automatización",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Aprende a integrar modelos de Inteligencia Artificial en aplicaciones reales comparando el desarrollo tradicional en Python con la automatización visual mediante n8n. Construiremos un bot de Telegram con arquitectura RAG desde cero."
+  }
+}
