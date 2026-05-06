@@ -30,18 +30,26 @@ Asegúrate de tener Docker Desktop instalado y corriendo en tu ordenador.
 
 ## Paso previo: Obtener una URL pública (Túnel)
 
-Para que Telegram pueda enviar mensajes a tu n8n local, necesitas una dirección `https`. Utilizaremos **ngrok**, la herramienta estándar para crear túneles seguros. **Debes hacer esto antes de crear el contenedor de n8n.**
+Para que Telegram pueda enviar mensajes a tu n8n local, necesitas una dirección `https` fija. Utilizaremos **ngrok** para crear un túnel seguro con un **dominio permanente gratuito**. **Haz esto antes de crear el contenedor de n8n.**
 
-1. Descarga **ngrok** desde [ngrok.com](https://ngrok.com/download) y regístrate para obtener tu **Authtoken** gratuito.
-2. En tu terminal, configura tu token (solo la primera vez):
+1. **Registro**: Crea una cuenta en [ngrok.com](https://ngrok.com/) y obtén tu **Authtoken**.
+2. **Configuración inicial**: Abre tu terminal y configura tu token:
    ```bash
    ngrok config add-authtoken TU_TOKEN_AQUÍ
    ```
-3. Lanza el túnel apuntando al puerto de n8n:
+3. **Lanzar el túnel**:
+   Usa el siguiente comando sustituyendo tu dominio:
    ```bash
    ngrok http 5678
    ```
 4. **Copia y guarda** la URL que empieza por `https://...` (ej: `https://1234-56.ngrok-free.dev`). La usaremos en el siguiente paso.
+
+:::tip[¿Cómo volver a conectar otro día?]
+Si cierras la terminal o apagas el PC, solo tienes que volver a ejecutar el comando del paso 4, indicando la url. Si olvidas cuál era tu dominio, puedes verlo siempre en tu [Dashboard de ngrok](https://dashboard.ngrok.com/domains). ¡Tu URL no cambiará nunca!
+```bash
+ngrok http 5678 --domain tu-dominio-elegido.ngrok-free.dev
+```
+:::
 
 ---
 
