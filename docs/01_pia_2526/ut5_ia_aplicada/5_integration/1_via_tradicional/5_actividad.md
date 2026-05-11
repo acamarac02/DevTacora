@@ -1,5 +1,5 @@
 ---
-title: Actividad de Ampliación
+title: Actividad de Seguimiento
 sidebar_position: 5
 ---
 
@@ -212,3 +212,11 @@ Para dar por válida la actividad, tu Agente debe ser capaz de responder a estas
 :::tip[Reflexión]
 Observa los logs en tu terminal. ¿Cómo decide el Agente qué herramienta usar en cada caso? Fíjate en cómo influye la descripción que has puesto en el `docstring` de la función `pokemon_tool`.
 :::
+
+---
+
+## Entrega
+
+Para la evaluación de esta actividad, se deberá entregar la carpeta completa del proyecto. **Es necesario excluir** el directorio del entorno virtual (`.venv`) y el archivo de variables de entorno (`.env`) antes de realizar la entrega. 
+
+Fecha límite de entrega: **miércoles 13 de mayo a las 23:59h**.
