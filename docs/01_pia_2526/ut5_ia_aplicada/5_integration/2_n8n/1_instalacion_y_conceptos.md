@@ -57,26 +57,24 @@ ngrok http 5678 --domain tu-dominio-elegido.ngrok-free.dev
 
 Una vez que tengas tu URL de ngrok, elige una de estas dos opciones para instalar n8n.
 
-### Opción A: Mediante la interfaz visual de Docker Desktop
+### Opción A: Mediante Docker Desktop (Visual)
 
 1. Abre **Docker Desktop**.
-2. Utiliza la barra de búsqueda superior y escribe `n8nio/n8n`.
+2. En la barra de búsqueda superior, escribe `n8nio/n8n`.
 3. Localiza la imagen oficial y haz clic en el botón azul **Run**.
 4. Despliega el menú **Optional settings** para configurar el entorno:
    - **Container Name**: Escribe `n8n_pia`.
    - **Ports** (Host Port): Escribe `5678`.
    - **Volumes** (Host Path): Crea un volumen llamado `n8n_data` y asígnalo a la ruta del contenedor `/home/node/.n8n-files`.
-   - **Environment Variables**: Para que Telegram funcione en local, necesitamos una URL pública. Usaremos una variable llamada `WEBHOOK_URL`.
+   - **Environment Variables**: Añade la URL que guardaste en el paso previo:
      - **Key**: `WEBHOOK_URL`
-     - **Value**: *(Aquí pondremos la URL que nos dé nuestro túnel externo)*.
+     - **Value**: `https://tu-url-de-ngrok.app`
 
-:::important[Importante: Túneles externos]
-Como n8n ya no ofrece un servicio de túnel propio, usaremos herramientas externas como **Localtunnel** o **ngrok** para que Telegram pueda comunicarse con nuestro ordenador. 
-:::
+   <div style={{ textAlign: 'center' }}>
+     <img src={require('../0-img/nuevo-contenedor.png').default} width="500" alt="Nuevo contenedor" />
+   </div>
 
 5. Pulsa **Run**. n8n estará disponible en `http://localhost:5678`.
-
----
 
 
 :::tip[¿Qué es un Volumen en Docker?]
@@ -101,25 +99,6 @@ docker run -d --name n8n_pia -p 5678:5678 -e WEBHOOK_URL=https://<tu-url>.ngrok-
     *(Nota: Usamos localhost para entrar al editor, la URL de ngrok es solo para que Telegram se comunique con n8n).*
 2.  Te aparecerá un asistente para crear tu cuenta de administrador local. Rellena tus datos (nombre, email y contraseña).
 3.  ¡Listo! Ya estás dentro del lienzo de trabajo (*Canvas*) de n8n.
-
-### Opción A: Mediante Docker Desktop (Visual)
-
-1. Abre **Docker Desktop**.
-2. En la barra de búsqueda superior, escribe `n8nio/n8n`.
-3. Localiza la imagen oficial y haz clic en el botón azul **Run**.
-4. Despliega el menú **Optional settings** para configurar el entorno:
-   - **Container Name**: Escribe `n8n_pia`.
-   - **Ports** (Host Port): Escribe `5678`.
-   - **Volumes** (Host Path): Crea un volumen llamado `n8n_data` y asígnalo a la ruta del contenedor `/home/node/.n8n-files`.
-   - **Environment Variables**: Añade la URL que guardaste en el paso previo:
-     - **Key**: `WEBHOOK_URL`
-     - **Value**: `https://tu-url-de-ngrok.app`
-
-   <div style={{ textAlign: 'center' }}>
-     <img src={require('../0-img/nuevo-contenedor.png').default} width="500" alt="Nuevo contenedor" />
-   </div>
-
-5. Pulsa **Run**. n8n estará disponible en `http://localhost:5678`.
 
 ---
 

@@ -72,5 +72,5 @@ Para lograrlo, ten en cuenta estas **pistas**:
 
 ### Entrega 
 
-* **Plazo máximo**: lunes 18 de mayo a las 23:59
+* **Plazo máximo**: domingo 17 de mayo a las 23:59
 * **Entrega**: fichero del workflow en formato *.json*. 
