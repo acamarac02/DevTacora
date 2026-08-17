@@ -1,0 +1,8 @@
+{
+  "label": "UT2. Interfaces Gráficas con Widgets",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Estudio en profundidad de los componentes de interfaz (Widgets) de Flutter: contenedores, alineaciones, listas dinámicas eficientes y la diferencia entre Stateless y Stateful Widgets junto con setState."
+  }
+}

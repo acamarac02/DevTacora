@@ -14,6 +14,15 @@ import rehypeKatex from 'rehype-katex';
 const config = {
   title: 'DevTacora',
   favicon: 'img/favicon.ico',
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'text/javascript',
+      },
+      innerHTML: `window.gtag = window.gtag || function() { (window.dataLayer = window.dataLayer || []).push(arguments); };`,
+    },
+  ],
 
   // Set the production url of your site here
   url: 'https://acamarac02.github.io',
@@ -95,6 +104,18 @@ const config = {
             label: 'PMDM',
           },
           {
+            type: 'docSidebar',
+            sidebarId: 'dam_2627_Sidebar',
+            position: 'left',
+            label: 'DAM 26/27',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'pia_2627_Sidebar',
+            position: 'left',
+            label: 'PIA 26/27',
+          },
+          {
             to: '/docs/licencia',
             label: 'Licencia',
             position: 'right',
@@ -132,18 +153,10 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ['java', 'groovy', 'bash', 'gradle', 'docker']
+        additionalLanguages: ['java', 'groovy', 'bash', 'gradle', 'docker', 'dart']
       },
     }),
-  plugins: [
-    [
-      '@docusaurus/plugin-google-gtag',
-      {
-        trackingID: 'G-7WCKN9ZY1F',
-        anonymizeIP: true,
-      },
-    ]
-  ],
+  plugins: [],
   stylesheets: [
     {
       href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',

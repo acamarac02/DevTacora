@@ -1,0 +1,8 @@
+{
+  "label": "UT4. Entrada de Datos y Formularios",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Entrada de datos interactiva del usuario: campos de texto, controladores de edición, claves globales de formulario para validación de datos, selectores y controles avanzados."
+  }
+}

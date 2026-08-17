@@ -1,0 +1,8 @@
+{
+  "label": "UT1. Introducción a Dart y Flutter",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Fundamentos del lenguaje de programación Dart y primeros pasos con el SDK de Flutter. Aprenderemos la sintaxis básica, Programación Orientada a Objetos, asincronía y la arquitectura de componentes de Flutter."
+  }
+}

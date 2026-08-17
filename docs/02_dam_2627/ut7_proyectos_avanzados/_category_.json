@@ -1,0 +1,8 @@
+{
+  "label": "UT7. Integración Nativa y Despliegue",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "description": "Acceso al hardware del dispositivo mediante image_picker (cámara y galería) y proceso de preparación, firma y compilación de la APK de producción."
+  }
+}

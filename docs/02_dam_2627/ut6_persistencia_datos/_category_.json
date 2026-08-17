@@ -1,0 +1,8 @@
+{
+  "label": "UT6. Persistencia Local y Caché",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "description": "Almacenamiento de preferencias del usuario con shared_preferences, bases de datos relacionales en local con Sqflite y diseño de estrategias de sincronización offline-first."
+  }
+}

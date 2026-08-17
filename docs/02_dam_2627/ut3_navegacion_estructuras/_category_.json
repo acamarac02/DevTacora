@@ -1,0 +1,8 @@
+{
+  "label": "UT3. Navegación y Flujo de la Aplicación",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Navegación entre pantallas en Flutter. Del Navigator 1.0 (imperativo) con paso de parámetros y menús avanzados (Tabs y Drawers) a la navegación declarativa moderna utilizando GoRouter."
+  }
+}
