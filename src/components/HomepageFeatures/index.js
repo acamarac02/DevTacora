@@ -11,12 +11,21 @@ import {
 
 // ===== Componente de tarjeta de asignatura =====
 const SubjectCard = ({ subject }) => {
+  const isClickable = Boolean(subject.link);
+
   const handleCardClick = () => {
-    window.location.href = subject.link;
+    if (isClickable) {
+      window.location.href = subject.link;
+    }
   };
 
   return (
-    <div onClick={handleCardClick} className="group relative bg-[var(--ifm-card-background-color)] rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col h-full">
+    <div
+      onClick={isClickable ? handleCardClick : undefined}
+      className={`group relative bg-[var(--ifm-card-background-color)] rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col h-full ${
+        isClickable ? 'cursor-pointer' : 'cursor-default'
+      }`}
+    >
       <div className={`absolute inset-0 bg-gradient-to-br ${subject.gradient} opacity-0 group-hover-opacity transition-opacity duration-500`}></div>
       <div className="flex items-start justify-between mb-6">
         <div className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${subject.gradient} text-white group-hover:scale-110 transition-transform duration-300`}>
@@ -26,7 +35,7 @@ const SubjectCard = ({ subject }) => {
           {subject.code}
         </span>
       </div>
-      <div class="flex-1">
+      <div className="flex-1">
         <h3 className="text-xl font-bold [color:var(--color-text-title)] mb-3 group-hover:[color:var(--color-text-hover)] transition-colors">
           {subject.name}
         </h3>
@@ -35,13 +44,15 @@ const SubjectCard = ({ subject }) => {
         </p>
       </div>
 
-      <div className="border-t-4 border-red-500 pt-4 mt-auto">
-        <div className="flex items-center text-sm font-medium [color:var(--color-text-secondary)] group-hover:[color:var(--color-text-hover)] transition-colors">
-          <BookOpen className="w-4 h-4 mr-2" />
-          Explorar contenido
-          <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+      {isClickable && (
+        <div className="border-t-4 border-red-500 pt-4 mt-auto">
+          <div className="flex items-center text-sm font-medium [color:var(--color-text-secondary)] group-hover:[color:var(--color-text-hover)] transition-colors">
+            <BookOpen className="w-4 h-4 mr-2" />
+            Explorar contenido
+            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
@@ -91,16 +102,24 @@ export default function Home() {
 
   const academicData = [
     {
-      year: '2025-2026',
+      year: '2026-2027',
       label: 'Curso Actual',
       subjects: [
+        {
+          name: 'Acceso a Datos',
+          code: '2ºDAM',
+          icon: <Database className="w-7 h-7" />,
+          gradient: 'from-indigo-500 to-purple-500',
+          description: 'Persistencia, ORM y gestión de bases de datos',
+          link: `${siteConfig.baseUrl}docs/ada_2627/`
+        },
         {
           name: 'Programación de Inteligencia Artificial',
           code: 'CEIABD',
           icon: <Brain className="w-7 h-7" />,
           gradient: 'from-purple-500 to-pink-500',
-          description: 'Algoritmos de ML, redes neuronales y procesamiento de datos con Python',
-          link: `${siteConfig.baseUrl}docs/pia_2526/`
+          description: 'Algoritmos de ML, redes neuronales, LLMs, RAG y procesamiento de datos con Python',
+          link: `${siteConfig.baseUrl}docs/pia_2627/`
         },
         {
           name: 'Programación Multimedia y Dispositivos Móviles',
@@ -108,7 +127,27 @@ export default function Home() {
           icon: <Smartphone className="w-7 h-7" />,
           gradient: 'from-green-500 to-emerald-500',
           description: 'Desarrollo de aplicaciones móviles Android con Java y Android Studio',
-          link: `${siteConfig.baseUrl}docs/pmdm_2526/`
+          link: `${siteConfig.baseUrl}docs/pmdm_2627/`
+        },
+      ],
+    },
+    {
+      year: '2025-2026',
+      label: 'Curso Completado',
+      subjects: [
+        {
+          name: 'Programación de Inteligencia Artificial',
+          code: 'CEIABD',
+          icon: <Brain className="w-7 h-7" />,
+          gradient: 'from-purple-500 to-pink-500',
+          description: 'Algoritmos de ML, redes neuronales y procesamiento de datos con Python',
+        },
+        {
+          name: 'Programación Multimedia y Dispositivos Móviles',
+          code: '2ºDAM',
+          icon: <Smartphone className="w-7 h-7" />,
+          gradient: 'from-green-500 to-emerald-500',
+          description: 'Desarrollo de aplicaciones móviles Android con Java y Android Studio',
         },
       ],
     },
@@ -122,7 +161,6 @@ export default function Home() {
           icon: <Database className="w-7 h-7" />,
           gradient: 'from-indigo-500 to-purple-500',
           description: 'Persistencia, ORM y gestión de bases de datos',
-          link: `${siteConfig.baseUrl}docs/category/ut5-acceso-a-bases-de-datos-nosql`
         },
         {
           name: 'Programación Multimedia y Dispositivos Móviles',
@@ -130,7 +168,6 @@ export default function Home() {
           icon: <Smartphone className="w-7 h-7" />,
           gradient: 'from-green-500 to-emerald-500',
           description: 'Desarrollo de aplicaciones móviles Android con Java y Android Studio',
-          link: `${siteConfig.baseUrl}mantenimiento`
         },
       ],
     },

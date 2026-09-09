@@ -5,14 +5,14 @@ Yo dejaría definitivamente las **200 horas** así:
 | UT      | Unidad                             |     Horas | Entorno Principal |
 | ------- | ---------------------------------- | --------: | ----------------- |
 | **UT0** | Introducción a la IA               |   **2 h** | Aula (Teoría)     |
-| **UT1** | Python para IA                     |  **20 h** | VS Code (Local)   |
-| **UT2** | Preparación y análisis de datos    |  **25 h** | Ambos             |
-| **UT3** | Machine Learning                   |  **35 h** | Ambos             |
+| **UT1** | Python para IA (Flask/FastAPI + Docker) | **15 h** | VS Code (Local)   |
+| **UT2** | Preparación y análisis de datos    |  **15 h** | Ambos             |
+| **UT3** | Machine Learning                   |  **34 h** | Ambos             |
 | **UT4** | Deep learning                      |  **30 h** | Google Colab      |
 | **UT5** | Computer Vision                    |  **20 h** | VS Code (Local)   |
 | **UT6** | NLP y Transformers                 |  **20 h** | Ambos             |
-| **UT7** | LLMs e IA Generativa               |  **28 h** | VS Code (Local)   |
-| **UT8** | RAG y Agentes                      |  **20 h** | VS Code (Local)   |
+| **UT7** | LLMs e IA Generativa               |  **39 h** | VS Code (Local)   |
+| **UT8** | RAG y Agentes                      |  **25 h** | VS Code (Local)   |
 |         | **TOTAL**                          | **200 h** |                   |
 
 ---
@@ -31,40 +31,25 @@ Yo dejaría definitivamente las **200 horas** así:
 
 ---
 
-# UT1 — Python para IA
+# UT1 — Python para IA (Flask/FastAPI + Docker)
 
-## 20 horas
+## 15 horas (Enfoque Práctico Condensado)
 
 ### Entorno de trabajo principal
-* **VS Code (Local):** Es indispensable trabajar en un entorno local para configurar variables de entorno, gestionar el ciclo de puertos de FastAPI y utilizar Docker Desktop.
+* **VS Code (Local):** Es indispensable trabajar en un entorno local para configurar variables de entorno, gestionar el ciclo de puertos de las APIs (Flask / FastAPI) y utilizar Docker Desktop.
 
-### Bloque 0 — Python para IA — 12 h
+### Bloque 0 — Python básico y Ecosistema — 5 h
 
-*Como los alumnos ya dominan Java y JavaScript, la transición sintáctica será rápida. Se prioriza la configuración profesional del entorno y la motivación práctica.*
+*Dado que los alumnos provienen de conocer Java y JavaScript, la sintaxis básica, operadores y estructuras de control se condensan al máximo para centrar el esfuerzo en APIs y contenedorización.*
 
 * **Sesión inicial de motivación (Día 1):** Antes de profundizar en la sintaxis, realizar una práctica guiada rápida: clonar un repositorio y ejecutar en VS Code un script de 5 líneas con un pipeline de Hugging Face para realizar clasificación de imágenes o análisis de sentimiento. Esto genera un efecto interactivo inmediato.
 * **Configuración del entorno local:** VS Code, instalación de Python local, creación de entornos virtuales con `venv`, uso del gestor de paquetes `pip` y uso de `requirements.txt`.
-
-#### Python básico
-* Sintaxis e indentación
-* Variables y tipos de datos
-* Strings y F-strings
-* `None`
-* Operadores y condicionales
-* Bucles (`range`, `enumerate`, `zip`)
-
-#### Estructuras de datos
-* `list`, `tuple`, `dict` y `set`
-* Slicing
-* List comprehensions y Dictionary comprehensions
-
-#### Funciones y POO
-* Parámetros (valores por defecto, `*args`, `**kwargs`)
-* Retorno y expresiones Lambda
-* POO básica (clases, objetos, constructor `__init__`, métodos e herencia)
-
-#### Introducción muy básica a datos
-* Qué son NumPy, Pandas y Matplotlib (breve aproximación sintáctica; la manipulación profunda y análisis se traslada a la UT2).
+* **Sintaxis y POO Condensada:**
+  * Variables, tipos de datos primarios, strings y f-strings.
+  * Condicionales y bucles rápidos (`range`, `enumerate`, `zip`).
+  * Estructuras de datos clave (`list`, `tuple`, `dict`, comprehensions).
+  * Funciones (parámetros y lambdas) y POO básica (clases, `__init__`, métodos e herencia).
+  * Introducción sintáctica muy básica a NumPy, Pandas y Matplotlib (su uso real se traslada a la UT2).
 
 ---
 
@@ -100,185 +85,148 @@ Este esquema será el **mapa conceptual de todo el curso**.
 
 ---
 
-## Bloque 2 — FastAPI — 4 h
+## Bloque 2 — APIs con Flask / FastAPI — 5 h
 
-* HTTP y arquitectura REST (GET, POST, JSON)
-* Creación de endpoints (Request y Response)
-* Validación de datos y tipado con Pydantic
-* Documentación interactiva automática con Swagger (`/docs`)
-* Construcción de la primera API de ejemplo
+* Conceptos HTTP y arquitectura REST (GET, POST, JSON).
+* Creación de endpoints y enrutamiento con Flask y FastAPI.
+* Validación estricta de esquemas de datos y tipado con Pydantic.
+* Generación y consumo de documentación Swagger/OpenAPI.
+* Práctica: Construcción de una API que actúe como pasarela y reciba/devuelva JSON.
 
 ---
 
-## Bloque 3 — Docker — 3 h
+## Bloque 3 — Dockerización de APIs — 4 h
 
-* Conceptos básicos: Imagen vs. Contenedor
-* Escritura de un Dockerfile optimizado para Python
-* Comandos esenciales: `build` y `run`
-* Configuración de puertos y variables de entorno
+* Conceptos básicos: Imagen vs. Contenedor.
+* Escritura de un Dockerfile optimizado para Python (Flask/FastAPI).
+* Comandos esenciales de Docker: `build` y `run`.
+* Mapeo de puertos, configuración de volúmenes y gestión de variables de entorno locales.
 
 **Resultado del bloque:**
 ```text
-FastAPI → Docker → API REST
+Flask / FastAPI → Docker → API REST
 ```
 
 ---
 
 # UT2 — Preparación y análisis de datos
 
-## 25 horas
+## 15 horas (Unidad Condensada)
 
 ### Entorno de trabajo principal
 * **Ambos (Google Colab + VS Code):** Se utiliza Google Colab para la exploración visual de datos (EDA) por su facilidad para renderizar gráficos de Seaborn y documentar descubrimientos de forma ágil. Se utiliza VS Code para escribir scripts de preprocesamiento limpios, clases personalizadas de transformación y la orquestación de Pipelines de scikit-learn.
 
 ### Flujo metodológico
 ```text
-Dataset
- ↓
-EDA
- ↓
-Preprocessing
- ↓
-Feature Engineering
- ↓
-Pipeline
- ↓
-Dataset preparado
+Dataset → EDA → Preprocessing → Feature Engineering → Pipeline → Dataset preparado
 ```
 
 ---
 
-## Bloque 1 — Entender el dataset — 3 h
+## Bloque 1 — Entender el dataset y Pandas esencial — 2 h
 
-* Anatomía de un dataset (Observaciones, Features, Target)
-* Tipos de variables (Numéricas, categóricas, ordinales, nominales)
-* División de datos: Train/Test split
-
-### Pandas esencial
-* Lectura de datos (`read_csv`, etc.)
-* Inspección básica (`head`, `info`, `describe`, `shape`, `dtypes`)
-* Selección, filtrado y ordenación (`sort_values`)
-* Agrupaciones (`groupby`) y combinación de datasets (`merge`)
+* Anatomía de un dataset (Observaciones, Features, Target) y divisiones del conjunto (Train/Test split).
+* Carga y manipulación ágil en Pandas (`read_csv`, `head`, `info`, `describe`, `shape`).
+* Indexaciones condicionales, filtrados, agrupamientos (`groupby`) y fusiones (`merge`).
 
 ---
 
-## Bloque 2 — EDA (Análisis Exploratorio de Datos) — 7 h
+## Bloque 2 — EDA (Análisis Exploratorio de Datos) — 4 h
 
-* **Estadística descriptiva:** Media, mediana, moda, percentiles, varianza y desviación típica.
-* **Visualización de distribuciones:** Histogramas, boxplots y gráficos de dispersión.
-* **Análisis de relaciones:** Matriz de correlación y scatter plots.
-* **Detección de problemas en datos reales:** Valores nulos/ausentes, duplicados, outliers, inconsistencias y errores de formato.
-* **Herramientas de visualización:** Matplotlib y Seaborn.
-* **Práctica:** Limpieza de un dataset real que contiene problemas deliberados.
+* Estadística descriptiva (media, mediana, percentiles, desviación típica).
+* Visualización rápida de distribuciones mediante Seaborn y Matplotlib: histogramas, boxplots y mapas de calor de correlaciones lineales.
+* Detección de problemas en datasets reales: valores ausentes, duplicados y outliers.
 
 ---
 
-## Bloque 3 — Preprocesamiento — 6 h
+## Bloque 3 — Preprocesamiento y Data Leakage — 4 h
 
-* **Missing values:** Eliminación e imputación táctica (`SimpleImputer`).
-* **Escalado de variables numéricas:** `StandardScaler`, `MinMaxScaler` y `RobustScaler`.
-* **Codificación de variables categóricas:** `OneHotEncoder` y `OrdinalEncoder`.
-* **Data Leakage (Fuga de datos):** Comprensión teórica y práctica de por qué es un error grave realizar transformaciones antes del Train/Test split.
-
----
-
-## Bloque 4 — Feature Engineering — 5 h
-
-* Creación de nuevas variables útiles (extracciones temporales de fechas, combinaciones matemáticas y binning)
-* Selección de características de entrada (*Feature Selection*):
-  * Filtros basados en correlación
-  * `VarianceThreshold`
-  * `SelectKBest`
+* **Missing values:** Tratamiento ágil e imputación rápida empleando `SimpleImputer` (evitando extenderse demasiado).
+* **Escalados y transformaciones:** Uso guiado de `StandardScaler`, `MinMaxScaler` y codificaciones categóricas (`OneHotEncoder`, `OrdinalEncoder`).
+* **Data Leakage (Fuga de datos):** Comprensión teórica e importancia de realizar las transformaciones únicamente tras el Train/Test split.
 
 ---
 
-## Bloque 5 — Pipelines — 4 h
+## Bloque 4 — Feature Engineering y Selection — 3 h
 
-Integración ordenada de todo el flujo en scikit-learn:
-```text
-Datos → Imputer → Scaler → Encoder → Feature Engineering → Modelo
-```
+* Creación de variables lógicas (temporales, binning).
+* Selección de características de entrada usando filtros estadísticos (`VarianceThreshold`, `SelectKBest`).
 
-* Clases clave: `Pipeline` y `ColumnTransformer`.
-* **Regla metodológica obligatoria:**
-  * ❌ Incorrecto: Escalar todo el dataset y luego dividir en Train/Test.
-  * ✅ Correcto: Dividir primero, entrenar (`fit`) el pipeline solo con Train, y aplicar (`transform`) en Test.
-* **Mini-proyecto:** Preparar y transformar completamente un dataset real, exportando el pipeline resultante sin entrenar todavía ningún modelo complejo.
+---
+
+## Bloque 5 — Orquestación de Pipelines — 2 h
+
+* Integración del preprocesamiento mediante las clases `Pipeline` y `ColumnTransformer` en scikit-learn.
+* **Mini-proyecto de unidad:** Exportar un pipeline completo de transformación de datos sin entrenar todavía ningún modelo complejo, asegurando la limpieza metodológica del flujo.
 
 ---
 
 # UT3 — Machine Learning
 
-## 35 horas
+## 34 horas (Estructura de Aprendizaje Cooperativo / Flipped Classroom)
 
 ### Entorno de trabajo principal
-* **Ambos (Google Colab + VS Code):** Google Colab se emplea para probar diferentes algoritmos iterativamente, graficar métricas de comparación e implementar optimizaciones de hiperparámetros de manera visual. VS Code se utilizará para el proyecto final de la unidad, empaquetando el mejor modelo obtenido en una estructura limpia de producción.
+* **Ambos (Google Colab + VS Code):** Se utiliza Google Colab para el análisis rápido de algoritmos, visualización de fronteras de decisión y ejecución iterativa de búsquedas de hiperparámetros. VS Code se utilizará para el proyecto final de la unidad, empaquetando el mejor modelo obtenido en una estructura limpia de producción.
 
 ### Metodología de aprendizaje
-> **Cada modelo se enseña → se entrena → se evalúa → se optimiza → se compara.**
+* **Flipped Classroom:** El profesor expone las bases del tipo de problema y las métricas comunes a todos los modelos. Después, los alumnos por parejas o grupos investigan un modelo asignado, preparan una presentación de su funcionamiento interno y realizan una demostración práctica en código al resto de compañeros.
+* **Consolidación:** Posteriormente, cada grupo aplica el resto de modelos a su dataset seleccionado para optimizarlos, evaluarlos y compararlos de forma global.
 
 ---
 
-## Bloque 1 — Introducción a ML — 2 h
+## UT3.1 — Regresión — 14 h
 
-* Definición de Machine Learning
-* Aprendizaje supervisado vs. No supervisado
-* Taxonomía básica: Clasificación, Regresión y Clustering
+### Fase 1: Fundamentos teóricos y métricas comunes — 3 h
+* Explicación del problema de regresión y funciones de pérdida.
+* Conceptos de predicción lineal y no lineal.
+* Métricas comunes de evaluación: MAE (Mean Absolute Error), MSE (Mean Squared Error), RMSE (Root Mean Squared Error) y coeficiente de determinación R².
 
----
+### Fase 2: Aprendizaje cooperativo (Exposiciones de alumnos) — 6 h
+* Repartición de modelos en grupos para su investigación, presentación y demo práctica en código:
+  1. **Regresión Lineal** ordinaria y regularización (**Ridge** y **Lasso**).
+  2. **KNN Regressor** (cálculos de distancia e hiperparámetro `k`).
+  3. **Árboles de Decisión** para regresión.
+  4. **Ensembles de Regresión** (Random Forest Regressor y Gradient Boosting / XGBoost).
+  5. **SVR (Support Vector Regression)** y truco del kernel.
 
-## Bloque 2 — Clasificación — 14 h
-
-### 2.1 Regresión logística
-* Fundamento matemático intuitivo, probabilidades y límites de decisión (*decision boundary*).
-* Evaluación de modelos de clasificación:
-  * Métricas: Accuracy, Precision, Recall, F1-Score.
-  * Herramientas de diagnóstico: Matriz de confusión, curvas ROC y métrica ROC-AUC.
-* Optimización de hiperparámetros: Cross-validation, `GridSearchCV` y `RandomizedSearchCV`.
-
-### 2.2 KNN (K-Nearest Neighbors)
-* Conceptos de distancia y número de vecinos.
-* Sensibilidad al escalado y optimización de hiperparámetros.
-
-### 2.3 Decision Trees (Árboles de decisión)
-* Conceptos de nodo, entropía, impureza de Gini y profundidad.
-* Control del sobreajuste mediante hiperparámetros (`max_depth`, `min_samples_split`).
-
-### 2.4 Random Forest
-* Concepto de ensamble, Bagging, Bootstrap y selección aleatoria de features.
-* Parámetros clave: `n_estimators`, `max_features` y `min_samples_leaf`.
-
-### 2.5 Gradient Boosting / XGBoost
-* Concepto de boosting e iteración sobre clasificadores débiles.
-* Parámetros clave: `learning_rate` y `n_estimators`.
-
-### 2.6 SVM (Support Vector Machines)
-* Concepto de margen máximo, vectores de soporte y truco del kernel.
+### Fase 3: Práctica de consolidación — 5 h
+* Aplicación práctica guiada sobre el dataset elegido por cada grupo. Cada equipo entrena, optimiza hiperparámetros y compara todos los demás algoritmos de regresión sobre sus propios datos, documentando los resultados.
 
 ---
 
-## Bloque 3 — Regresión — 9 h
+## UT3.2 — Clasificación — 15 h
 
-* **Algoritmos principales:** Regresión Lineal (con regularización Ridge y Lasso), KNN Regressor, Árboles de Regresión, Random Forest Regressor y XGBoost.
-* **Evaluación de regresores:** MAE, MSE, RMSE y coeficiente de determinación R².
-* Comparación sistemática de algoritmos de regresión sobre un mismo problema.
+### Fase 1: Fundamentos teóricos y métricas comunes — 3 h
+* Concepto de clasificación (binaria y multiclase). Umbral de decisión y probabilidad.
+* Métricas de evaluación esenciales: Accuracy, Precision, Recall, F1-Score y diagnóstico mediante la Matriz de Confusión.
+* Curvas de decisión ROC y métrica ROC-AUC.
+* Introducción conceptual a la Validación Cruzada (*Cross-validation*) y búsquedas de hiperparámetros (`GridSearchCV` y `RandomizedSearchCV`).
+
+### Fase 2: Aprendizaje cooperativo (Exposiciones de alumnos) — 6 h
+* Repartición de modelos en grupos para su investigación, presentación y demo práctica en código:
+  1. **Regresión Logística** (probabilidades y sigmoid).
+  2. **KNN Classifier** (fronteras de decisión y vecinos).
+  3. **Árboles de Decisión** (impureza de Gini y entropía).
+  4. **Random Forest Classifier** (Bagging y Bootstrap).
+  5. **XGBoost Classifier** (Weak Learners y Boosting secuencial).
+  6. **SVM (Support Vector Machines)** para clasificación.
+
+### Fase 3: Práctica de consolidación — 6 h
+* Aplicación práctica sobre el dataset del grupo. Entrenamiento, búsqueda exhaustiva de hiperparámetros con `GridSearchCV` de todos los modelos y comparación sistemática mediante curvas ROC y matrices de confusión.
 
 ---
 
-## Bloque 4 — Aprendizaje No Supervisado — 6 h
+## UT3.3 — Aprendizaje No Supervisado (Clustering) — 5 h
 
-* **K-Means:** Centroides y optimización del número de clusters (método del codo y Silhouette Score).
-* **DBSCAN:** Agrupación basada en densidad, parámetros de proximidad (`eps`) y manejo del ruido.
-* **Clustering Jerárquico:** Dendrogramas y agrupaciones estructurales.
+### Fase 1: Fundamentos y Flipped classroom — 3 h
+* Concepto de clustering y ausencia de variable target.
+* Repartición de algoritmos en grupos para su investigación, presentación y demo práctica:
+  1. **K-Means:** Centroides, optimización por distancia euclídea, método del codo y Silhouette Score.
+  2. **DBSCAN:** Densidad de puntos, proximidad (`eps`), número mínimo de muestras y detección de ruido.
+  3. **Clustering Jerárquico:** Distancia entre clusters y dendrogramas.
 
----
-
-## Bloque 5 — Proyecto de integración ML — 4 h
-
-Desarrollo y entrega de un flujo completo:
-```text
-Dataset → EDA → Preprocesamiento → Pipeline → Selección de Modelos → Tuning → Evaluación → API (FastAPI) → Docker
-```
+### Fase 2: Evaluación y Cierre de la 1ª Evaluación — 2 h
+* **Proyecto de Integración Final:** Aplicación del clustering seleccionado sobre el dataset y empaquetado del mejor pipeline final entrenado dentro de un servicio Flask/FastAPI dockerizado, dejándolo listo para su despliegue y entrega final antes del 16 de diciembre.
 
 ---
 
@@ -339,7 +287,7 @@ Dataset → EDA → Preprocesamiento → Pipeline → Selección de Modelos → 
 
 **Proyecto práctico:** Clasificador de imágenes empaquetado en una API REST Dockerizada:
 ```text
-Keras (Saved Model) → API REST (FastAPI) → Contenedor (Docker)
+Keras (Saved Model) → API REST (Flask/FastAPI) → Contenedor (Docker)
 ```
 
 ---
@@ -447,14 +395,14 @@ Ticket entrante → Inferencia Transformer → Asignación de Categoría, Priori
 
 # UT7 — LLMs e IA Generativa
 
-## 28 horas
+## 39 horas (Unidad Ampliada)
 
 ### Entorno de trabajo principal
 * **VS Code (Local):** El desarrollo de integraciones complejas con APIs de LLM, el manejo de variables de entorno de forma segura (`.env`) y la validación estructurada de datos con Pydantic requieren el uso de un entorno local e interactivo.
 
 ---
 
-## Bloque 1 — Fundamentos de los LLMs — 4 h
+## Bloque 1 — Fundamentos de los LLMs — 6 h
 
 * Concepto de LLMs autorregresivos.
 * Ciclo de tokens, embeddings y ventana de contexto.
@@ -463,7 +411,7 @@ Ticket entrante → Inferencia Transformer → Asignación de Categoría, Priori
 
 ---
 
-## Bloque 2 — Integración de APIs de LLMs — 6 h
+## Bloque 2 — Integración de APIs de LLMs — 8 h
 
 * Llamadas a APIs y gestión de variables de entorno seguras.
 * Estructuración del contexto: System Prompt, User Prompt e historial de conversación.
@@ -471,14 +419,14 @@ Ticket entrante → Inferencia Transformer → Asignación de Categoría, Priori
 
 ---
 
-## Bloque 3 — Prompt Engineering — 4 h
+## Bloque 3 — Prompt Engineering — 6 h
 
-* Técnicas avanzadas: Few-shot prompting, restricciones explícitas de salida y plantillas de prompts.
+* Técnicas avanzadas: Few-shot prompting, restricciones semánticas y plantillas de prompts.
 * Métodos sistemáticos para la evaluación de la calidad de los prompts.
 
 ---
 
-## Bloque 4 — Structured Outputs (Salidas estructuradas) — 5 h
+## Bloque 4 — Structured Outputs (Salidas estructuradas) — 7 h
 
 * Garantía de esquemas estructurados usando Pydantic en las respuestas de los LLMs.
 * Extracción y tipado automático de datos complejos a formato JSON.
@@ -489,7 +437,7 @@ Documento PDF → Inferencia LLM → Esquema Pydantic → Aplicación de negocio
 
 ---
 
-## Bloque 5 — Function Calling / Tool Calling — 5 h
+## Bloque 5 — Function Calling / Tool Calling — 7 h
 
 * Habilitación de herramientas para que el LLM decida autónomamente cuándo y cómo usarlas.
 
@@ -500,7 +448,7 @@ Usuario → LLM → Identificación de Tool → Ejecución Python local → Reto
 
 ---
 
-## Bloque 6 — Modelos Open Source y Ejecución Local — 4 h
+## Bloque 6 — Modelos Open Source y Ejecución Local — 5 h
 
 * Uso prioritario de **Ollama** para orquestar y ejecutar modelos de lenguaje locales (Llama 3.1, Phi-3).
 * Esto permite evitar la dependencia exclusiva de APIs de pago externas, facilitando un entorno de laboratorio gratuito, seguro y sin conexión a internet.
@@ -510,14 +458,14 @@ Usuario → LLM → Identificación de Tool → Ejecución Python local → Reto
 
 # UT8 — RAG y Agentes
 
-## 20 horas
+## 25 horas (Unidad Ampliada)
 
 ### Entorno de trabajo principal
 * **VS Code (Local):** Es la mejor opción para interactuar con bases de datos vectoriales persistidas en disco de forma local (como Chroma DB), gestionar flujos interactivos de entrada/salida y crear agentes automatizados que ejecuten código del sistema.
 
 ---
 
-## Bloque 1 — RAG (Retrieval-Augmented Generation) — 8 h
+## Bloque 1 — RAG (Retrieval-Augmented Generation) — 10 h
 
 * Limitaciones de los modelos estáticos: Alucinaciones y corte temporal de conocimiento.
 * Arquitectura técnica del flujo RAG:
@@ -527,7 +475,7 @@ Documentos locales → Chunking (y solapamiento) → Embeddings → Base de Dato
 
 ---
 
-## Bloque 2 — Vector Databases — 2 h
+## Bloque 2 — Vector Databases — 3 h
 
 * Manejo de la base de datos vectorial local **Chroma DB**.
 * Conceptos de indexación de vectores, búsqueda de similitud y filtrado por metadatos.
@@ -535,7 +483,7 @@ Documentos locales → Chunking (y solapamiento) → Embeddings → Base de Dato
 
 ---
 
-## Bloque 3 — Implementación de RAG — 6 h
+## Bloque 3 — Implementación de RAG — 7 h
 
 * **Aproximación inicial "Nativa":** Para asegurar la comprensión técnica, los alumnos programarán primero un flujo RAG completo utilizando Python puro y conectando directamente la API del LLM con el cliente local de Chroma DB.
 * **Aproximación con Frameworks:** Una vez asentada la lógica subyacente, se presentará el uso de herramientas de abstracción como **LangChain** o **LlamaIndex** para agilizar y robustecer las implementaciones.
@@ -543,7 +491,7 @@ Documentos locales → Chunking (y solapamiento) → Embeddings → Base de Dato
 
 ---
 
-## Bloque 4 — Agentes Inteligentes — 4 h
+## Bloque 4 — Agentes Inteligentes — 5 h
 
 * Qué es un agente autónomo y diferencia con flujos predefinidos.
 * Diseño del bucle de ejecución de agentes (Agent Loop) y persistencia de memoria de conversación.
@@ -569,7 +517,7 @@ proyecto/
 ├── models/                  # Binarios serializados (.pkl, .h5, etc.)
 │
 ├── app/                     # Lógica de la interfaz de servicios
-│   └── main.py              # Endpoints construidos en FastAPI
+│   └── main.py              # Endpoints construidos en Flask o FastAPI
 │
 ├── tests/                   # Pruebas unitarias y de integración
 │
@@ -582,8 +530,8 @@ proyecto/
 
 De esta manera, el aprendizaje progresa sobre una arquitectura robusta:
 * **UT2:** Preprocesamiento → Pipeline de datos estructurado.
-* **UT3:** Pipeline de datos + Clasificador ML → FastAPI → Docker.
-* **UT4:** Pipeline de imágenes + CNN Keras → FastAPI → Docker.
-* **UT5:** Procesamiento de vídeo/imágenes + YOLO → FastAPI → Docker.
-* **UT6/UT7:** Procesamiento de texto + Modelos Locales (Ollama) → FastAPI → Docker.
-* **UT8:** Orquestación de Agentes y RAG → FastAPI → Docker.
+* **UT3:** Pipeline de datos + Clasificador ML → Flask/FastAPI → Docker.
+* **UT4:** Pipeline de imágenes + CNN Keras → Flask/FastAPI → Docker.
+* **UT5:** Procesamiento de vídeo/imágenes + YOLO → Flask/FastAPI → Docker.
+* **UT6/UT7:** Procesamiento de texto + Modelos Locales (Ollama) → Flask/FastAPI → Docker.
+* **UT8:** Orquestación de Agentes y RAG → Flask/FastAPI → Docker.

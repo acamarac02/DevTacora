@@ -24,24 +24,24 @@ Los **resultados de aprendizaje (RA)** trabajados en este módulo son los indica
 
 El módulo de PIA se ha estructurado de forma eminentemente práctica, sumando un total de **200 horas** distribuidas en las siguientes unidades de trabajo (UT):
 
-| UNIDAD                                    | RAs       | HORAS |
-|-------------------------------------------|-----------|-------|
-| UT0. Introducción a la IA                 | RA1       | 2 h   |
-| UT1. Python para IA                       | RA1       | 20 h  |
-| UT2. Preparación y análisis de datos      | RA2       | 25 h  |
-| UT3. Machine Learning                     | RA2       | 35 h  |
-| UT4. Deep learning                        | RA2       | 30 h  |
-| UT5. Computer Vision                      | RA3       | 20 h  |
-| UT6. NLP y Transformers                   | RA3       | 20 h  |
-| UT7. LLMs e IA Generativa                 | RA3, RA4  | 28 h  |
-| UT8. RAG y Agentes                        | RA3, RA4  | 20 h  |
-| **TOTAL**                                 |           | **200 h** |
+| EV. | UNIDAD                                    | RAs       | HORAS |
+|------------|-------------------------------------------|-----------|-------|
+| 1ª         | UT0. Introducción a la IA                 | RA1       | 2 h   |
+| 1ª         | UT1. Python para IA (Flask/FastAPI + Docker)| RA1     | 15 h  |
+| 1ª         | UT2. Preparación y análisis de datos      | RA2       | 15 h  |
+| 1ª         | UT3. Machine Learning                     | RA2       | 34 h  |
+| 2ª         | UT4. Deep learning                        | RA2       | 30 h  |
+| 2ª         | UT5. Computer Vision                      | RA3       | 20 h  |
+| 2ª         | UT6. NLP y Transformers                   | RA3       | 20 h  |
+| 3ª         | UT7. LLMs e IA Generativa                 | RA4       | 39 h  |
+| 3ª         | UT8. RAG y Agentes                        | RA4       | 25 h  |
+|            | **TOTAL**                                 |           | **200 h** |
 
 ## Temporalización
 
 Las unidades de trabajo y sus contenidos clave se organizan a lo largo de los tres trimestres del curso bajo los siguientes esquemas temporales:
 
-### Primer Trimestre (1ª Evaluación)
+### 1ª Evaluación
 
 ```mermaid
 ---
@@ -49,15 +49,14 @@ config:
   theme: default
 ---
 timeline
-    title 1ª Evaluación (82 horas)
     UT0. Introducción a la IA
       : Historia y evolución de la IA
       : Áreas (supervisado, no supervisado, PLN, visión, voz)
       : Casos de uso en la industria
-    UT1. Python para IA
+    UT1. Python para IA (Flask/FastAPI + Docker)
       : Configuración de entorno local (VS Code)
-      : Sintaxis de Python y POO
-      : Primer endpoint en FastAPI
+      : Sintaxis condensada y POO básica
+      : APIs REST con Flask / FastAPI
       : Contenedorización con Docker
     UT2. Preparación y análisis de datos
       : Análisis Exploratorio de Datos (EDA)
@@ -65,13 +64,13 @@ timeline
       : Feature Engineering e Imputación
       : Pipelines y ColumnTransformers
     UT3. Machine Learning
-      : Clasificación y Regresión clásica
-      : Optimización de Hiperparámetros (GridSearchCV)
-      : Aprendizaje No Supervisado (K-Means, DBSCAN)
-      : Integración en API Dockerizada
+      : Fundamentos y métricas (Clasificación/Regresión)
+      : Aprendizaje cooperativo (Exposiciones de modelos)
+      : Optimización e hiperparámetros (GridSearchCV)
+      : Clustering y empaquetado en API Dockerizada
 ```
 
-### Segundo Trimestre (2ª Evaluación)
+### 2ª Evaluación
 
 ```mermaid
 ---
@@ -79,7 +78,6 @@ config:
   theme: default
 ---
 timeline
-    title 2ª Evaluación (70 horas)
     UT4. Deep learning
       : Fundamentos de redes y optimizadores
       : Regularización y TensorBoard
@@ -97,7 +95,7 @@ timeline
       : Clasificador de tickets
 ```
 
-### Tercer Trimestre (3ª Evaluación)
+### 3ª Evaluación
 
 ```mermaid
 ---
@@ -105,7 +103,6 @@ config:
   theme: default
 ---
 timeline
-    title 3ª Evaluación (48 horas)
     UT7. LLMs e IA Generativa
       : Inferencia local con Ollama (Llama 3.1)
       : Structured Outputs con Pydantic

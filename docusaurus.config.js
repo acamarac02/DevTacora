@@ -93,27 +93,21 @@ const config = {
         items: [
           {
             type: 'docSidebar',
-            sidebarId: 'pia_2526_Sidebar',
+            sidebarId: 'ada_2627_Sidebar',
             position: 'left',
-            label: 'PIA',
-          },
-          {
-            type: 'docSidebar',
-            sidebarId: 'pmdm_2526_Sidebar',
-            position: 'left',
-            label: 'PMDM',
-          },
-          {
-            type: 'docSidebar',
-            sidebarId: 'dam_2627_Sidebar',
-            position: 'left',
-            label: 'DAM 26/27',
+            label: 'ADA',
           },
           {
             type: 'docSidebar',
             sidebarId: 'pia_2627_Sidebar',
             position: 'left',
-            label: 'PIA 26/27',
+            label: 'PIA',
+          },
+          {
+            type: 'docSidebar',
+            sidebarId: 'pmdm_2627_Sidebar',
+            position: 'left',
+            label: 'PMDM',
           },
           {
             to: '/docs/licencia',
