@@ -150,7 +150,20 @@ const config = {
         additionalLanguages: ['java', 'groovy', 'bash', 'gradle', 'docker', 'dart']
       },
     }),
-  plugins: [],
+  plugins: [
+    [
+      'docusaurus-lunr-search',
+      {
+        languages: ['es'],
+        excludeRoutes: [
+          'docs/ada_2425/**',
+          'docs/pmdm_2425/**',
+          'docs/pia_2526/**',
+          'docs/pmdm_2526/**',
+        ],
+      },
+    ],
+  ],
   stylesheets: [
     {
       href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
