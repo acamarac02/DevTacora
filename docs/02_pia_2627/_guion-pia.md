@@ -4,20 +4,20 @@ Yo dejaría definitivamente las **200 horas** así:
 
 | UT      | Unidad                             |     Horas | Entorno Principal |
 | ------- | ---------------------------------- | --------: | ----------------- |
-| **UT0** | Introducción a la IA               |   **2 h** | Aula (Teoría)     |
-| **UT1** | Python para IA (Flask/FastAPI + Docker) | **15 h** | VS Code (Local)   |
-| **UT2** | Preparación y análisis de datos    |  **15 h** | Ambos             |
-| **UT3** | Machine Learning                   |  **34 h** | Ambos             |
-| **UT4** | Deep learning                      |  **30 h** | Google Colab      |
-| **UT5** | Computer Vision                    |  **20 h** | VS Code (Local)   |
-| **UT6** | NLP y Transformers                 |  **20 h** | Ambos             |
-| **UT7** | LLMs e IA Generativa               |  **39 h** | VS Code (Local)   |
-| **UT8** | RAG y Agentes                      |  **25 h** | VS Code (Local)   |
+| **UT1** | Introducción a la IA               |   **2 h** | Aula (Teoría)     |
+| **UT2** | Python para IA (Flask/FastAPI + Docker) | **15 h** | VS Code (Local)   |
+| **UT3** | Preparación y análisis de datos    |  **15 h** | Ambos             |
+| **UT4** | Machine Learning                   |  **34 h** | Ambos             |
+| **UT5** | Deep learning                      |  **30 h** | Google Colab      |
+| **UT6** | Computer Vision                    |  **20 h** | VS Code (Local)   |
+| **UT7** | NLP y Transformers                 |  **20 h** | Ambos             |
+| **UT8** | LLMs e IA Generativa               |  **39 h** | VS Code (Local)   |
+| **UT9** | RAG y Agentes                      |  **25 h** | VS Code (Local)   |
 |         | **TOTAL**                          | **200 h** |                   |
 
 ---
 
-# UT0 — Introducción a la IA
+# UT1 — Introducción a la IA
 
 ## 2 horas
 
@@ -31,7 +31,7 @@ Yo dejaría definitivamente las **200 horas** así:
 
 ---
 
-# UT1 — Python para IA (Flask/FastAPI + Docker)
+# UT2 — Python para IA (Flask/FastAPI + Docker)
 
 ## 15 horas (Enfoque Práctico Condensado)
 
@@ -49,7 +49,7 @@ Yo dejaría definitivamente las **200 horas** así:
   * Condicionales y bucles rápidos (`range`, `enumerate`, `zip`).
   * Estructuras de datos clave (`list`, `tuple`, `dict`, comprehensions).
   * Funciones (parámetros y lambdas) y POO básica (clases, `__init__`, métodos e herencia).
-  * Introducción sintáctica muy básica a NumPy, Pandas y Matplotlib (su uso real se traslada a la UT2).
+  * Introducción sintáctica muy básica a NumPy, Pandas y Matplotlib (su uso real se traslada a la UT3).
 
 ---
 
@@ -109,7 +109,7 @@ Flask / FastAPI → Docker → API REST
 
 ---
 
-# UT2 — Preparación y análisis de datos
+# UT3 — Preparación y análisis de datos
 
 ## 15 horas (Unidad Condensada)
 
@@ -161,7 +161,7 @@ Dataset → EDA → Preprocessing → Feature Engineering → Pipeline → Datas
 
 ---
 
-# UT3 — Machine Learning
+# UT4 — Machine Learning
 
 ## 34 horas (Estructura de Aprendizaje Cooperativo / Flipped Classroom)
 
@@ -174,7 +174,7 @@ Dataset → EDA → Preprocessing → Feature Engineering → Pipeline → Datas
 
 ---
 
-## UT3.1 — Regresión — 14 h
+## UT4.1 — Regresión — 14 h
 
 ### Fase 1: Fundamentos teóricos y métricas comunes — 3 h
 * Explicación del problema de regresión y funciones de pérdida.
@@ -194,7 +194,7 @@ Dataset → EDA → Preprocessing → Feature Engineering → Pipeline → Datas
 
 ---
 
-## UT3.2 — Clasificación — 15 h
+## UT4.2 — Clasificación — 15 h
 
 ### Fase 1: Fundamentos teóricos y métricas comunes — 3 h
 * Concepto de clasificación (binaria y multiclase). Umbral de decisión y probabilidad.
@@ -216,7 +216,7 @@ Dataset → EDA → Preprocessing → Feature Engineering → Pipeline → Datas
 
 ---
 
-## UT3.3 — Aprendizaje No Supervisado (Clustering) — 5 h
+## UT4.3 — Aprendizaje No Supervisado (Clustering) — 5 h
 
 ### Fase 1: Fundamentos y Flipped classroom — 3 h
 * Concepto de clustering y ausencia de variable target.
@@ -230,7 +230,7 @@ Dataset → EDA → Preprocessing → Feature Engineering → Pipeline → Datas
 
 ---
 
-# UT4 — Deep learning
+# UT5 — Deep learning
 
 ## 30 horas
 
@@ -292,7 +292,7 @@ Keras (Saved Model) → API REST (Flask/FastAPI) → Contenedor (Docker)
 
 ---
 
-# UT5 — Computer Vision
+# UT6 — Computer Vision
 
 ## 20 horas
 
@@ -341,7 +341,7 @@ Keras (Saved Model) → API REST (Flask/FastAPI) → Contenedor (Docker)
 
 ---
 
-# UT6 — NLP y Transformers
+# UT7 — NLP y Transformers
 
 ## 20 horas
 
@@ -393,7 +393,7 @@ Ticket entrante → Inferencia Transformer → Asignación de Categoría, Priori
 
 ---
 
-# UT7 — LLMs e IA Generativa
+# UT8 — LLMs e IA Generativa
 
 ## 39 horas (Unidad Ampliada)
 
@@ -456,7 +456,7 @@ Usuario → LLM → Identificación de Tool → Ejecución Python local → Reto
 
 ---
 
-# UT8 — RAG y Agentes
+# UT9 — RAG y Agentes
 
 ## 25 horas (Unidad Ampliada)
 
@@ -501,7 +501,7 @@ Documentos locales → Chunking (y solapamiento) → Embeddings → Base de Dato
 
 # Arquitectura de Proyecto Estándar (Evolutiva)
 
-Para garantizar un estándar de calidad profesional, todos los proyectos del curso a partir de la **UT2** deberán organizarse bajo la misma estructura física de directorios. Los estudiantes irán refactorizando e incorporando nuevas piezas sobre este esqueleto a medida que progrese el curso:
+Para garantizar un estándar de calidad profesional, todos los proyectos del curso a partir de la **UT3** deberán organizarse bajo la misma estructura física de directorios. Los estudiantes irán refactorizando e incorporando nuevas piezas sobre este esqueleto a medida que progrese el curso:
 
 ```text
 proyecto/
@@ -529,9 +529,9 @@ proyecto/
 ```
 
 De esta manera, el aprendizaje progresa sobre una arquitectura robusta:
-* **UT2:** Preprocesamiento → Pipeline de datos estructurado.
-* **UT3:** Pipeline de datos + Clasificador ML → Flask/FastAPI → Docker.
-* **UT4:** Pipeline de imágenes + CNN Keras → Flask/FastAPI → Docker.
-* **UT5:** Procesamiento de vídeo/imágenes + YOLO → Flask/FastAPI → Docker.
-* **UT6/UT7:** Procesamiento de texto + Modelos Locales (Ollama) → Flask/FastAPI → Docker.
-* **UT8:** Orquestación de Agentes y RAG → Flask/FastAPI → Docker.
+* **UT3:** Preprocesamiento → Pipeline de datos estructurado.
+* **UT4:** Pipeline de datos + Clasificador ML → Flask/FastAPI → Docker.
+* **UT5:** Pipeline de imágenes + CNN Keras → Flask/FastAPI → Docker.
+* **UT6:** Procesamiento de vídeo/imágenes + YOLO → Flask/FastAPI → Docker.
+* **UT7/UT8:** Procesamiento de texto + Modelos Locales (Ollama) → Flask/FastAPI → Docker.
+* **UT9:** Orquestación de Agentes y RAG → Flask/FastAPI → Docker.
