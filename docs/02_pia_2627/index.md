@@ -26,15 +26,15 @@ El módulo de PIA se ha estructurado de forma eminentemente práctica, sumando u
 
 | EV. | UNIDAD                                    | RAs       | HORAS |
 |------------|-------------------------------------------|-----------|-------|
-| 1ª         | UT0. Introducción a la IA                 | RA1       | 2 h   |
-| 1ª         | UT1. Python para IA (Flask/FastAPI + Docker)| RA1     | 15 h  |
-| 1ª         | UT2. Preparación y análisis de datos      | RA2       | 15 h  |
-| 1ª         | UT3. Machine Learning                     | RA2       | 34 h  |
-| 2ª         | UT4. Deep learning                        | RA2       | 30 h  |
-| 2ª         | UT5. Computer Vision                      | RA3       | 20 h  |
-| 2ª         | UT6. NLP y Transformers                   | RA3       | 20 h  |
-| 3ª         | UT7. LLMs e IA Generativa                 | RA4       | 39 h  |
-| 3ª         | UT8. RAG y Agentes                        | RA4       | 25 h  |
+| 1ª         | UT1. Introducción a la IA                 | RA1       | 2 h   |
+| 1ª         | UT2. Python para IA (Flask/FastAPI + Docker)| RA1     | 15 h  |
+| 1ª         | UT3. Preparación y análisis de datos      | RA2       | 15 h  |
+| 1ª         | UT4. Machine Learning                     | RA2       | 34 h  |
+| 2ª         | UT5. Deep learning                        | RA2       | 30 h  |
+| 2ª         | UT6. Computer Vision                      | RA3       | 20 h  |
+| 2ª         | UT7. NLP y Transformers                   | RA3       | 20 h  |
+| 3ª         | UT8. LLMs e IA Generativa                 | RA4       | 39 h  |
+| 3ª         | UT9. RAG y Agentes                        | RA4       | 25 h  |
 |            | **TOTAL**                                 |           | **200 h** |
 
 ## Temporalización
@@ -49,21 +49,21 @@ config:
   theme: default
 ---
 timeline
-    UT0. Introducción a la IA
+    UT1. Introducción a la IA
       : Historia y evolución de la IA
       : Áreas (supervisado, no supervisado, PLN, visión, voz)
       : Casos de uso en la industria
-    UT1. Python para IA (Flask/FastAPI + Docker)
+    UT2. Python para IA (Flask/FastAPI + Docker)
       : Configuración de entorno local (VS Code)
       : Sintaxis condensada y POO básica
       : APIs REST con Flask / FastAPI
       : Contenedorización con Docker
-    UT2. Preparación y análisis de datos
+    UT3. Preparación y análisis de datos
       : Análisis Exploratorio de Datos (EDA)
       : Preprocesamiento y Data Leakage
       : Feature Engineering e Imputación
       : Pipelines y ColumnTransformers
-    UT3. Machine Learning
+    UT4. Machine Learning
       : Fundamentos y métricas (Clasificación/Regresión)
       : Aprendizaje cooperativo (Exposiciones de modelos)
       : Optimización e hiperparámetros (GridSearchCV)
@@ -78,17 +78,17 @@ config:
   theme: default
 ---
 timeline
-    UT4. Deep learning
+    UT5. Deep learning
       : Fundamentos de redes y optimizadores
       : Regularización y TensorBoard
       : Redes Convolucionales (CNN)
       : Transfer Learning con Keras 3
-    UT5. Computer Vision
+    UT6. Computer Vision
       : Procesamiento de imagen con OpenCV
       : Data Augmentation
       : Detección de objetos con YOLO
       : Segmentación y OCR
-    UT6. NLP y Transformers
+    UT7. NLP y Transformers
       : NLP clásico y Embeddings
       : Mecanismo de autoatención
       : Ecosistema Hugging Face
@@ -103,12 +103,12 @@ config:
   theme: default
 ---
 timeline
-    UT7. LLMs e IA Generativa
+    UT8. LLMs e IA Generativa
       : Inferencia local con Ollama (Llama 3.1)
       : Structured Outputs con Pydantic
       : Function Calling y APIs
       : Prompt Engineering y evaluación
-    UT8. RAG y Agentes
+    UT9. RAG y Agentes
       : RAG nativo y base vectorial Chroma DB
       : Frameworks (LangChain / LlamaIndex)
       : Agentes autónomos y Agent Loops

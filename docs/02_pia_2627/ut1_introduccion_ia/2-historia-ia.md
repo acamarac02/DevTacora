@@ -170,8 +170,10 @@ A partir de 2015, la inteligencia artificial vivió una auténtica **explosión 
 
   * A partir de 2020, la IA no solo reconocía o clasificaba datos, sino que **empezó a crear contenido nuevo**.
   * **Modelos de texto**: en 2022, OpenAI lanzó **ChatGPT**, un modelo de lenguaje capaz de mantener conversaciones fluidas, redactar textos complejos, programar código o responder preguntas de todo tipo.
+  * **Modelos Open Source e inferencia local**: soluciones como **Ollama**, **Llama 3** o **Mistral** han democratizado el acceso a modelos de lenguaje sin depender exclusivamente de APIs comerciales.
+  * **Ecosistema de RAG y Agentes Inteligentes**: evolución hacia sistemas que conectan LLMs con bases de datos privadas (RAG) y agentes autónomos capaces de ejecutar herramientas y código localmente.
   * **Modelos de imagen**: herramientas como **Stable Diffusion, MidJourney o DALL·E** permiten generar ilustraciones realistas a partir de simples descripciones de texto.
-  * **Modelos de música y vídeo**: aplicaciones como **Suno, Runway o Pika** han demostrado que la IA también puede componer canciones o generar clips audiovisuales desde cero.
+  * **Modelos de música y vídeo**: aplicaciones como **Suno, Runway, Pika o Sora** han demostrado que la IA también puede componer canciones o generar clips audiovisuales hiperrealistas desde cero.
 
 * **La IA en la vida diaria**
   La IA ya no es exclusiva de laboratorios o grandes empresas: forma parte de nuestro día a día.

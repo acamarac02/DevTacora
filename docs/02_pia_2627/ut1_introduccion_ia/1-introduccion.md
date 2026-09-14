@@ -188,8 +188,20 @@ Las **principales áreas de uso** actuales del Deep Learning son:
 
 * **Procesamiento de Lenguaje Natural (PLN o NLP en inglés):** parte de la IA que se centra en entender y generar lenguaje humano (chatbots, traductores automáticos, análisis de sentimientos). Ejemplos: ChatGPT, Google Translate, Siri, etc.
 * **Visión por computador:** que permite a las máquinas interpretar imágenes y vídeos. Ejemplos: FaceID de Apple, búsqueda de imágenes por objetos o personas ("perro", "playa", "Juan") en Google Photos, Tesla Autopilot, etc.
-* **IA generativa**: se centra en crear contenido nuevo: texto, imágenes, música, código, audio o incluso vídeo. Ejemplos: ChatGPT, DALL·E, etc. 
+* **Procesamiento de Voz y Audio (Voice AI):** conversión de voz a texto (*Speech-to-Text / STT*) y generación de voz sintética realista (*Text-to-Speech / TTS*). Ejemplos: Whisper (OpenAI), ElevenLabs, transcripción asistida e interfaces de voz interactivas.
+* **IA generativa**: se centra en crear contenido nuevo: texto, imágenes, música, código, audio o incluso vídeo. Ejemplos: ChatGPT, DALL·E, Midjourney, Claude, etc. 
 * **Robótica inteligente:** combina IA con hardware para actuar en el mundo físico. Ejemplos: Roomba, Da Vinci (sistema quirúrgico que combina precisión mecánica con asistencia inteligente), etc.
 
+---
+
+## Casos de uso reales e impacto de la IA en la industria contemporánea
+
+La Inteligencia Artificial ha dejado de ser una disciplina puramente académica para convertirse en una tecnología transversal clave en el tejido empresarial e industrial actual:
+
+* **Desarrollo de Software y Tecnologías de la Información:** Integración de asistentes inteligentes (GitHub Copilot, Cursor), generación automática de pruebas unitarias, análisis estático de código y detección temprana de vulnerabilidades.
+* **Salud y Biomedicina:** Diagnóstico asistido por análisis de radiografías/resonancias, aceleración en el descubrimiento de fármacos y predicción de estructuras moleculares (AlphaFold).
+* **Finanzas y Servicios Bancarios:** Detección de transacciones fraudulentas en tiempo real, análisis de riesgo crediticio automatizado y evaluación de patrones de inversión.
+* **Industria, Manufactura y Logística:** Mantenimiento predictivo de componentes mecánicos mediante sensores IoT, optimización dinámica de rutas de distribución y inspección visual de calidad en cadenas de montaje.
+* **Atención al Cliente y Operaciones:** Despliegue de asistentes conversacionales avanzados basados en LLMs y RAG, clasificación e hiperpersonalización de respuestas a clientes y automatización del procesamiento de documentos.
 
 </div>
