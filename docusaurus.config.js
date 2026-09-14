@@ -63,7 +63,7 @@ const config = {
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
           exclude: isProd
-            ? ['01_pia_2526/**', '**/_*.{js,jsx,ts,tsx,md,mdx}', '**/_*/**']
+            ? ['01_pia_2526/**', '01_pmdm_2526/**', '**/_*.{js,jsx,ts,tsx,md,mdx}', '**/_*/**']
             : ['**/_*.{js,jsx,ts,tsx,md,mdx}', '**/_*/**'],
         },
         blog: {
