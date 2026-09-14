@@ -27,7 +27,7 @@ El módulo de PIA se ha estructurado de forma eminentemente práctica, sumando u
 | EV. | UNIDAD                                    | RAs       | HORAS |
 |------------|-------------------------------------------|-----------|-------|
 | 1ª         | UT1. Introducción a la IA                 | RA1       | 2 h   |
-| 1ª         | UT2. Python para IA (Flask/FastAPI + Docker)| RA1     | 15 h  |
+| 1ª         | UT2. Python para IA (Flask/FastAPI + Docker)| RA1     | 34 h  |
 | 1ª         | UT3. Preparación y análisis de datos      | RA2       | 15 h  |
 | 1ª         | UT4. Machine Learning                     | RA2       | 34 h  |
 | 2ª         | UT5. Deep learning                        | RA2       | 30 h  |

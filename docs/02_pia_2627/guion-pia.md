@@ -9,7 +9,7 @@ Yo dejaría definitivamente las **200 horas** así:
 | UT      | Unidad                             |     Horas | Entorno Principal |
 | ------- | ---------------------------------- | --------: | ----------------- |
 | **UT1** | Introducción a la IA               |   **2 h** | Aula (Teoría)     |
-| **UT2** | Python para IA (Flask/FastAPI + Docker) | **15 h** | VS Code (Local)   |
+| **UT2** | Python para IA (Flask/FastAPI + Docker) | **34 h** | VS Code (Local)   |
 | **UT3** | Preparación y análisis de datos    |  **15 h** | Ambos             |
 | **UT4** | Machine Learning                   |  **34 h** | Ambos             |
 | **UT5** | Deep learning                      |  **30 h** | Google Colab      |
@@ -37,7 +37,7 @@ Yo dejaría definitivamente las **200 horas** así:
 
 # UT2 — Python para IA (Flask/FastAPI + Docker)
 
-## 15 horas (Enfoque Práctico Condensado)
+## 34 horas (Extendido — Fundamentos + APIs + Docker)
 
 ### Entorno de trabajo principal
 * **VS Code (Local):** Es indispensable trabajar en un entorno local para configurar variables de entorno, gestionar el ciclo de puertos de las APIs (Flask / FastAPI) y utilizar Docker Desktop.

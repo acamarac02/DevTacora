@@ -4,14 +4,13 @@ draft: true
 
 # Organización Semanal del Curso (2026-2027) — Planificación Ajustada
 
-Esta planificación distribuye las **200 horas lectivas** del módulo de **Programación de Inteligencia Artificial (PIA)** a lo largo de las semanas reales del calendario académico de Extremadura, iniciando el **5 de octubre de 2026** y finalizando el **27 de mayo de 2027**.
+Esta planificación distribuye las **200 horas lectivas** del módulo de **Programación de Inteligencia Artificial (PIA)** a lo largo de las semanas reales del calendario académico de Extremadura, iniciando el **14 de septiembre de 2026** y finalizando el **27 de mayo de 2027**.
 
 Esta versión del calendario ha sido optimizada para:
-1. **Adelantar y finalizar la UT4 antes del 16 de diciembre de 2026**, garantizando que todos los trabajos evaluables del primer trimestre se entreguen antes de esa fecha límite.
-2. **Priorizar el desarrollo de APIs (Flask / FastAPI) y Docker en la UT2 (15 h)**. Se ha condensado drásticamente la sintaxis básica de Python (ya que los alumnos conocen Java/JS) a 5 horas, dejando 5 horas completas para el diseño de APIs REST y 4 horas para la contenedorización con Docker.
-3. **Condensar la UT3 (15 h)** para evitar extenderse en elementos simples de preprocesamiento (como el uso aislado de imputadores).
-4. **Implementar una estructura de Aprendizaje Cooperativo (Flipped Classroom)** en la UT4, donde el profesor imparte fundamentos/métricas y los alumnos investigan, exponen y demuestran en código los algoritmos por grupos, consolidándolos después sobre sus datasets.
-5. **Expandir las unidades de IA Generativa y Agentes** (UT8 a 39 h y UT9 a 25 h) en el tercer trimestre, aprovechando las horas liberadas de la fase inicial.
+1. **Adelantar el inicio de la UT2 al 16 de septiembre de 2026** (disponiendo de **34 h** lectivas en lugar de 15 h), permitiendo asentar con máxima solidez la sintaxis moderna de Python, POO, type hinting, utilidades de tratamiento de datos (NumPy/Pandas), desarrollo de APIs REST con Flask/FastAPI (Pydantic v2) y contenedorización con Docker Desktop.
+2. **Mantener los hitos de cierre intactos**, finalizando la UT2 el **21 de octubre de 2026** y la **UT4 (Machine Learning) antes del 16 de diciembre de 2026** para garantizar la entrega de la 1ª Evaluación antes de las vacaciones de Navidad.
+3. **Implementar una estructura de Aprendizaje Cooperativo (Flipped Classroom)** en la UT4, donde el profesor imparte fundamentos/métricas y los alumnos investigan, exponen y demuestran en código los algoritmos por grupos.
+4. **Expandir las unidades de IA Generativa y Agentes** (UT8 a 39 h y UT9 a 25 h) en el tercer trimestre.
 
 ---
 
@@ -19,37 +18,58 @@ Esta versión del calendario ha sido optimizada para:
 
 | Trimestre / Evaluación | Semanas Lectivas | Fechas Aproximadas | Horas Totales | Unidades de Trabajo (UT) |
 |---|---|---|---|---|
-| **1ª Evaluación** | 11 semanas | 5 oct - 15 dic | **66 h** | UT1, UT2, UT3, UT4 |
+| **1ª Evaluación** | 14 semanas | 14 sep - 15 dic | **85 h** | UT1 (2h), UT2 (34h), UT3 (15h), UT4 (34h) |
 | **2ª Evaluación** | 12 semanas | 16 dic - 18 mar (Resuelve tras Navidad) | **73 h** | UT5, UT6, UT7 (Inicio) |
 | **3ª Evaluación** | 9 semanas | 30 mar - 27 may (Resuelve tras S. Santa) | **61 h** | UT7 (Fin), UT8, UT9 |
-| **Total Curso** | **32 semanas lectivas** | **5 oct - 27 may** | **200 h** | **UT1 a UT9** |
+| **Total Curso** | **35 semanas lectivas** | **14 sep - 27 may** | **219 h** | **UT1 a UT9** |
 
 ---
 
 ## Detalle Semanal
 
-### 📅 Primer Trimestre (1ª Evaluación) — 66 Horas Mapeadas (Límite: 15 de Diciembre)
+### 📅 Primer Trimestre (1ª Evaluación) (Límite de Evaluación: 15 de Diciembre)
 
-#### Semana 1 (05/10/2026 a 08/10/2026) — 7 horas lectivas
+#### Semana 1 (14/09/2026 a 17/09/2026) — 7 horas lectivas
 * **UT1 — Introducción a la IA (2 h):** 
-  * *Lunes (2h):* Presentación de la asignatura. Historia, evolución, áreas principales y casos de uso prácticos en la industria.
+  * *Lunes (2h):* Presentación de la asignatura. Historia, evolución, áreas principales (supervisado, no supervisado, visión, PLN, voz) y casos de uso reales en la industria contemporánea.
 * **UT2 — Python para IA (Flask/FastAPI + Docker) (5 h):** 
-  * *Martes (2h):* **Bloque 0 (Python básico y Ecosistema).** Sesión de motivación en local: clonar y ejecutar un script de 5 líneas con Hugging Face. Configuración de VS Code y entorno local (Python, `venv`).
-  * *Miércoles (2h):* **Bloque 0 cont.** Sintaxis condensada de Python (condicionales, bucles rápidos, `range`, `enumerate`, `zip`) y colecciones nativas (listas, tuplas, conjuntos, diccionarios, slicing y comprehensions).
-  * *Jueves (1h):* **Bloque 0 cont.** Funciones y POO básica (clases, `__init__`, herencia), y gestión de dependencias (`pip`, `requirements.txt`).
+  * *Martes (2h):* **Bloque 0 (Python básico y Ecosistema).** Sesión de motivación en local: clonar y ejecutar en VS Code un script de 5 líneas con un pipeline de Hugging Face (`sentiment-analysis`). Configuración del entorno local (VS Code, Python local, `venv`, `pip`, `requirements.txt`).
+  * *Miércoles (2h):* **Bloque 0 cont.** Tipos de datos primarios, operadores, f-strings, condicionales y bucles rápidos (`range`, `enumerate`, `zip`).
+  * *Jueves (1h):* **Bloque 0 cont.** Colecciones nativas (`list`, `tuple`, `dict`, `set`), slicing e introducción a comprehensions.
 
-#### Semana 2 (12/10/2026 a 15/10/2026) — 5 horas lectivas
+#### Semana 2 (21/09/2026 a 24/09/2026) — 7 horas lectivas
+* **UT2 — Python para IA (Flask/FastAPI + Docker) (7 h):**
+  * *Lunes (2h):* **Bloque 0 cont.** Funciones en Python: parámetros (`*args`, `**kwargs`), lambdas, retornos múltiples y Type Hinting (tipado estático moderno).
+  * *Martes (2h):* **Bloque 0 cont.** Programación Orientada a Objetos (POO): Clases, instanciación, método `__init__`, atributos y métodos de instancia.
+  * *Miércoles (2h):* **Bloque 0 cont.** POO avanzada: Herencia, `@classmethod`, `@staticmethod`, dunder métodos (`__str__`, `__repr__`) y encapsulamiento.
+  * *Jueves (1h):* **Bloque 0 cont.** Manejo robusto de errores y excepciones (`try/except/finally/else`), excepciones personalizadas y Context Managers (`with`).
+
+#### Semana 3 (28/09/2026 a 01/10/2026) — 7 horas lectivas
+* **UT2 — Python para IA (Flask/FastAPI + Docker) (7 h):**
+  * *Lunes (2h):* **Bloque 0 cont.** Introducción práctica al ecosistema científico: NumPy (vectores, matrices, indexing y operaciones vectorizadas).
+  * *Martes (2h):* **Bloque 0 cont.** Pandas esencial: DataFrames, Series, lectura de CSV/JSON (`read_csv`), inspección (`head`, `info`, `describe`) y filtrado.
+  * *Miércoles (2h):* **Bloque 0 cont.** Visualización rápida con Matplotlib y Seaborn (gráficos de líneas, barras y dispersión) para anticipar la UT3.
+  * *Jueves (1h):* **Bloque 1 (Ciclo de vida de una aplicación de IA - 1h):** Explicación del mapa conceptual de 11 pasos (*Problema → Datos → EDA → Preprocesamiento → Feature Eng. → Modelo → Optimización → Evaluación → API → Docker → Deploy*).
+
+#### Semana 4 (05/10/2026 a 08/10/2026) — 7 horas lectivas
+* **UT2 — Python para IA (Flask/FastAPI + Docker) (7 h):**
+  * *Lunes (2h):* **Bloque 2 (APIs con Flask / FastAPI).** Fundamentos de arquitectura REST y protocolo HTTP (GET, POST, PUT, DELETE, códigos de estado y JSON).
+  * *Martes (2h):* **Bloque 2 cont.** Creación del primer servidor HTTP en Flask: enrutamiento, captura de parámetros de petición y devolución de JSON.
+  * *Miércoles (2h):* **Bloque 2 cont.** Estructuración de aplicaciones Flask con Blueprints y manejo de errores HTTP.
+  * *Jueves (1h):* **Bloque 2 cont.** Introducción a FastAPI: ¿Por qué FastAPI para IA? Declaración de endpoints asíncronos (`async/await`).
+
+#### Semana 5 (12/10/2026 a 15/10/2026) — 5 horas lectivas
 * **UT2 — Python para IA (Flask/FastAPI + Docker) (5 h):**
   * *Lunes (0h):* **FESTIVO NACIONAL (Día de la Hispanidad)** — Sin clases.
-  * *Martes (2h):* **Bloque 1 (Ciclo de vida - 1h):** Explicación del flujo de un proyecto de IA (Datos → EDA → Pipeline → Modelo → API → Docker → Deploy). **Bloque 2 (APIs con Flask/FastAPI - 1h):** Conceptos HTTP y arquitectura REST (GET/POST, JSON).
-  * *Miércoles (2h):* **Bloque 2 cont.** Creación de endpoints y enrutamiento con Flask/FastAPI. Validación estricta con Pydantic.
-  * *Jueves (1h):* **Bloque 2 cont.** Generación y testeo interactivo de documentación OpenAPI / Swagger.
+  * *Martes (2h):* **Bloque 2 cont.** Validación estricta de esquemas de datos con Pydantic v2 (BaseModel, Field, tipos complejos, validaciones personalizadas).
+  * *Miércoles (2h):* **Bloque 2 cont.** Integración de Pydantic con FastAPI: validación automática de Path, Query y Body parameters.
+  * *Jueves (1h):* **Bloque 2 cont.** Autodocumentación interactiva OpenAPI / Swagger UI, gestión de CORS y middlewares.
 
-#### Semana 3 (19/10/2026 a 22/10/2026) — 7 horas lectivas
+#### Semana 6 (19/10/2026 a 22/10/2026) — 7 horas lectivas
 * **UT2 — Python para IA (Flask/FastAPI + Docker) (5 h):**
-  * *Lunes (2h):* **Bloque 2 cont. (1h):** Práctica integradora: crear una pasarela de datos HTTP en Flask/FastAPI. **Bloque 3 (Dockerización - 1h):** Conceptos de contenedor vs. imagen y escritura del Dockerfile para la API creada.
-  * *Martes (2h):* **Bloque 3 cont.** Comandos esenciales de Docker (`build`, `run`), mapeo de puertos y gestión de variables de entorno locales.
-  * *Miércoles (1h):* **Bloque 3 cont.** Contenedorización de la API de Flask/FastAPI en local y prueba de consumo desde cliente externo. *Fin de la UT2 (15h totales)*.
+  * *Lunes (2h):* **Bloque 3 (Dockerización de APIs).** Conceptos de contenedorización: Imagen vs. Contenedor, arquitectura Docker Engine vs VMs. Instalación y verificación de Docker Desktop.
+  * *Martes (2h):* **Bloque 3 cont.** Escritura de un Dockerfile optimizado para Python (`python:3.12-slim`, `.dockerignore`, instalación de dependencias, variables `ENV`, `EXPOSE` y servidor `uvicorn`/`gunicorn`). Comandos `build` y `run`.
+  * *Miércoles (1h):* **Bloque 3 cont.** Mapeo de puertos, volúmenes locales persistentes, variables de entorno con `.env` e introducción a Docker Compose. *Fin de la UT2 (34h totales)*.
 * **UT3 — Preparación y análisis de datos (2 h):**
   * *Miércoles (1h cont.):* **Bloque 1 (Entender el dataset y Pandas).** Conceptos de features, target y división Train/Test split.
   * *Jueves (1h):* Carga e inspección de datasets reales con Pandas (`read_csv`, `head`, `info`, `describe`).

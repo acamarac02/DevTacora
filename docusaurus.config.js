@@ -10,6 +10,8 @@ import rehypeKatex from 'rehype-katex';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+const isProd = process.env.NODE_ENV === 'production';
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'DevTacora',
@@ -60,6 +62,9 @@ const config = {
           sidebarPath: './sidebars.js',
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
+          exclude: isProd
+            ? ['01_pia_2526/**', '**/_*.{js,jsx,ts,tsx,md,mdx}', '**/_*/**']
+            : ['**/_*.{js,jsx,ts,tsx,md,mdx}', '**/_*/**'],
         },
         blog: {
           showReadingTime: true,
