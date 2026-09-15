@@ -1,8 +1,8 @@
 ---
 title: "Introducción"
 sidebar_position: 1
-description: "Introducción a Python como lenguaje para la Inteligencia Artificial, su ecosistema de librerías y el uso de Jupyter Notebooks."
-keywords: [Python, Inteligencia Artificial, Jupyter, Google Colab, librerías IA]
+description: "Introducción a Python como lenguaje clave para la Inteligencia Artificial, su ecosistema de librerías y la preparación para entornos de producción."
+keywords: [Python, Inteligencia Artificial, VS Code, entorno local, librerías IA]
 ---
 
 <div class="justify-text">
@@ -16,32 +16,29 @@ La Inteligencia Artificial (IA) es un campo en constante evolución que combina 
 A lo largo de la historia se han utilizado distintos lenguajes en el ámbito de la Inteligencia Artificial:
 
 * **LISP** (1958) y **Prolog** (1972): muy empleados en los inicios de la IA, especialmente en sistemas expertos y razonamiento lógico.
-* **C++ y Java** (años 80-90 en adelante): ofrecen alto rendimiento y han sido habituales en aplicaciones de producción y sistemas de gran escala. C++ destaca por su velocidad de ejecución, siendo elegido en aplicaciones donde el rendimiento es crítico.
+* **C++ y Java** (años 80-90 en adelante): ofrecen alto rendimiento y han sido habituales en aplicaciones de producción y sistemas de gran escala. C++ destaca por su velocidad de ejecución, siendo elegido en componentes críticos de librerías como TensorFlow o PyTorch.
 * **R** (1993): muy usado en estadística y análisis de datos, con un ecosistema rico en paquetes para análisis exploratorio.
-* **Julia** (2012): más reciente, pensado para cálculos científicos de alto rendimiento. Ofrece una sintaxis similar a Python pero con velocidad cercana a la de C.
+* **Julia** (2012): más reciente, pensado para cálculos científicos de alto rendimiento. Ofrece una sintaxis limpia similar a Python con velocidad cercana a la de C.
 
 Si bien todos estos lenguajes siguen teniendo aplicaciones específicas, en la práctica actual **Python se ha convertido en el estándar de facto en Inteligencia Artificial y Ciencia de Datos**. Su sencillez, comunidad activa y amplio ecosistema de librerías lo han posicionado como la primera elección tanto en investigación como en la industria.
 
 ## Python como lenguaje para la IA
 
-Python destaca por su equilibrio entre simplicidad y potencia. Gracias a su sintaxis clara, es accesible incluso para programadores con poca experiencia previa, y al mismo tiempo permite construir sistemas complejos con relativa facilidad.
+Python destaca por su equilibrio entre simplicidad y potencia. Gracias a su sintaxis clara, es accessible para programadores y al mismo tiempo permite construir sistemas complejos de producción con relativa facilidad.
 
 ### Ventajas de Python en IA
 
-* **Sintaxis sencilla y legible**: facilita el aprendizaje y la colaboración en proyectos multidisciplinares.
-* **Gran comunidad**: existe una comunidad muy activa que desarrolla librerías, frameworks y tutoriales.
-* **Ecosistema especializado**: bibliotecas como **NumPy**, **Pandas**, **Matplotlib**, **TensorFlow**, **PyTorch** o **Scikit-learn** han convertido a Python en el lenguaje preferido en investigación y aplicaciones prácticas.
-* **Compatibilidad**: puede integrarse con otros lenguajes (C, C++, Java) y ejecutarse en distintos entornos (local, nube, dispositivos móviles).
+* **Sintaxis sencilla y legible**: facilita el aprendizaje, el prototipado rápido y el mantenimiento de proyectos.
+* **Gran comunidad**: existe un ecosistema masivo que desarrolla librerías, frameworks y soluciones ante problemas comunes.
+* **Ecosistema especializado**: bibliotecas como **NumPy**, **Pandas**, **Matplotlib**, **Scikit-learn**, **FastAPI**, **PyTorch** o **Transformers (Hugging Face)** han convertido a Python en el lenguaje preferido del sector.
+* **Integración y despliegue**: se integra fácilmente con contenedores **Docker**, servicios web en la nube y APIs de microservicios.
 
-### Jupyter Notebooks
+### Entorno de desarrollo para el módulo
 
-Una de las herramientas que más ha impulsado el uso de Python en IA es **Jupyter Notebooks**. Se trata de un entorno interactivo que permite:
+Para garantizar una experiencia de aprendizaje alineada con los estándares profesionales de la industria, en este módulo utilizaremos como entorno principal **VS Code en local**:
 
-* Escribir y ejecutar código en bloques (celdas).
-* Combinar texto, fórmulas matemáticas (con LaTeX), gráficos y código en un mismo documento.
-* Documentar y reproducir experimentos de forma clara y estructurada.
-* Compartir fácilmente resultados con otros usuarios.
-
-En el curso utilizaremos principalmente **Google Colab**, una plataforma basada en Jupyter que funciona en la nube, sin necesidad de instalación y con acceso gratuito a GPU y TPU.
+* Configuraremos **entornos virtuales (`venv`)** para gestionar aisladamente las dependencias del proyecto.
+* Aprenderemos a organizar código modular en archivos `.py`.
+* Integraremos nuestros modelos con servicios web (**FastAPI**) y contenedores (**Docker**).
 
 </div>

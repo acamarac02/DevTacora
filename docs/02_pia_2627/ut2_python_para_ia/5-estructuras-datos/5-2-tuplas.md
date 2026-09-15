@@ -11,6 +11,10 @@ Las **tuplas** son colecciones **ordenadas e inmutables**.
 Esto significa que, una vez creadas, **no se pueden modificar** (no se pueden añadir ni eliminar elementos, ni cambiar su valor).
 Se utilizan para representar datos **constantes o que no deben alterarse**.
 
+:::tip USO EN INTELIGENCIA ARTIFICIAL
+En IA y aprendizaje automático, las tuplas se utilizan constantemente para representar **dimensiones de matrices o imágenes** (por ejemplo, `forma_imagen = (224, 224, 3)`), **coordenadas**, parámetros de configuración que deben permanecer fijos y para **devolver múltiples valores desde una función**.
+:::
+
 :::warning LAS TUPLAS SON COLECCIONES ORDENADAS
 Cuando decimos que **las tuplas son "ordenadas"**, significa que **los elementos mantienen el orden en que fueron insertados** y que ese orden no cambia automáticamente.
 No es que se ordenen solas (como en matemáticas), sino que **recuerdan el orden original**.
@@ -86,7 +90,7 @@ print(colores)  # ('amarillo', 'verde', 'azul')
 
 ```python
 frutas = ("manzana", "pera", "uva")
-print("pera" in frutas)      # True
+print("pera" in frutas)        # True
 print("plátano" not in frutas) # True
 ```
 

@@ -6,11 +6,11 @@
     - Ventajas y ecosistema de librerías
     - Jupyter Notebooks
 
-## 2. Trabajo práctico en Google Colab
-- Creación y organización de notebooks
-- Importación de datasets
-- Conexión con Google Drive
-- Descarga y exportación de resultados
+## 2. Puesta en marcha del entorno local (VS Code)
+- Configuración de VS Code y extensiones clave
+- Instalación y gestión de entornos virtuales (`venv`)
+- Gestión de dependencias con `pip` y `requirements.txt`
+- Primera sesión práctica con Hugging Face (`transformers`)
 
 ## 3. Fundamentos de Python 
 - Sintaxis básica y estructuras de control

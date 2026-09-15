@@ -276,7 +276,7 @@ print(mensaje)
 
 #### 🔹 ¿Qué ocurre en `print`?
 
-La función `print()` muestra por pantalla (o en consola, o en Colab) el valor de una o varias variables, cadenas o expresiones.
+La función `print()` muestra por pantalla (en la terminal o consola de VS Code) el valor de una o varias variables, cadenas o expresiones.
 Cuando le pasamos un f-string, **Python lo evalúa primero**, reemplazando las llaves `{}` con los valores correspondientes, y luego `print` se encarga de mostrar la cadena resultante.
 
 ---

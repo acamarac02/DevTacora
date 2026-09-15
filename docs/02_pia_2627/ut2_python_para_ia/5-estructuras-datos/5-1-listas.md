@@ -5,10 +5,17 @@ description: "Las listas en Python son colecciones ordenadas y modificables (mut
 keywords: [Python, estructuras de datos, listas]
 ---
 
+<div class="justify-text">
+
+Las **listas** son una de las estructuras de datos más importantes en Python. Permiten guardar secuencias ordenadas de elementos y modificarlos cuando se necesite.
+
 * Son colecciones **ordenadas y modificables** (mutables).
-* Permiten elementos de cualquier tipo (números, cadenas, incluso otras listas).
+* Permiten elementos de cualquier tipo (números, cadenas, incluso otras listas o diccionarios).
 * Se definen con corchetes `[]`.
 
+:::tip USO EN INTELIGENCIA ARTIFICIAL
+En IA y Ciencia de Datos, las listas se usan constantemente para almacenar secuencias de tokens, lotes de datos (*batches*), listas de predicciones o historiales de métricas de entrenamiento.
+:::
 
 ### Cómo crear una lista
 
@@ -106,7 +113,7 @@ print(nombres[:3])    # ['Ana', 'Luis', 'Marta']   (inicio implícito en 0)
 print(nombres[2:])    # ['Marta', 'Juan', 'Lucía'] (fin implícito en último)
 print(nombres[:])     # ['Ana', 'Luis', 'Marta', 'Juan', 'Lucía'] (copia completa)
 
-# El tercer parámetro controla el **salto** entre elementos.
+# El tercer parámetro controla el salto entre elementos.
 print(nombres[::2])   # ['Ana', 'Marta', 'Lucía'] (de dos en dos)
 print(nombres[1::2])  # ['Luis', 'Juan'] (empieza en 1 y salta de dos en dos)
 
@@ -127,29 +134,39 @@ print(nombres)  # ['Ana', 'Lucía', 'Marta']
 ### Comprobar si un elemento está en la lista
 
 ```python
-print("Ana" in nombres)     # True
+print("Ana" in nombres)       # True
 print("Pedro" not in nombres) # True
 ```
 
 ### Añadir elementos
 
-* Con `append()`: al final de la lista.
-* Con `insert(i, x)`: en una posición concreta.
+* `append(x)` → añade un elemento al final de la lista.
+* `extend(iterable)` → añade **todos los elementos** de otra lista o colección al final.
+* `insert(i, x)` → inserta un elemento en una posición concreta.
 
 ```python
-nombres.append("Juan")
-print(nombres)  # ['Ana','Lucía','Marta','Juan']
+nombres = ["Ana", "Lucía"]
 
-nombres.insert(1, "Pedro")
-print(nombres)  # ['Ana','Pedro','Lucía','Marta','Juan']
+# append: añade 1 elemento
+nombres.append("Juan")
+print(nombres)  # ['Ana', 'Lucía', 'Juan']
+
+# extend: une otra lista al final
+nuevos = ["Pedro", "Elena"]
+nombres.extend(nuevos)
+print(nombres)  # ['Ana', 'Lucía', 'Juan', 'Pedro', 'Elena']
+
+# insert: inserta en una posición
+nombres.insert(1, "Marta")
+print(nombres)  # ['Ana', 'Marta', 'Lucía', 'Juan', 'Pedro', 'Elena']
 ```
 
 ### Eliminar elementos
 
-* `remove(x)` → elimina el valor.
-* `pop(i)` → elimina y devuelve el valor en la posición (último por defecto).
+* `remove(x)` → elimina la primera aparición del valor.
+* `pop(i)` → elimina y devuelve el valor en la posición indicada (último por defecto).
 * `del lista[i]` → elimina el valor en la posición.
-* `clear()` → vacía la lista.
+* `clear()` → vacía la lista por completo.
 
 ```python
 nombres.remove("Pedro")
@@ -167,9 +184,9 @@ print(nombres)  # []
 
 ### Copiar una lista
 
-En Python, si hacemos una asignación directa (lista2 = lista1), **no se crea una nueva lista**, sino que ambas variables apuntan al mismo objeto en memoria.
+En Python, si hacemos una asignación directa (`lista2 = lista1`), **no se crea una nueva lista**, sino que ambas variables apuntan al mismo objeto en memoria.
 
-Las formas correctas de realizar una copia de una lista en Python son con el método `.copy()` o con el constructor `list()`.
+Las formas correctas de realizar una copia independiente son con el método `.copy()` o con la función `list()`:
 
 ```python
 lista1 = [1, 2, 3]
@@ -179,36 +196,28 @@ lista3 = list(lista1)
 
 ### Ordenar listas
 
-Python ofrece **dos formas** principales de ordenar:
-
+Python ofrece dos formas principales de ordenar:
 
 #### 1) `lista.sort()`
 
-* Es un **método** de las listas.
-* Ordena la **lista original** → la modifica en el sitio (*in-place*).
-* **No devuelve nada** (`None`).
-
-Ejemplo:
+* Es un **método** propio de las listas.
+* Ordena la **lista original** (*in-place*).
+* No devuelve una lista nueva (devuelve `None`).
 
 ```python
 numeros = [4, 2, 9, 1]
 numeros.sort()
 print(numeros)   # [1, 2, 4, 9]
-```
 
-Si queremos orden descendente:
-
-```python
+# Orden descendente
 numeros.sort(reverse=True)
 print(numeros)   # [9, 4, 2, 1]
 ```
 
 #### 2) `sorted(iterable)`
 
-* Es una **función integrada** (no solo de listas, sirve para cualquier iterable: tuplas, cadenas, diccionarios…).
-* Devuelve una **nueva lista ordenada** y deja intacto el iterable original.
-
-Ejemplo:
+* Es una **función integrada** que funciona con cualquier iterable.
+* Devuelve una **nueva lista ordenada** y deja intacta la lista original.
 
 ```python
 numeros = [4, 2, 9, 1]
@@ -218,20 +227,13 @@ print("Original:", numeros)    # [4, 2, 9, 1]
 print("Ordenados:", ordenados) # [1, 2, 4, 9]
 ```
 
-También permite ordenar descendente:
+### Comprensiones de listas (List Comprehensions)
 
-```python
-ordenados = sorted(numeros, reverse=True)
-print(ordenados)  # [9, 4, 2, 1]
-```
-
-### Comprensiones (comprehension)
-
-Las **comprensiones de listas** permiten crear listas nuevas a partir de una secuencia (o cualquier iterable) en una sola línea, de forma concisa y legible.
+Las **comprensiones de listas** permiten crear listas nuevas a partir de una secuencia en una sola línea, de forma concisa y legible.
 
 Sintaxis:
 
-```
+```python
 [expresion for elemento in iterable if condicion]
 ```
 
@@ -246,8 +248,11 @@ print(cuadrados)  # [0, 1, 4, 9, 16]
 pares = [x for x in range(10) if x % 2 == 0]
 print(pares)  # [0, 2, 4, 6, 8]
 
-# Transformar texto
-palabras = ["Hola", "Python", "IA"]
-longitudes = [len(p) for p in palabras]
-print(longitudes)  # [4, 6, 2]
+# Transformar textos
+palabras = ["hola", "python", "ia"]
+mayusculas = [p.upper() for p in palabras]
+print(mayusculas)  # ['HOLA', 'PYTHON', 'IA']
 ```
+
+</div>
+
