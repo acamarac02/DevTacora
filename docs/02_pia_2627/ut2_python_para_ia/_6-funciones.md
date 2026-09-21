@@ -1,8 +1,8 @@
 ---
-title: "Programación funcional"
-sidebar_position: 5
-description: "Qué son las funciones, cómo se definen, cómo se llaman, tipos de argumentos y valores de retorno en Python. Uso de funciones lambda, funciones de orden superior como map, filter y reduce, decoradores y gestores de contexto (context managers) en Python."
-keywords: [Python, programación funcional, lambda, map, filter, reduce, decoradores, context managers]
+title: "Funciones y Programación Funcional"
+sidebar_position: 6
+description: "Declaración de funciones, parámetros, retornos, Type Hinting, funciones lambda, uso conceptual de decoradores y gestores de contexto en Python."
+keywords: [Python, funciones, type hinting, lambda, map, filter, decoradores, context managers]
 ---
 
 <div class="justify-text">
@@ -16,7 +16,9 @@ Podemos imaginarlas como **“máquinas”**: reciben datos (entradas), hacen al
 ENTRADA → [ FUNCIÓN ] → SALIDA
 ```
 
-## Funciones
+---
+
+## Declaración de Funciones
 
 Las funciones se definen con la palabra clave `def`, seguida de un nombre, paréntesis (con o sin parámetros) y dos puntos.
 El **cuerpo** de la función se escribe indentado (normalmente 4 espacios).
@@ -29,663 +31,283 @@ def saludar():
 Para **ejecutarla**, se llama por su nombre seguido de paréntesis:
 
 ```python
-saludar()
-# Salida: Hola, mundo!
+saludar()  # Salida: Hola, mundo!
 ```
 
 ---
 
-### Parámetros y argumentos
+### Parámetros y Argumentos
 
-Los **parámetros** son los **nombres de variables** que aparecen entre paréntesis en la definición de la función. Actúan como **“variables locales”** que recibirán un valor cuando se llame a la función.
-
-```python
-def saludar_persona(nombre):
-    print(f"Hola, {nombre}!")
-```
-
+Los **parámetros** son los **nombres de variables** que aparecen entre paréntesis en la definición de la función.
 Los **argumentos** son los **valores reales** que pasamos a la función cuando la llamamos.
-
-```python
-saludar_persona("Ana")
-# Salida: Hola, Ana!
-```
-
-#### Varios parámetros
-
-Podemos definir funciones con varios parámetros, separados por comas.
 
 ```python
 def presentar(nombre, edad):
     print(f"Me llamo {nombre} y tengo {edad} años.")
-```
 
-```python
 presentar("Luis", 20)
 # Salida: Me llamo Luis y tengo 20 años.
 ```
 
 ---
 
+### Tipado Estático Moderno: Type Hinting
+
+En versiones modernas de Python (y muy especialmente en frameworks como **FastAPI** o **Pydantic**), se utiliza el **Type Hinting** (anotaciones de tipo).
+Indica qué tipo de datos espera recibir cada parámetro y qué tipo de datos devolverá la función.
+
+Sintaxis:
+```python
+def nombre_funcion(parametro1: tipo, parametro2: tipo) -> tipo_retorno:
+    ...
+```
+
+Ejemplo:
+```python
+def calcular_area_rectangulo(base: float, altura: float) -> float:
+    """Calcula el área de un rectángulo dados su base y altura."""
+    return base * altura
+
+# El código funciona igual, pero VS Code y FastAPI entienden perfectamente los tipos
+area: float = calcular_area_rectangulo(5.0, 3.2)
+print(area)  # 16.0
+```
+
+:::tip ¿POR QUÉ USAR TYPE HINTING EN IA?
+1. **Validación automática**: Frameworks web de IA como **FastAPI** usan estas anotaciones para validar los datos que llegan por HTTP automáticamente.
+2. **Autocompletado en VS Code**: Permite que el editor sugiera los métodos y atributos correctos del tipo de dato sin cometer errores de sintaxis.
+:::
+
+---
+
 ### Valores de retorno (`return`)
 
 Una función puede **devolver un valor** usando la palabra clave `return`.
-Esto permite **guardar el resultado** en una variable o usarlo en una expresión.
 
 ```python
-def sumar(a, b):
+def sumar(a: int, b: int) -> int:
     return a + b
-```
 
-```python
 resultado = sumar(5, 3)
 print(resultado)   # 8
 ```
 
 :::warning Importante
-Cuando una función ejecuta `return`, **termina inmediatamente** y devuelve el valor indicado. Esto implica que el código que hay debajo nunca se ejecutará.
-
-```python
-def sumar(a, b):
-    return a + b
-    print("Este mensaje va después del return") # Esta línea nunca llega a ejecutarse
-```
+Cuando una función ejecuta `return`, **termina inmediatamente** y devuelve el valor indicado. El código que haya debajo nunca se ejecutará.
 :::
 
 #### Funciones que devuelven varios valores
 
 En Python, una función puede **devolver varios valores a la vez** separándolos con comas.
-Internamente, Python los agrupa en una **tupla**, aunque no sea necesario escribir los paréntesis.
+Internamente, Python los agrupa y devuelve en una **tupla**:
 
 ```python
-def operaciones(a, b):
-    suma = a + b
-    resta = a - b
-    producto = a * b
-    return suma, resta, producto
-```
+def evaluar_modelo(y_true: list, y_pred: list) -> tuple:
+    precision = 0.95
+    recall = 0.90
+    f1 = 0.92
+    return precision, recall, f1
 
-```python
-resultados = operaciones(5, 3)
-print(resultados)
-# (8, 2, 15)
-```
-
-En este caso, `resultados` es una **tupla** con los tres valores.
-
-También podemos **desempaquetar** los valores directamente en variables separadas:
-
-```python
-s, r, p = operaciones(5, 3)
-print(f"Suma: {s}, Resta: {r}, Producto: {p}")
-# Suma: 8, Resta: 2, Producto: 15
-```
-
-
-#### Funciones que no devuelven nada
-
-Si no se usa `return`, la función devuelve implícitamente `None`.
-
-```python
-def saludo():
-    print("Hola!")
-
-x = saludo()    # Ejecuta la función
-print(x)        # None
+# Desempaquetado directo en variables individuales
+p, r, f = evaluar_modelo([], [])
+print(f"Precisión: {p}, Recall: {r}, F1: {f}")
 ```
 
 ---
 
 ### Tipos de parámetros
 
-Python permite distintos tipos de parámetros según la flexibilidad que queramos.
-
-
-#### 1. Posicionales (los más comunes)
-
-Los argumentos se pasan en el **mismo orden** que los parámetros.
+#### 1. Posicionales y nombrados (keyword arguments)
 
 ```python
-def resta(a, b):
-    return a - b
+def dividir(numerador: float, denominador: float) -> float:
+    return numerador / denominador
 
-print(resta(10, 5))   # 5
+# Argumentos posicionales (el orden importa)
+print(dividir(10, 2))  # 5.0
+
+# Argumentos nombrados (el orden NO importa)
+print(dividir(denominador=2, numerador=10))  # 5.0
 ```
 
-
-#### 2. Nombrados (keyword arguments)
-
-Se puede indicar el nombre del parámetro al llamar la función.
-Esto permite **cambiar el orden** o **hacer el código más claro**.
+#### 2. Valores por defecto
 
 ```python
-def resta(a, b):
-    return a - b
+def clasificar_texto(texto: str, umbral: float = 0.75) -> str:
+    # Si no se especifica umbral, tomará 0.75 por defecto
+    return "Aceptado" if len(texto) >= 10 else "Rechazado"
 
-print(resta(b=2, a=8))   # 6
+print(clasificar_texto("Hola"))                 # Rechazado
+print(clasificar_texto("Texto largo de prueba")) # Aceptado
 ```
 
+#### 3. Parámetros variables (`*args` y `**kwargs`)
 
-#### 3. Valores por defecto
-
-Podemos asignar un **valor predeterminado** a un parámetro, que se usa si no se pasa argumento.
+* `*args` captura argumentos posicionales adicionales en una **tupla**.
+* `**kwargs` captura argumentos nombrados adicionales (`clave=valor`) en un **diccionario**.
 
 ```python
-def saludar(nombre="invitado"):
-    print(f"Hola, {nombre}!")
+def entrenar_modelo(nombre_modelo: str, *metricas, **hyperparametros):
+    print(f"Modelo: {nombre_modelo}")
+    print(f"Métricas solicitadas: {metricas}")  # Tupla
+    print(f"Hiperparámetros: {hyperparametros}") # Diccionario
 
-saludar()          # Hola, invitado!
-saludar("Marta")   # Hola, Marta!
+entrenar_modelo("ResNet50", "accuracy", "loss", lr=0.001, epochs=10)
 ```
 
-
-#### 4. Parámetros variables (`*args` y `**kwargs`)
-
-A veces no sabemos cuántos argumentos recibirá la función.
-
-##### `*args` → varios argumentos posicionales
-
-Si no sabemos cuántos argumentos vamos a pasar a nuestra función, podemos crear una función que acepte un número arbitrario de argumentos añadiendo un asterisco * antes del nombre del parámetro.
-
-```python
-def sumar_todo(*numeros):
-    total = 0
-    for num in numeros:
-        total = total + num
-    return total
-
-print(sumar_todo(1, 2, 3, 4))  # 10
-```
-
-:::info
-También puedes mezclar los tipos de parámetros.
-```python
-def generar_grupos(nombre_grupo, *miembros, ciudad = "Cáceres"):
-    print(f"El grupo se llama {nombre_grupo} y pertenece a la de ciudad de {ciudad}")
-    print("Los miembros son:")
-    for miembro in miembros:
-        print(miembro)
-
-# ciudad debe ir nombrado para evitar que lo incluya como parte de los argumentos posicionales "miembros"
-generar_grupos("Equipo 1", "Pedro", "Ana", "Juan", ciudad = "Madrid")
-```
-
-:::
-
-##### `**kwargs` → varios argumentos nombrados
-
-A veces no sabemos **qué cantidad de argumentos con nombre** (`clave=valor`) se van a pasar a una función.
-En esos casos, podemos usar `**kwargs` (*keyword arguments*), que **recoge todos los argumentos nombrados adicionales** en un **diccionario**.
-
-La palabra `kwargs` es una convención (viene de *keyword arguments*), pero podrías usar cualquier nombre después de los dos asteriscos `**`.
-
-```python
-def mostrar_info(**datos):
-    for clave, valor in datos.items():
-        print(f"{clave}: {valor}")
-
-mostrar_info(nombre="Ana", edad=22, ciudad="Madrid")
-```
-
-Salida:
-
-```
-nombre: Ana
-edad: 22
-ciudad: Madrid
-```
-
-👉 Internamente, `**datos` se convierte en un **diccionario**:
-
-```python
-{
-  "nombre": "Ana",
-  "edad": 22,
-  "ciudad": "Madrid"
-}
-```
-
-Por eso podemos recorrerlo con `.items()` para acceder a las **claves** y **valores**.
-
-##### 🔹 Diferencias `*args` y `*kwargs`
-
-| Característica     | `*args`                 | `**kwargs`                            |
-| ------------------ | ----------------------- | ------------------------------------- |
-| Captura            | Argumentos posicionales | Argumentos nombrados (clave=valor)    |
-| Tipo de estructura | Tupla                   | Diccionario                           |
-| Ejemplo            | `sumar_todo(1,2,3)`     | `mostrar_info(nombre="Ana", edad=22)` |
-
-Ambos pueden combinarse en una misma función:
-
-```python
-def registrar_usuario(*roles, **datos):
-    print("Roles:", roles)
-    print("Datos:", datos)
-
-registrar_usuario("admin", "editor", nombre="Luis", activo=True)
-```
-
-Salida:
-
-```
-Roles: ('admin', 'editor')
-Datos: {'nombre': 'Luis', 'activo': True}
+**Salida:**
+```text
+Modelo: ResNet50
+Métricas solicitadas: ('accuracy', 'loss')
+Hiperparámetros: {'lr': 0.001, 'epochs': 10}
 ```
 
 ---
 
 ### Documentación: Docstrings
 
-Podemos incluir un **comentario descriptivo** dentro de la función usando **triple comillas**.
-Se llama **docstring** y explica qué hace la función.
+Explicación formal del propósito de la función encerrada en triple comilla:
 
 ```python
-def area_rectangulo(base, altura):
-    """Calcula el área de un rectángulo a partir de su base y altura."""
-    return base * altura
-```
-
-Para consultar la documentación de una función:
-
-```python
-help(area_rectangulo)
-```
-
----
-
-### Variables locales y globales
-
-Las variables **definidas dentro** de una función **solo existen en su interior**:
-a eso se le llama **ámbito local** (*scope*).
-
-```python
-def ejemplo():
-    x = 10   # variable local
-    print(x)
-
-ejemplo()
-# print(x)  # ❌ Error: x no está definida fuera
-```
-
-Si necesitas usar una variable **declarada fuera** (global) dentro de una función, se puede acceder, pero **no modificar** a menos que se use `global`.
-
-```python
-contador = 0
-
-def incrementar():
-    global contador
-    contador += 1
-
-incrementar()
-print(contador)   # 1
-```
-
-:::warning CUIDADO CON LAS VARIABLES GLOBALES
-Las **variables globales** pueden causar errores difíciles de detectar, ya que cualquier función puede modificarlas y alterar el comportamiento del programa sin que te des cuenta.
-
-✅ **Buena práctica:** usa **parámetros** y **valores de retorno** para pasar información entre funciones en lugar de depender de variables globales.
-:::
-
----
-
-### Buenas prácticas
-
-* ✅ **Nombres descriptivos** → usa verbos si la función hace algo (`calcular_media`, `mostrar_menu`).
-* ✅ **Una sola tarea por función** → evita funciones que hagan demasiadas cosas.
-* ✅ **Evita duplicar código** → si algo se repite, conviértelo en función.
-* ✅ **Usa `return` para devolver datos**, no solo `print`.
-* ✅ **Documenta** las funciones con docstrings y comenta el código cuando sea necesario.
-
----
-
-### Ejemplo completo
-
-```python
-def calcular_precio_final(precio, iva=21, descuento=0):
+def preprocesar_prompt(prompt: str) -> str:
     """
-    Calcula el precio final de un producto.
-    - precio: precio base (float)
-    - iva: porcentaje de IVA (por defecto 21)
-    - descuento: porcentaje de descuento (por defecto 0)
-    Devuelve el precio total.
+    Limpia espacios sobrantes y convierte el prompt a minúsculas.
+    
+    Args:
+        prompt (str): Texto de entrada del usuario.
+        
+    Returns:
+        str: Texto saneado.
     """
-    precio_con_iva = precio * (1 + iva / 100)
-    precio_final = precio_con_iva * (1 - descuento / 100)
-    return round(precio_final, 2)
-
-# Uso
-p1 = calcular_precio_final(100)
-p2 = calcular_precio_final(100, iva=10, descuento=5)
-
-print(p1, p2)   # 121.0 104.5
+    return prompt.strip().lower()
 ```
 
 ---
 
-## Funciones lambda
+## Funciones Lambda (Anónimas)
 
-Las **funciones lambda** son **funciones anónimas** (sin nombre), definidas en una sola línea con la palabra clave `lambda`.
+Las **funciones lambda** son funciones pequeñas y anónimas que se definen en una sola línea.
 
 Sintaxis:
-
-```
+```python
 lambda argumentos: expresión
 ```
 
-Ejemplo básico:
-
+Ejemplo:
 ```python
 doble = lambda x: x * 2
 print(doble(5))   # 10
-```
 
-➡️ Es equivalente a:
-
-```python
+# Equivalente tradicional:
 def doble(x):
     return x * 2
 ```
 
-Las lambdas se usan cuando necesitamos **funciones cortas y desechables**, por ejemplo, dentro de `map`, `filter` o `sorted`.
-
-Ejemplo con varias variables:
-
-```python
-suma = lambda a, b: a + b
-print(suma(3, 4))   # 7
-```
-
-Y pueden incluir expresiones lógicas:
-
-```python
-mayor = lambda a, b: a if a > b else b
-print(mayor(8, 5))  # 8
-```
+Se utilizan frecuentemente como funciones desechables para transformar o filtrar elementos en listas.
 
 ---
 
-## Funciones de orden superior
+## Funciones de Orden Superior (`map`, `filter`)
 
-En Python (y en otros lenguajes funcionales), una **función de orden superior** es simplemente una **función que trabaja con otras funciones**.
-Concretamente, cumple **al menos una** de estas dos condiciones:
-
-1. **Recibe una o más funciones como argumento.**
-2. **Devuelve una función como resultado.**
-
-En otras palabras, las *higher-order functions* tratan las funciones **como datos**: pueden recibirlas, devolverlas o combinarlas.
-
-Python incluye varias **funciones que aceptan otras funciones** como argumento.
-Las más comunes en programación funcional son: **`map()`**, **`filter()`** y **`reduce()`**.
-
----
+Una **función de orden superior** es aquella que recibe otra función como argumento o devuelve una función.
 
 ### `map()`
-
-Aplica una función a **cada elemento** de un iterable y devuelve un **iterador** con los resultados.
-
-Sintaxis:
-
-```python
-map(función, iterable)
-```
-
-Ejemplo:
+Aplica una función a cada elemento de una lista o secuencia:
 
 ```python
 numeros = [1, 2, 3, 4, 5]
-dobles = map(lambda x: x * 2, numeros)
-lista_dobles = list(dobles)
-print(lista_dobles)   # [2, 4, 6, 8, 10]
+cuadrados = list(map(lambda x: x**2, numeros))
+print(cuadrados)  # [1, 4, 9, 16, 25]
 ```
-
-También puedes usar una función ya definida:
-
-```python
-def cuadrado(x):
-    return x**2
-
-numeros = [1, 2, 3, 4]
-resultado = list(map(cuadrado, numeros))
-print(resultado)  # [1, 4, 9, 16]
-```
-
----
 
 ### `filter()`
-
-Filtra los elementos de un iterable **según una condición booleana**.
-
-Sintaxis:
+Filtra los elementos que cumplen una condición booleana (`True`):
 
 ```python
-filter(función, iterable)
-```
-
-Ejemplo:
-
-```python
-numeros = [1, 2, 3, 4, 5, 6]
-pares = filter(lambda x: x % 2 == 0, numeros)
-print(list(pares))   # [2, 4, 6]
-```
-
-La función debe devolver `True` o `False` para cada elemento.
-
----
-
-### `reduce()`
-
-Aplica una función de forma **acumulativa** sobre los elementos de un iterable, **reduciéndolo a un solo valor**. Para hacerlo, **va aplicando una función binaria** (una función que toma dos argumentos) **de manera acumulativa**:
-
-* Toma los dos primeros elementos
-* Aplica la función
-* Luego combina el resultado con el siguiente elemento
-* Y así sucesivamente hasta llegar al final
-
-Por eso, **la función que se pasa a `reduce()` siempre debe aceptar dos parámetros**:
-* uno representa el **acumulador** (el resultado parcial hasta el momento)
-* y el otro el **nuevo elemento** de la lista.
-
-Está en el módulo `functools`, por lo que debe importarse.
-
-Sintaxis:
-
-```python
-from functools import reduce
-reduce(función, iterable[, valor_inicial])
-```
-
-Ejemplo:
-
-```python
-from functools import reduce
-
-numeros = [1, 2, 3, 4]
-producto = reduce(lambda x, y: x * y, numeros)
-print(producto)  # 24
-```
-
-#### Cómo lo interpreta Python:
-
-1. Toma los dos primeros elementos: `1` y `2`:  
-    → ejecuta `lambda x, y: x * y` → `1 * 2 = 2`
-
-2. Luego usa ese resultado (`2`) como primer parámetro (`x`) y el siguiente elemento de la lista (`3`) como segundo (`y`):  
-    → `2 * 3 = 6`
-
-3. Repite con el resultado (`6`) y el siguiente (`4`):  
-    → `6 * 4 = 24`
-
-🎯 Resultado final: `24`
-
-
-#### Con valor inicial (útil para definir un acumulador):
-
-Si proporcionas un **valor inicial**, `reduce()` empezará la acumulación desde ese valor.
-Ese valor actúa como **primer acumulador** antes de empezar a recorrer el iterable.
-
-```python
-suma = reduce(lambda acc, x: acc + x, numeros, 10)
-print(suma)   # 20 (10 + 1 + 2 + 3 + 4)
+scores = [0.95, 0.42, 0.88, 0.31, 0.79]
+altos = list(filter(lambda s: s >= 0.75, scores))
+print(altos)  # [0.95, 0.88, 0.79]
 ```
 
 ---
 
-## Decoradores (Decorators)
+## Decoradores (`@`)
 
-Un **decorador** es una **función que recibe otra función como argumento y devuelve una nueva función**, normalmente una versión “mejorada” o “modificada” de la original.
+Un **decorador** es una instrucción especial que comienza por el símbolo `@` y se coloca **justo encima** de la definición de una función.
 
-En otras palabras:
+> **Idea clave:** Un decorador añade una funcionalidad o comportamiento extra a una función existente **sin necesidad de modificar su código interno**.
 
-> Un decorador **envuelve** una función para añadirle comportamiento extra **sin modificar su código original**.
-
-Se usa con la sintaxis `@nombre_decorador` justo **encima** de la función a decorar.
-
-Esto permite añadir funcionalidades como:
-
-* Mostrar mensajes antes o después de ejecutar una función.
-* Medir tiempos de ejecución.
-* Controlar acceso o validar permisos.
-* Registrar logs (mensajes de depuración).
-* Evitar repetir código en varias funciones.
-
----
-
-### Sintaxis básica
-
-El decorador **recibe una función**, pero no la ejecuta inmediatamente.
-En su interior define otra función (normalmente llamada `wrapper`, “envoltorio”) que **envuelve el comportamiento original** y añade el nuevo código.
-
-La estructura general es:
-
-```python
-def decorador(funcion_original):
-    def wrapper():
-        # Código que se ejecuta ANTES de la función original
-        ...
-        funcion_original()  # llamada a la función original
-        # Código que se ejecuta DESPUÉS de la función original
-        ...
-    return wrapper  # devolvemos la nueva función
-```
-
-#### 🧠 Explicación paso a paso
-
-1. `decorador` es una función que recibe otra función (`funcion_original`).
-2. Dentro de `decorador`, definimos una **nueva función** (`wrapper`) que añade algo antes y/o después de la original.
-3. `decorador` devuelve `wrapper`, no la ejecuta.
-4. Cuando Python ve `@decorador` encima de una función, **sustituye la función original por el resultado del decorador**.
-
-:::info Un decorador es una función de orden superior
-Un decorador es un tipo especial de **Higher-Order Function**, diseñado específicamente para envolver otra función y alterar o ampliar su comportamiento sin cambiar su código original.
+:::important ENFOQUE DIDÁCTICO
+En este curso **no necesitaremos programar decoradores desde cero**, pero sí es fundamental **aprender a identificarlos y usarlos**, ya que son la pieza central de frameworks como **FastAPI** y la programación orientada a objetos en Python.
 :::
 
----
+### Ejemplos comunes de uso de decoradores
 
-### Ejemplo básico
-
-En el siguiente ejemplo se crea un decorador que muestra un mensaje antes y después de ejecutar la función principal.
-
-```python
-def decorador(func):
-    def wrapper():
-        print("Antes de ejecutar la función...")
-        func()
-        print("Después de ejecutar la función...")
-    return wrapper
-
-@decorador
-def saludar():
-    print("¡Hola, mundo!")
-
-saludar()
-```
-
-Salida:
-
-```
-Antes de ejecutar la función...
-¡Hola, mundo!
-Después de ejecutar la función...
-```
-
----
-
-### Ejemplo de función con parámetros
-
-Para que el decorador funcione con cualquier función (que reciba o no argumentos), usamos `*args` y `**kwargs`.
+#### 1. Rutas en FastAPI (Creación de APIs Web)
+En FastAPI, indicamos qué función debe responder a una petición HTTP usando un decorador:
 
 ```python
-def decorador(func):
-    def wrapper(*args, **kwargs):
-        print("Llamando a la función...")
-        resultado = func(*args, **kwargs)  # ejecuta la función original
-        print("Ejecución completada.")
-        return resultado
-    return wrapper
-
-@decorador
-def sumar(a, b):
-    return a + b
-
-print(sumar(3, 4))
+# El decorador @app.get("/") le indica a FastAPI que esta función
+# responderá cuando un usuario visite la raíz de la API Web.
+@app.get("/")
+def inicio():
+    return {"mensaje": "Servidor de IA activo"}
 ```
 
-Salida:
-
-```
-Llamando a la función...
-Ejecución completada.
-7
-```
-
-✅ Ahora el decorador sirve para **cualquier función**, sin importar el número de parámetros.
-
----
-
-### Decoradores anidados
-
-Puedes aplicar **varios decoradores** sobre una misma función.
-Se ejecutan de abajo hacia arriba (el más cercano a la función es el primero en aplicarse).
+#### 2. Métodos de clase en POO (`@staticmethod` y `@classmethod`)
+En programación orientada a objetos, se usan decoradores integrados de Python para cambiar el comportamiento de los métodos:
 
 ```python
-@decorador1
-@decorador2
-def mi_funcion():
-    ...
+class ProcesadorTexto:
+    
+    @staticmethod
+    def limpiar(texto: str) -> str:
+        return texto.strip().lower()
+```
+
+#### 3. Propiedades (`@property`)
+Permiten acceder a un método como si fuera un atributo simple de lectura:
+
+```python
+class ModeloIA:
+    def __init__(self, exactitud: float):
+        self._exactitud = exactitud
+        
+    @property
+    def exactitud_porcentaje(self) -> str:
+        return f"{self._exactitud * 100:.1f}%"
 ```
 
 ---
 
-### Ejemplo práctico: tiempo de ejecución
+## Gestores de Contexto: El bloque `with`
+
+El bloque `with` (gestor de contexto) permite manejar recursos externos (archivos, conexiones, sesiones) asegurando que **se liberen o cierren automáticamente al terminar**, incluso si ocurre un error durante la ejecución.
+
+Sintaxis general:
+```python
+with recurso as variable:
+    # Operaciones con el recurso
+```
+
+### Ejemplo clásico: Lectura y escritura de ficheros
 
 ```python
-import time
+# Al salir del bloque 'with', Python cierra el archivo automáticamente
+with open("dataset.txt", "w", encoding="utf-8") as archivo:
+    archivo.write("Línea 1: Datos de entrenamiento\n")
+    archivo.write("Línea 2: Datos de prueba\n")
 
-def medir_tiempo(func):
-    def wrapper(*args, **kwargs):
-        inicio = time.time()
-        resultado = func(*args, **kwargs)
-        fin = time.time()
-        print(f"Tiempo de ejecución: {fin - inicio:.4f} segundos")
-        return resultado
-    return wrapper
-
-@medir_tiempo
-def tarea_pesada():
-    suma = 0
-    for i in range(10**6):
-        suma += i
-    return suma
-
-tarea_pesada()
+print("Archivo escrito y cerrado correctamente.")
 ```
 
-Salida:
+### Ejemplo en Inteligencia Artificial (PyTorch / Inference Context)
+En librerías avanzadas de IA como PyTorch, `with` se usa para desactivar el cálculo de gradientes durante la inferencia para ahorrar memoria RAM/VRAM:
 
+```python
+# Desactiva el cálculo de gradientes temporalmente durante la predicción
+with torch.no_grad():
+    prediccion = modelo(datos_entrada)
 ```
-Tiempo de ejecución: 0.0462 segundos
-```
-
 
 </div>
