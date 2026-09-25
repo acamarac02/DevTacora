@@ -1,0 +1,8 @@
+{
+  "label": "Fundamentos y estructuras de control",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Fundamentos de sintaxis en Python, variables, tipos de datos primarios, operadores y estructuras de control de flujo (condicionales y bucles)."
+  }
+}

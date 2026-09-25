@@ -1,6 +1,6 @@
 ---
 title: "Errores y excepciones"
-sidebar_position: 8
+sidebar_position: 3
 description: "Qué son los errores y excepciones en Python, cómo manejarlas con try, except, else y finally, cómo lanzar errores con raise y buenas prácticas para evitar fallos en la ejecución."
 keywords: [Python, errores, excepciones, try, except, raise, manejo de errores]
 ---
@@ -174,7 +174,7 @@ Ejecución finalizada.
 
 ### Resumen del manejo de excepciones
 
-![Captura de excepciones](./0-img/exception_handling.png)
+![Captura de excepciones](../0-img/exception_handling.png)
 
 
 ---

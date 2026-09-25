@@ -1,6 +1,6 @@
 ---
 title: "NumPy"
-sidebar_position: 10
+sidebar_position: 1
 description: "Introducción a NumPy, la librería base para el cálculo numérico y científico en Python usada en IA y Machine Learning"
 keywords: [Python, NumPy, arrays, IA, Machine Learning, cálculo numérico, vectorización]
 ---
@@ -26,10 +26,11 @@ Imagina que queremos **simular una imagen** para entrenar una red neuronal. Cada
 * El segundo, la **anchura** (número de columnas).
 * El tercero, los **canales de color** (por ejemplo, RGB = 3 canales).
 
-![Matriz imagen RGB](./0-img/matriz-imagen-rgb.png)
+![Matriz imagen RGB](../0-img/matriz-imagen-rgb.png)
 
 ```python
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Creamos una imagen aleatoria de 224x224 píxeles con 3 canales (RGB)
 # Cada valor representa la intensidad de un color (de 0 a 255)
@@ -45,15 +46,20 @@ imagen = np.random.randint(0, 255, (224, 224, 3))
 # Consultamos su forma: (alto, ancho, canales)
 print(imagen.shape)
 # (224, 224, 3)
+
+# Visualizamos la matriz como una imagen usando Matplotlib
+plt.imshow(imagen)
+plt.title("Matriz aleatoria interpretada como imagen RGB")
+plt.xlabel("Eje X: Ancho (224 píxeles)")
+plt.ylabel("Eje Y: Alto (224 píxeles)")
+plt.show()
 ```
+
+![Ejecución de imagen aleatoria en Matplotlib](../0-img/ejecucion-matplotlib-imagen-aleatoria.png)
 
 👉 En este ejemplo, `np.random.randint(0, 255, (224, 224, 3))` genera una **matriz tridimensional** llena de números enteros aleatorios entre 0 y 255, imitando los valores de brillo de una imagen real.
 
-El método `.shape` nos muestra la estructura del array:
-
-* 224 filas (alto)
-* 224 columnas (ancho)
-* 3 canales (RGB)
+Gracias a la función `plt.imshow(imagen)` de la librería **Matplotlib**, podemos visualizar directamente el array de NumPy como una imagen. Al tratarse de números generados al azar, el resultado visual es un patrón de ruido cromático digital donde cada píxel toma una combinación aleatoria de rojo, verde y azul. Los ejes de la gráfica representan las **224 filas (alto)** y **224 columnas (ancho)**.
 
 
 En visión artificial y redes neuronales, es muy habitual **normalizar** las imágenes antes de procesarlas, para que los valores estén en un rango más manejable (por ejemplo, entre 0 y 1). Esto ayuda a que el modelo aprenda más rápido y de forma más estable.
@@ -91,7 +97,7 @@ print(type(array))
 
 En el caso del código anterior estamos creando un array de una dimensión:
 
-![Array una dimensión](./0-img/array-una-dimension.png)
+![Array una dimensión](../0-img/array-una-dimension.png)
 
 También pueden crearse arrays **bidimensionales** (matrices) a partir de una lista de listas:
 
@@ -103,7 +109,7 @@ print(matriz)
 #  [6 7 8 9 10]]
 ```
 
-![Array bidimensional](./0-img/array-bidimensional.png)
+![Array bidimensional](../0-img/array-bidimensional.png)
 
 
 Todos los elementos del array tendrán el **mismo tipo de dato**.
@@ -586,26 +592,25 @@ print(a / 10)  # División por escalar
 ```
 
 :::warning Importante
-En las operaciones aritméticas entre arrays (`+`, `-`, `*`, `/`, etc.),
-ambos arrays deben tener **el mismo tamaño y forma** (`shape`), o ser **compatibles mediante broadcasting**.
+En las operaciones aritméticas entre arrays (`+`, `-`, `*`, `/`, etc.), ambos arrays deben tener **el mismo tamaño y forma** (`shape`).
 
 ```python
 a = np.array([10, 20, 30])
 b = np.array([1, 2, 3])
 print(a + b)
-# [11 22 33] ✅ Correcto
+# [11 22 33] ✅ Correcto (ambos tienen 3 elementos)
 ```
 
-Si las dimensiones no coinciden y no pueden adaptarse por broadcasting, NumPy mostrará un error:
+Si las dimensiones o el número de elementos no coinciden, NumPy mostrará un error:
 
 ```python
 c = np.array([1, 2])
 print(a + c)
-# ❌ ValueError: operands could not be broadcast together
+# ❌ ValueError: las dimensiones no coinciden (array de 3 elementos frente a uno de 2)
 ```
 
 👉 Antes de realizar operaciones entre arrays, comprueba sus formas con `array.shape`.
-Esto es especialmente importante en IA, donde los datos (por ejemplo, vectores de entrada o matrices de pesos) **deben tener dimensiones compatibles** para poder combinarse correctamente.
+Esto es especialmente importante en IA, donde los datos (por ejemplo, vectores de características) **deben tener la misma forma** para poder combinarse correctamente.
 :::
 
 
@@ -651,11 +656,39 @@ print(np.min(x), np.max(x))   # Mínimo y máximo
 # 5 20
 ```
 
+#### Operaciones por ejes (`axis`) en matrices 2D
+
+En arrays bidimensionales (matrices), podemos aplicar las funciones estadísticas a **todo el array** o a lo largo de un **eje específico** usando el parámetro `axis`:
+
+* **`axis=0`**: Opera a lo largo de las **filas** (calcula la estadística por **columna**).
+* **`axis=1`**: Opera a lo largo de las **columnas** (calcula la estadística por **fila**).
+
+```python
+# Matriz de calificaciones: 3 estudiantes (filas) y 4 asignaturas (columnas)
+notas = np.array([
+    [7.0, 8.5, 9.0, 6.5],
+    [5.0, 6.0, 4.5, 7.0],
+    [9.5, 9.0, 10.0, 8.5]
+])
+
+# Media de todo el grupo de notas
+print("Media global:", np.mean(notas))
+# Media global: 7.5
+
+# Media por asignatura (axis=0 → colapsa las filas)
+print("Media por asignatura (columnas):", np.mean(notas, axis=0))
+# Media por asignatura (columnas): [7.16666667 7.83333333 7.83333333 7.33333333]
+
+# Media por estudiante (axis=1 → colapsa las columnas)
+print("Media por estudiante (filas):", np.mean(notas, axis=1))
+# Media por estudiante (filas): [7.75 5.625 9.25]
+```
+
 Estas funciones son esenciales, por ejemplo, para:
 
 * Calcular medias y desviaciones antes de **normalizar** los datos.
 * Obtener el **rango de valores** para aplicar escalado *min–max*.
-* Resumir resultados de predicción o métricas de rendimiento.
+* Resumir resultados de predicción o métricas de rendimiento por muestra o característica.
 
 :::info Conceptos matemáticos
 
@@ -798,63 +831,15 @@ Si se modifica el resultado, **el original no cambia**.
 
 ---
 
-### `ravel()`
-
-Hace lo mismo que `flatten()`, pero devuelve una **vista** (*view*) del array original cuando es posible (sin copiar datos).
-
-```python
-matriz = np.array([[1, 2, 3],
-                   [4, 5, 6]])
-
-v = matriz.ravel()
-print(v)
-# [1 2 3 4 5 6]
-
-v[0] = 99
-print(matriz)
-# [[99  2  3]
-#  [ 4  5  6]]
-```
-
-👉 `ravel()` es más eficiente en memoria, pero hay que tener cuidado:
-los cambios en el array resultante pueden **afectar al original**.
-
----
-
-### `transpose()` o `.T`
-
-Devuelve la **transpuesta** del array, es decir, **intercambia filas por columnas**.
-Es una operación muy común en álgebra lineal, especialmente en redes neuronales y productos punto.
-
-```python
-matriz = np.array([[1, 2, 3],
-                   [4, 5, 6]])
-
-print(matriz.T)
-# [[1 4]
-#  [2 5]
-#  [3 6]]
-```
-
-También se puede usar el método:
-
-```python
-transpuesta = np.transpose(matriz)
-```
-
----
-
 ### 💡 Resumen rápido
 
-| Función              | Descripción                  | Resultado / Uso típico                   |
-| -------------------- | ---------------------------- | ---------------------------------------- |
-| `reshape()`          | Cambia la forma del array    | `a.reshape((2,3)) →` reorganiza en 2×3   |
-| `flatten()`          | Convierte a 1D (copia nueva) | `[1 2 3 4 5 6]`                          |
-| `ravel()`            | Convierte a 1D (vista)       | Más eficiente, pero modifica el original |
-| `transpose()` o `.T` | Intercambia filas y columnas | Muy usado en álgebra lineal              |
+| Función     | Descripción                  | Resultado / Uso típico                 |
+| ----------- | ---------------------------- | -------------------------------------- |
+| `reshape()` | Cambia la forma del array    | `a.reshape((2,3)) →` reorganiza en 2×3 |
+| `flatten()` | Convierte a 1D (copia nueva) | `[1 2 3 4 5 6]`                        |
 
 Estas funciones son esenciales para **preparar los datos** antes de entrenar modelos de IA:
-por ejemplo, convertir imágenes 2D en vectores de entrada 1D, apilar características en una matriz de entrenamiento o ajustar dimensiones antes de aplicar una operación matricial.
+por ejemplo, convertir imágenes 2D en vectores de entrada 1D o ajustar dimensiones para adaptarlas a la entrada de un modelo.
 
 
 </div>

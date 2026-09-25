@@ -1,6 +1,6 @@
 ---
 title: "Módulos e importaciones"
-sidebar_position: 7
+sidebar_position: 2
 description: "Cómo funcionan los módulos en Python, cómo importar funciones o librerías, uso de alias y la estructura if __name__ == '__main__'."
 keywords: [Python, módulos, import, librerías, from, alias, paquetes, main]
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Funciones y Programación Funcional"
-sidebar_position: 6
+sidebar_position: 1
 description: "Declaración de funciones, parámetros, retornos, Type Hinting, funciones lambda, uso conceptual de decoradores y gestores de contexto en Python."
 keywords: [Python, funciones, type hinting, lambda, map, filter, decoradores, context managers]
 ---

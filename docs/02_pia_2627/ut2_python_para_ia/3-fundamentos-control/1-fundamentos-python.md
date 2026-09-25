@@ -1,6 +1,6 @@
 ---
 title: "Fundamentos de Python"
-sidebar_position: 3
+sidebar_position: 1
 description: "Sintaxis básica de Python, estructuras de control, funciones y módulos, manejo de errores y buenas prácticas de programación."
 keywords: [Python, fundamentos, sintaxis, control de flujo, funciones, módulos, excepciones, PEP8]
 ---

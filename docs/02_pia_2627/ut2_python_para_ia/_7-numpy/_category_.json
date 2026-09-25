@@ -1,0 +1,8 @@
+{
+  "label": "NumPy",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "description": "Librería base para el cálculo numérico y científico en Python: manipulación y operaciones eficientes con arrays multidimensionales para IA y Machine Learning."
+  }
+}

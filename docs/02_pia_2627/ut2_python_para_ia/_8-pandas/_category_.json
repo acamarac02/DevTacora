@@ -1,0 +1,8 @@
+{
+  "label": "Pandas",
+  "position": 8,
+  "link": {
+    "type": "generated-index",
+    "description": "Librería esencial para el análisis, manipulación y limpieza de datos tabulares (DataFrames) en proyectos de Inteligencia Artificial y Machine Learning."
+  }
+}

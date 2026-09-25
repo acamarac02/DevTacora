@@ -1,0 +1,8 @@
+{
+  "label": "FastAPI",
+  "position": 9,
+  "link": {
+    "type": "generated-index",
+    "description": "Desarrollo de APIs REST modernas en Python para servir modelos de Inteligencia Artificial: arquitectura HTTP, validación con Pydantic, documentación interactiva con Swagger UI, consumo desde frontend y despliegue en la nube en Hugging Face Spaces."
+  }
+}

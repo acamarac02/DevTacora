@@ -1,6 +1,6 @@
 ---
 title: "📝 Ejercicios Prácticos"
-sidebar_position: 4.5
+sidebar_position: 3
 description: "Relación de ejercicios prácticos sobre sintaxis básica, fundamentos de Python y estructuras de control."
 keywords: [Python, ejercicios, sintaxis, condicionales, bucles, control de flujo]
 ---

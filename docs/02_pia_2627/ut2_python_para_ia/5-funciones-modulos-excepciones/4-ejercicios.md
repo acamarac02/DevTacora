@@ -1,6 +1,6 @@
 ---
 title: "📝 Ejercicios Prácticos"
-sidebar_position: 8.5
+sidebar_position: 4
 description: "Relación de ejercicios prácticos sobre funciones, type hinting, módulos y manejo de excepciones en Python."
 keywords: [Python, ejercicios, funciones, type hinting, modulos, excepciones, try except]
 ---

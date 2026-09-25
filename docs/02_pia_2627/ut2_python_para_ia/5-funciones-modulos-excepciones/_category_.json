@@ -1,0 +1,8 @@
+{
+  "label": "Funciones, módulos y excepciones",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Modularización y robustez de código en Python: definición de funciones, organización en módulos y paquetes, y control de excepciones."
+  }
+}

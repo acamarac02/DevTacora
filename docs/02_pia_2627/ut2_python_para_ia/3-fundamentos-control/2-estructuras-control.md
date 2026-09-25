@@ -1,6 +1,6 @@
 ---
 title: "Estructuras de control"
-sidebar_position: 4
+sidebar_position: 2
 description: "Estructuras de control del flujo de ejecución de un programa"
 keywords: [Python, fundamentos, sintaxis, control de flujo]
 ---
@@ -250,7 +250,7 @@ Tiene tres formas principales:
 
     En la siguiente imagen se ilustra su uso:
 
-   ![Resumen range](./0-img/resumen-range.png)
+   ![Resumen range](../0-img/resumen-range.png)
 
 El diagrama de flujo de un bucle for sería:
 
