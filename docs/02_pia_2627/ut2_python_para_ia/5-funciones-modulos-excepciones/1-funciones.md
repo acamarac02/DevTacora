@@ -278,36 +278,4 @@ class ModeloIA:
         return f"{self._exactitud * 100:.1f}%"
 ```
 
----
-
-## Gestores de Contexto: El bloque `with`
-
-El bloque `with` (gestor de contexto) permite manejar recursos externos (archivos, conexiones, sesiones) asegurando que **se liberen o cierren automáticamente al terminar**, incluso si ocurre un error durante la ejecución.
-
-Sintaxis general:
-```python
-with recurso as variable:
-    # Operaciones con el recurso
-```
-
-### Ejemplo clásico: Lectura y escritura de ficheros
-
-```python
-# Al salir del bloque 'with', Python cierra el archivo automáticamente
-with open("dataset.txt", "w", encoding="utf-8") as archivo:
-    archivo.write("Línea 1: Datos de entrenamiento\n")
-    archivo.write("Línea 2: Datos de prueba\n")
-
-print("Archivo escrito y cerrado correctamente.")
-```
-
-### Ejemplo en Inteligencia Artificial (PyTorch / Inference Context)
-En librerías avanzadas de IA como PyTorch, `with` se usa para desactivar el cálculo de gradientes durante la inferencia para ahorrar memoria RAM/VRAM:
-
-```python
-# Desactiva el cálculo de gradientes temporalmente durante la predicción
-with torch.no_grad():
-    prediccion = modelo(datos_entrada)
-```
-
 </div>
