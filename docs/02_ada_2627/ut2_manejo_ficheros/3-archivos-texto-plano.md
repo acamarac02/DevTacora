@@ -1,15 +1,15 @@
 ---
-title: Archivos de Texto Plano
+title: Archivos de Texto Plano y CSV
 sidebar_position: 3
-description: Lectura y escritura de archivos de texto plano utilizando Java NIO.2, codificación UTF-8 y try-with-resources.
-keywords: [ficheros de texto, texto plano, nio2, readalllines, try-with-resources, utf8]
+description: Lectura y escritura de archivos de texto plano y procesamiento de datos tabulares (CSV) utilizando Java NIO.2 y try-with-resources.
+keywords: [ficheros de texto, csv, nio2, readalllines, split, try-with-resources, utf8]
 ---
 
 <div class="justify-text">
 
-Los archivos de texto plano son el formato más extendido para almacenar información legible por personas: archivos de configuración, registros de actividad (*logs*) y volcados de datos.
+Los archivos de texto plano son el formato más extendido para almacenar información legible por personas: archivos de configuración, registros de actividad (*logs*), volcados de datos y archivos tabulares (**CSV**).
 
-En este tema aprenderemos a leer y escribir texto en disco utilizando las utilidades de **Java NIO.2**, garantizando la liberación segura de memoria y descriptores del sistema operativo mediante **`try-with-resources`**.
+En este tema aprenderemos a leer y escribir texto en disco utilizando las utilidades de **Java NIO.2**, garantizando la liberación segura de recursos del sistema operativo mediante **`try-with-resources`** y procesando archivos CSV extrayendo sus columnas mediante bucles y división por campos (`split`).
 
 ---
 
@@ -182,7 +182,7 @@ try {
 
 ## Demo Completa: Lectura y Escritura de Texto Plano
 
-Para consolidar las estrategias de lectura y escritura de texto plano, implementamos una demo completa que crea un archivo de registro (*log*), añade nuevos eventos sin sobreescribir y lee los datos usando tanto carga completa como procesamiento línea a línea:
+Para consolidar las estrategias de lectura y escritura de texto plano, implementamos una demo completa que crea un archivo de registro (*log*), añade nuevos eventos sin sobreescribir y lee los datos usando tanto carga completa en memoria como lectura línea a línea:
 
 ```java title="src/es/iesagora/ada/ficheros/DemoTextoPlano.java"
 package es.iesagora.ada.ficheros;
@@ -228,7 +228,7 @@ public class DemoTextoPlano {
                         StandardOpenOption.APPEND);
             System.out.println("2. Eventos añadidos con APPEND.");
 
-            // PASO 4: Lectura completa en memoria
+            // PASO 4: Lectura completa en memoria con bucle for clásico
             System.out.println("\n3. Lectura completa con Files.readAllLines():");
             List<String> lineasMemoria = Files.readAllLines(archivoLog, StandardCharsets.UTF_8);
             for (String linea : lineasMemoria) {
@@ -250,5 +250,164 @@ public class DemoTextoPlano {
     }
 }
 ```
+
+---
+
+## Procesamiento de Archivos Tabulares: CSV
+
+Un caso muy particular e importante de archivo de texto plano es el formato **CSV** (*Comma-Separated Values*). Es un estándar universal para almacenar datos tabulares (filas y columnas) en texto simple:
+
+* **Cada fila** del archivo representa un registro independiente.
+* **Cada columna** está separada por un delimitador de texto (típicamente una coma `,` o un punto y coma `;`).
+* **Primera fila (cabecera)**: Habitualmente contiene los títulos o nombres de los campos.
+
+```text
+id,nombre,precio,stock,disponible
+1,Teclado Mecanico,79.99,15,true
+2,Raton Ergonomico,34.50,40,true
+```
+
+### División de Campos con `split()` e Ignorado de Cabecera
+
+Para extraer la información de cada columna al leer un archivo CSV en Java, aplicamos dos técnicas sencillas:
+
+1. **Ignorar la cabecera**: Al recorrer la lista de líneas con un bucle `for` tradicional, comenzamos la variable contadora en `i = 1` en vez de `i = 0`. De este modo, la primera línea (que contiene nombres de columnas y no datos) no se procesa.
+2. **Dividir los valores de la fila con `split()`**: El método `linea.split(",")` divide el texto en cada aparición de la coma y devuelve un array de cadenas `String[]`. Cada posición del array corresponde a una columna:
+
+```mermaid
+flowchart TD
+    Linea["Línea de texto: 1,Teclado Mecanico,79.99,15,true"]
+    Linea -->|"linea.split"| Array["Array de cadenas campos"]
+    Array --> Col0["campos(0): ID"]
+    Array --> Col1["campos(1): Nombre"]
+    Array --> Col2["campos(2): Precio"]
+    Array --> Col3["campos(3): Stock"]
+    Array --> Col4["campos(4): Disponible"]
+```
+
+```java
+// Ejemplo básico de extracción por columnas como texto
+String linea = "1,Teclado Mecanico,79.99,15,true";
+String[] campos = linea.split(",");
+
+String id = campos[0].trim();
+String nombre = campos[1].trim();
+String precio = campos[2].trim();
+String stock = campos[3].trim();
+String disponible = campos[4].trim();
+
+System.out.println("Producto #" + id + ": " + nombre + " | Precio: " + precio + " €");
+```
+
+:::tip ¿Por qué usar `.trim()`?
+En muchos archivos CSV pueden aparecer espacios accidentales alrededor de las comas (por ejemplo: `"1, Teclado , 79.99"`). Aplicar `.trim()` a cada campo elimina los espacios en blanco sobrantes a los extremos antes de imprimir o utilizar el valor.
+:::
+
+---
+
+### Demo Completa: Procesamiento de un Archivo CSV
+
+Para poner en práctica la lectura de un archivo CSV real, procesaremos un catálogo de productos informáticos.
+
+:::info Descarga del archivo de ejemplo
+Puedes descargar el archivo de datos para realizar la prueba en tu proyecto:
+* 📥 **<a href="/DevTacora/recursos/ada_ut2/catalogo_productos.csv" download="catalogo_productos.csv">Descargar catalogo_productos.csv</a>**
+
+Coloca el archivo descargado dentro de una carpeta llamada `datos_csv` en la raíz de tu proyecto Java (o en la misma carpeta desde donde ejecutes el programa).
+:::
+
+El archivo `catalogo_productos.csv` contiene los siguientes registros:
+
+```text title="datos_csv/catalogo_productos.csv"
+id,nombre,precio,stock,disponible
+1,Teclado Mecanico,79.99,15,true
+2,Raton Ergonomico,34.50,40,true
+3,Monitor 27 Pulgadas,199.90,0,false
+4,Auriculares Inalambricos,59.00,12,true
+5,Webcam Full HD,45.20,0,false
+6,Microfono USB,68.00,8,true
+7,Alfombrilla XL,18.50,25,true
+```
+
+A continuación se muestra el programa completo que lee el archivo CSV existente, ignora la fila de cabecera, extrae las columnas mediante `split(",")` y muestra todos los productos por pantalla recorriendo las líneas con un bucle `for`:
+
+```java title="src/es/iesagora/ada/ficheros/DemoLecturaCsv.java"
+package es.iesagora.ada.ficheros;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
+public class DemoLecturaCsv {
+
+    public static void main(String[] args) {
+        System.out.println("=== LECTURA Y PROCESAMIENTO DE ARCHIVO CSV ===");
+
+        Path rutaCsv = Path.of("datos_csv", "catalogo_productos.csv");
+        String separador = ",";
+
+        // Comprobamos si el archivo existe antes de intentar leerlo
+        if (Files.notExists(rutaCsv)) {
+            System.err.println("El archivo no existe en la ruta: " + rutaCsv.toAbsolutePath());
+            System.err.println("Descarga 'catalogo_productos.csv' y colócalo en la carpeta 'datos_csv'.");
+            return;
+        }
+
+        try {
+            // PASO 1: Leer todas las líneas del archivo CSV
+            List<String> lineas = Files.readAllLines(rutaCsv, StandardCharsets.UTF_8);
+            System.out.println("Líneas leídas en total (incluyendo cabecera): " + lineas.size());
+
+            // PASO 2: Procesar los datos fila a fila
+            // Empezamos en i = 1 para omitir la cabecera (nombres de columnas en i = 0)
+            System.out.println("\n--- LISTADO COMPLETO DE PRODUCTOS ---");
+
+            for (int i = 1; i < lineas.size(); i++) {
+                String linea = lineas.get(i);
+
+                // Evitamos procesar líneas vacías
+                if (linea.isBlank()) {
+                    continue;
+                }
+
+                // PASO 3: Trocear la línea en columnas según el separador
+                String[] campos = linea.split(separador);
+
+                // Extraemos cada valor por su posición de columna directamente como texto
+                String id = campos[0].trim();
+                String nombre = campos[1].trim();
+                String precio = campos[2].trim();
+                String stock = campos[3].trim();
+                String disponible = campos[4].trim();
+
+                // PASO 4: Mostrar la información formateada por consola
+                System.out.println("Producto #" + id + ": " + nombre);
+                System.out.println("   Precio     : " + precio + " €");
+                System.out.println("   Stock      : " + stock + " unidades");
+                System.out.println("   Disponible : " + disponible);
+                System.out.println("   -----------------------------------");
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error leyendo el archivo CSV: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+:::info Para reflexionar: ¿Y si tuviéramos que manipular estos datos en el resto de la aplicación?
+En este ejemplo hemos leído las columnas directamente como texto suelto (`String`) y las hemos impreso por pantalla. 
+
+Sin embargo, plantéate las siguientes cuestiones:
+* ¿Qué ocurriría si tuviéramos que ordenar los productos por precio, calcular el valor total del inventario o buscar si hay stock suficiente en varias partes de nuestra aplicación?
+* ¿Es cómodo y seguro seguir manejando arrays de cadenas como `campos[2]` o variables sueltas por todo el código?
+:::
+
+:::tip ¿Cuándo usar una librería externa como OpenCSV?
+Para archivos CSV estándar y sencillos, el método `split(separador)` es rápido, no requiere dependencias adicionales y permite entender claramente el funcionamiento de los datos delimitados. Si en el futuro un campo de texto contiene comas dentro del propio valor entre comillas (por ejemplo, `"Calle Mayor, 14, 2ºB"`), entonces es cuando se justifica utilizar un analizador sintáctico especializado como **OpenCSV** o **Apache Commons CSV**.
+:::
 
 </div>

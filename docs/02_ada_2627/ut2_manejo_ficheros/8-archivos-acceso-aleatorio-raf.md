@@ -1,6 +1,6 @@
 ---
 title: Archivos de Acceso Aleatorio (RAF)
-sidebar_position: 9
+sidebar_position: 8
 description: Acceso posicional a archivos mediante RandomAccessFile, cálculo de offsets en bytes y simulación de matrices bidimensionales.
 keywords: [randomaccessfile, raf, puntero, seek, acceso aleatorio, bytes, matrices]
 ---

@@ -1,6 +1,6 @@
 ---
 title: Arquitectura Limpia y Patrón DAO
-sidebar_position: 10
+sidebar_position: 9
 description: Diseño arquitectónico en capas y aplicación del patrón de acceso a datos DAO (Data Access Object) desacoplando la persistencia en ficheros.
 keywords: [arquitectura, dao, data access object, capas, interfaz, dto, desacoplamiento]
 ---
