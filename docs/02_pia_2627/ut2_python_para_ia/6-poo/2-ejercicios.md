@@ -45,9 +45,7 @@ keywords: [Python, ejercicios, POO, clases, objetos, init, self, métodos, atrib
 
 * Métodos a implementar:
   * `repostar_combustible(cantidad: float, precio_litro: float) -> float`: suma litros al depósito. Si se excede la capacidad máxima, llena hasta el límite e informa al usuario. Devuelve el coste total en euros del repostaje realizado.
-  * `calcular_km_disponibles() -> float`: calcula la distancia que puede recorrer con el combustible actual según la fórmula base:
-    $$\text{kms} = \left(\frac{\text{combustible\_actual}}{\text{consumo}}\right) \times 100$$
-    Aplicando una penalización por tramos de peso en toneladas:
+  * `calcular_km_disponibles() -> float`: calcula la distancia que puede recorrer con el combustible actual, aplicando una penalización por tramos de peso en toneladas:
     * Hasta 4.5 t → sin penalización.
     * Más de 4.5 t y hasta 18 t → $-50\text{ km}$.
     * Más de 18 t y hasta 25 t → $-75\text{ km}$.
