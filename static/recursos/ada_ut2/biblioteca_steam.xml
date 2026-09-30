@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<biblioteca usuario="GamerPro99" region="EU">
+    <juego id="730" pegi="18" instalado="true">
+        <titulo>Counter-Strike 2</titulo>
+        <horas_jugadas>145.5</horas_jugadas>
+        <desarrollador>
+            <nombre>Valve Corporation</nombre>
+            <pais>Estados Unidos</pais>
+            <sitio_web>https://www.valvesoftware.com</sitio_web>
+        </desarrollador>
+        <requisitos>
+            <ram_gb>8</ram_gb>
+            <almacenamiento_gb>85</almacenamiento_gb>
+            <grafica>GTX 1060 / Radeon RX 580</grafica>
+        </requisitos>
+        <generos>
+            <genero>Shooter</genero>
+            <genero>Competitivo</genero>
+            <genero>Accion</genero>
+        </generos>
+    </juego>
+    <juego id="1091500" pegi="18" instalado="false">
+        <titulo>Cyberpunk 2077</titulo>
+        <horas_jugadas>62.0</horas_jugadas>
+        <desarrollador>
+            <nombre>CD Projekt RED</nombre>
+            <pais>Polonia</pais>
+            <sitio_web>https://www.cdprojekt.com</sitio_web>
+        </desarrollador>
+        <requisitos>
+            <ram_gb>16</ram_gb>
+            <almacenamiento_gb>70</almacenamiento_gb>
+            <grafica>RTX 2060 / Radeon RX 5700 XT</grafica>
+        </requisitos>
+        <generos>
+            <genero>RPG</genero>
+            <genero>Mundo Abierto</genero>
+            <genero>Ciencia Ficcion</genero>
+        </generos>
+    </juego>
+    <juego id="105600" pegi="7" instalado="true">
+        <titulo>Terraria</titulo>
+        <horas_jugadas>310.2</horas_jugadas>
+        <desarrollador>
+            <nombre>Re-Logic</nombre>
+            <pais>Estados Unidos</pais>
+            <sitio_web>https://re-logic.com</sitio_web>
+        </desarrollador>
+        <requisitos>
+            <ram_gb>4</ram_gb>
+            <almacenamiento_gb>2</almacenamiento_gb>
+            <grafica>Grafica integrada 256MB</grafica>
+        </requisitos>
+        <generos>
+            <genero>Sandbox</genero>
+            <genero>Supervivencia</genero>
+            <genero>Aventura</genero>
+        </generos>
+    </juego>
+</biblioteca>
