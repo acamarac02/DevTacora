@@ -541,3 +541,4 @@ Con el estudio de los archivos de acceso aleatorio completamos el catálogo de f
 | **Acceso Aleatorio (RAF)** | Modificación y lectura directa en tiempo $O(1)$ sin cargar en RAM. | Registros obligatoriamente de longitud fija, cálculo manual de bytes. | Motores de bases de datos internas, índices posicionales, archivos binarios gigantes. |
 
 </div>
+
