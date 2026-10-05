@@ -1,4 +1,5 @@
 ---
+draft: true
 title: Operaciones con archivos
 sidebar_position: 2
 description: Gestión de rutas y operaciones sobre el sistema de archivos con Path y Files en Java.

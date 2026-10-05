@@ -1,4 +1,5 @@
 ---
+draft: true
 title: Arquitectura en Capas
 sidebar_position: 9
 description: Diseño arquitectónico en capas y aplicación del patrón de acceso a datos DAO desacoplando la persistencia en ficheros.

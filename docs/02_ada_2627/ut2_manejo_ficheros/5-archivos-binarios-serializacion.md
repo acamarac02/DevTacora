@@ -1,4 +1,5 @@
 ---
+draft: true
 title: Archivos Binarios
 sidebar_position: 5
 description: Persistencia del estado de objetos en Java mediante flujos binarios y la interfaz Serializable.

@@ -1,4 +1,5 @@
 ---
+draft: true
 title: Archivos de Acceso Aleatorio (RAF)
 sidebar_position: 8
 description: Acceso posicional a archivos mediante RandomAccessFile, puntero de archivo, cálculo de offsets y manipulación de registros de tamaño fijo.
