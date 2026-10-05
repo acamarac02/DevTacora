@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "nombre": "Pocion Curativa",
+    "disponible": true
+  },
+  {
+    "id": 2,
+    "nombre": "Antidoto Veneno",
+    "disponible": true
+  },
+  {
+    "id": 3,
+    "nombre": "Piedra Fuego",
+    "disponible": false
+  },
+  {
+    "id": 4,
+    "nombre": "Super Pocion",
+    "disponible": true
+  },
+  {
+    "id": 5,
+    "nombre": "Elixir Magico",
+    "disponible": false
+  }
+]

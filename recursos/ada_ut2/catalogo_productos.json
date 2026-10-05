@@ -1,0 +1,23 @@
+[
+  {
+    "id": 101,
+    "nombre": "Portatil Gaming",
+    "categoria": "Informatica",
+    "precio": 1199.99,
+    "etiquetas": ["electronica", "ordenadores", "gaming"]
+  },
+  {
+    "id": 102,
+    "nombre": "Raton Inalambrico",
+    "categoria": "Accesorios",
+    "precio": 29.95,
+    "etiquetas": ["perifericos", "inalambrico"]
+  },
+  {
+    "id": 103,
+    "nombre": "Teclado Mecanico RGB",
+    "categoria": "Accesorios",
+    "precio": 89.50,
+    "etiquetas": ["perifericos", "gaming", "teclados"]
+  }
+]

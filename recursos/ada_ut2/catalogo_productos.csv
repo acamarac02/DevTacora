@@ -1,0 +1,8 @@
+id,nombre,precio,stock,disponible
+1,Teclado Mecanico,79.99,15,true
+2,Raton Ergonomico,34.50,40,true
+3,Monitor 27 Pulgadas,199.90,0,false
+4,Auriculares Inalambricos,59.00,12,true
+5,Webcam Full HD,45.20,0,false
+6,Microfono USB,68.00,8,true
+7,Alfombrilla XL,18.50,25,true
