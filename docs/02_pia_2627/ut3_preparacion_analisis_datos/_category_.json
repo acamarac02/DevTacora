@@ -1,0 +1,8 @@
+{
+  "label": "UT3. Preparación y análisis de datos",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Ciclo de vida de proyectos de Machine Learning, Análisis Exploratorio de Datos (EDA) guiado por hipótesis, limpieza y preprocesamiento de datos, y orquestación reproducible con Pipelines de Scikit-learn."
+  }
+}
