@@ -1,5 +1,4 @@
 ---
-draft: true
 title: Ficheros de Configuración 
 sidebar_position: 4
 description: Gestión de parámetros de aplicación mediante ficheros .properties en Java utilizando la clase java.util.Properties.

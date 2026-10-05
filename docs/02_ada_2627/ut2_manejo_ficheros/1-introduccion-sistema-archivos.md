@@ -1,5 +1,4 @@
 ---
-draft: true
 title: Introducción
 sidebar_position: 1
 description: Conceptos fundamentales del manejo de ficheros en Java, tipos de acceso y gestión del sistema de archivos con NIO.2.
