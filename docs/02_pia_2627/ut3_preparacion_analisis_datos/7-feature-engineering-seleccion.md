@@ -1,6 +1,6 @@
 ---
 draft: true
-title: "Sesión 7: Feature Engineering y Selección de Características"
+title: "Feature Engineering y Selección de Características"
 sidebar_position: 7
 description: "Creación de nuevas variables basadas en conocimiento de dominio (ratios, temporales, binning) y selección de características mediante filtros estadísticos."
 keywords: ["feature engineering", "seleccion de variables", "SelectKBest", "VarianceThreshold", "mutual_info", "ratios", "dominio"]
@@ -8,7 +8,7 @@ keywords: ["feature engineering", "seleccion de variables", "SelectKBest", "Vari
 
 <div class="justify-text">
 
-# Sesión 7: Feature Engineering y Selección de Características
+# Feature Engineering y Selección de Características
 
 **Duración estimada:** 2 horas (120 minutos)  
 **Bloque:** Bloque 4 — Feature Engineering y Selección de Características  

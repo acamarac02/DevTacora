@@ -44,16 +44,16 @@ El error formativo más común en el EDA (Análisis Exploratorio de Datos) es co
 
 ## 🗺️ Mapa de Sesiones y Temporalización (15 Horas)
 
-| Sesión | Archivo | Bloque Temático | Horas | Formato Principal |
-| :---: | :--- | :--- | :---: | :--- |
-| **S1** | `1-ciclo-vida-anatomia-datos.md` | Ciclo de Vida y Anatomía del Dataset | 2 h | Notebook (`.ipynb`) |
-| **S2** | `2-eda-univariante.md` | EDA Univariante y Distribuciones | 2 h | Notebook (`.ipynb`) |
-| **S3** | `3-eda-bivariante-multivariante.md` | EDA Bivariante y Relación con el Target | 2 h | Notebook (`.ipynb`) |
-| **S4** | `4-calidad-datos-anomalias.md` | Auditoría de Calidad: Outliers y Nulos | 1 h | Notebook (`.ipynb`) |
-| **S5** | `5-preprocesamiento-imputacion-escalado.md` | Preprocesamiento I: Imputación y Escalado | 2 h | Notebook (`.ipynb`) |
-| **S6** | `6-codificacion-categorica-outliers.md` | Preprocesamiento II: Categóricas y Outliers | 2 h | Notebook (`.ipynb`) |
-| **S7** | `7-feature-engineering-seleccion.md` | Feature Engineering y Selección de Features | 2 h | Notebook (`.ipynb`) |
-| **S8** | `8-pipelines-columntransformer.md` | Pipelines de Scikit-learn y Producción | 2 h | Notebook $\rightarrow$ Script `.py` |
+| Apartado / Archivo | Bloque Temático | Horas | Formato Principal |
+| :--- | :--- | :---: | :--- |
+| `1-ciclo-vida-ml.md` | Ciclo de Vida de ML y Tipos de Aprendizaje | 1 h | Aula / Presentación / Teoría |
+| `2-anatomia-datos-train-test.md` | Anatomía de los Datos y Partición Train-Test | 1 h | Notebook (`.ipynb`) |
+| `3-eda-univariante.md` | EDA Univariante y la Fórmula V-H-A | 2 h | Notebook (`.ipynb`) |
+| `4-eda-bivariante-multivariante.md` | EDA Bivariante y Relación con el Target | 2 h | Notebook (`.ipynb`) |
+| `5-preprocesamiento-imputacion-escalado.md` | Preprocesamiento I: Imputación y Escalado | 2 h | Notebook (`.ipynb`) |
+| `6-codificacion-categorica-outliers.md` | Preprocesamiento II: Categóricas y Outliers | 2 h | Notebook (`.ipynb`) |
+| `7-feature-engineering-seleccion.md` | Feature Engineering y Selección de Características | 2 h | Notebook (`.ipynb`) |
+| `8-pipelines-columntransformer.md` | Pipelines de Scikit-learn y Producción | 3 h | Notebook $\rightarrow$ Script `.py` |
 
 ---
 

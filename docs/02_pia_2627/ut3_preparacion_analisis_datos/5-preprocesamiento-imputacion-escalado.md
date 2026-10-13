@@ -1,6 +1,6 @@
 ---
 draft: true
-title: "Sesión 5: Preprocesamiento I: Imputación, Escalado y Data Leakage"
+title: "Preprocesamiento I: Imputación, Escalado y Data Leakage"
 sidebar_position: 5
 description: "Preprocesamiento paso a paso con Scikit-learn: el contrato fit/transform, imputación con SimpleImputer, escalado numérico y prevención práctica de Data Leakage."
 keywords: ["preprocesamiento", "SimpleImputer", "StandardScaler", "MinMaxScaler", "RobustScaler", "data leakage", "fit transform"]
@@ -8,7 +8,7 @@ keywords: ["preprocesamiento", "SimpleImputer", "StandardScaler", "MinMaxScaler"
 
 <div class="justify-text">
 
-# Sesión 5: Preprocesamiento I: Imputación, Escalado y Data Leakage
+# Preprocesamiento I: Imputación, Escalado y Data Leakage
 
 **Duración estimada:** 2 horas (120 minutos)  
 **Bloque:** Bloque 3 — Preprocesamiento y Prevención de Data Leakage  

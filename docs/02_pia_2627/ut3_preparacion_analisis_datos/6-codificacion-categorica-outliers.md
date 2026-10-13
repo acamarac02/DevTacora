@@ -1,6 +1,6 @@
 ---
 draft: true
-title: "Sesión 6: Preprocesamiento II: Codificación Categórica y Outliers"
+title: "Preprocesamiento II: Codificación Categórica y Outliers"
 sidebar_position: 6
 description: "Codificación de variables cualitativas con OneHotEncoder y OrdinalEncoder, gestión de categorías desconocidas en producción y técnicas de recorte de outliers."
 keywords: ["OneHotEncoder", "OrdinalEncoder", "handle_unknown", "categoricas", "outliers", "winsorizing", "np.hstack"]
@@ -8,7 +8,7 @@ keywords: ["OneHotEncoder", "OrdinalEncoder", "handle_unknown", "categoricas", "
 
 <div class="justify-text">
 
-# Sesión 6: Preprocesamiento II: Codificación Categórica y Outliers
+# Preprocesamiento II: Codificación Categórica y Outliers
 
 **Duración estimada:** 2 horas (120 minutos)  
 **Bloque:** Bloque 3 — Preprocesamiento y Prevención de Data Leakage  

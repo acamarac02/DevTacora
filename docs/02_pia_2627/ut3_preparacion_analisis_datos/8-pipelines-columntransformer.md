@@ -1,6 +1,6 @@
 ---
 draft: true
-title: "Sesión 8: Orquestación con Pipelines, ColumnTransformer y Puesta en Producción"
+title: "Orquestación con Pipelines, ColumnTransformer y Puesta en Producción"
 sidebar_position: 8
 description: "Empaquetado profesional del preprocesamiento con ColumnTransformer y Pipeline de Scikit-learn, serialización con joblib y transición a script Python para producción."
 keywords: ["Pipeline", "ColumnTransformer", "joblib", "scikit-learn", "produccion", "FastAPI", "serializacion"]
@@ -8,7 +8,7 @@ keywords: ["Pipeline", "ColumnTransformer", "joblib", "scikit-learn", "produccio
 
 <div class="justify-text">
 
-# Sesión 8: Orquestación con Pipelines, ColumnTransformer y Puesta en Producción
+# Orquestación con Pipelines, ColumnTransformer y Puesta en Producción
 
 **Duración estimada:** 2 horas (120 minutos)  
 **Bloque:** Bloque 5 — Orquestación mediante Pipelines de Scikit-learn (Cierre de la UT3)  
