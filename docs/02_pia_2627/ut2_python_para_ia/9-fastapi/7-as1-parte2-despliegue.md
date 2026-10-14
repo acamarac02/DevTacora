@@ -1,6 +1,7 @@
 ---
 title: "AS1 - Parte 2: Despliegue"
 sidebar_position: 7
+draft: true
 description: "Actividad práctica de despliegue de la API REST y página web de Inteligencia Artificial en Hugging Face Spaces."
 keywords: [FastAPI, Hugging Face Spaces, actividad, despliegue, nube, producción, Evex]
 ---
