@@ -1,6 +1,5 @@
 ---
 title: "Despliegue en Hugging Face Spaces"
-draft: true
 sidebar_position: 6
 description: "Despliegue de APIs de FastAPI y Frontend web en la nube mediante Hugging Face Spaces con el SDK de Gradio."
 keywords: [FastAPI, Hugging Face Spaces, Gradio SDK, despliegue, nube, puerto 7860, app.py, producción]
