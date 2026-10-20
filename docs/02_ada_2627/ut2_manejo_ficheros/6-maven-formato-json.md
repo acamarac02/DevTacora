@@ -1,5 +1,4 @@
 ---
-draft: true
 title: Formato de Intercambio JSON
 sidebar_position: 6
 description: Introducción a la gestión de dependencias con Maven e intercambio de datos en formato JSON mediante Jackson en Java.
