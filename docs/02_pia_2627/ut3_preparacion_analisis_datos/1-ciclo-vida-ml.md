@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Ciclo de Vida de ML y Tipos de Aprendizaje"
 sidebar_position: 1
 description: "Introducción al Machine Learning, conceptos fundamentales, tipos de problemas (supervisado, no supervisado, refuerzo) y el ciclo de vida de un proyecto de IA."

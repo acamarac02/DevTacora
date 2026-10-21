@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Anatomía de los Datos y Partición Train-Test"
 sidebar_position: 2
 description: "Estructura formal de un dataset, matriz de características X, vector objetivo y, y la regla de oro de la división Train/Test para blindar los datos contra Data Leakage."
@@ -12,7 +11,7 @@ keywords: ["matriz de caracteristicas", "target", "train test split", "blindaje 
 
 Una vez comprendido el ciclo de vida de un proyecto de Machine Learning y los tipos de problemas que podemos resolver, llega el momento de sentarnos frente al ordenador con un dataset real.
 
-Antes de construir cualquier gráfico o aplicar transformaciones matemáticas, es indispensable comprender la **estructura matricial de los datos** y aplicar la **primera regla metodológica innegociable de la ciencia de datos: la división sagrada entre entrenamiento y test**.
+Antes de construir cualquier gráfico o aplicar transformaciones matemáticas, es indispensable comprender la **estructura matricial de los datos** y aplicar la **primera regla metodológica innegociable de la ciencia de datos: la división entre entrenamiento y test**.
 
 ---
 
