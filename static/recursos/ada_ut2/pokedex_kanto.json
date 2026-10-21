@@ -1,0 +1,99 @@
+{
+  "total_count": 3,
+  "region_name": "Kanto",
+  "api_source": "https://pokeapi.co/api/v2/",
+  "pokemon_list": [
+    {
+      "id": 1,
+      "name": "Bulbasaur",
+      "height": 7,
+      "weight": 69,
+      "is_legendary": false,
+      "sprites": {
+        "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+        "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/1.png"
+      },
+      "types": [
+        {
+          "slot": 1,
+          "type": {
+            "name": "Planta",
+            "url": "https://pokeapi.co/api/v2/type/12/"
+          }
+        },
+        {
+          "slot": 2,
+          "type": {
+            "name": "Veneno",
+            "url": "https://pokeapi.co/api/v2/type/4/"
+          }
+        }
+      ],
+      "stats": [
+        { "stat_name": "hp", "base_stat": 45 },
+        { "stat_name": "attack", "base_stat": 49 },
+        { "stat_name": "defense", "base_stat": 49 },
+        { "stat_name": "speed", "base_stat": 45 }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Charizard",
+      "height": 17,
+      "weight": 905,
+      "is_legendary": false,
+      "sprites": {
+        "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png",
+        "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/6.png"
+      },
+      "types": [
+        {
+          "slot": 1,
+          "type": {
+            "name": "Fuego",
+            "url": "https://pokeapi.co/api/v2/type/10/"
+          }
+        },
+        {
+          "slot": 2,
+          "type": {
+            "name": "Volador",
+            "url": "https://pokeapi.co/api/v2/type/3/"
+          }
+        }
+      ],
+      "stats": [
+        { "stat_name": "hp", "base_stat": 78 },
+        { "stat_name": "attack", "base_stat": 84 },
+        { "stat_name": "defense", "base_stat": 78 },
+        { "stat_name": "speed", "base_stat": 100 }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Pikachu",
+      "height": 4,
+      "weight": 60,
+      "is_legendary": false,
+      "sprites": {
+        "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+        "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/25.png"
+      },
+      "types": [
+        {
+          "slot": 1,
+          "type": {
+            "name": "Electrico",
+            "url": "https://pokeapi.co/api/v2/type/13/"
+          }
+        }
+      ],
+      "stats": [
+        { "stat_name": "hp", "base_stat": 35 },
+        { "stat_name": "attack", "base_stat": 55 },
+        { "stat_name": "defense", "base_stat": 40 },
+        { "stat_name": "speed", "base_stat": 90 }
+      ]
+    }
+  ]
+}

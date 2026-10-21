@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogo>
+    <producto id="101" categoria="Informatica">
+        <nombre>Portatil Gaming</nombre>
+        <precio>1199.99</precio>
+        <stock>15</stock>
+        <proveedor>
+            <cif>B12345678</cif>
+            <nombre>TechDistribuciones S.L.</nombre>
+            <pais>España</pais>
+        </proveedor>
+        <etiquetas>
+            <etiqueta>gaming</etiqueta>
+            <etiqueta>portatil</etiqueta>
+            <etiqueta>nvidia</etiqueta>
+        </etiquetas>
+    </producto>
+    <producto id="102" categoria="Accesorios">
+        <nombre>Raton Inalambrico</nombre>
+        <precio>29.95</precio>
+        <stock>40</stock>
+        <proveedor>
+            <cif>B87654321</cif>
+            <nombre>Perifericos Global S.A.</nombre>
+            <pais>España</pais>
+        </proveedor>
+        <etiquetas>
+            <etiqueta>ergonomico</etiqueta>
+            <etiqueta>inalambrico</etiqueta>
+            <etiqueta>oficina</etiqueta>
+        </etiquetas>
+    </producto>
+    <producto id="103" categoria="Accesorios">
+        <nombre>Teclado Mecanico RGB</nombre>
+        <precio>89.50</precio>
+        <stock>25</stock>
+        <proveedor>
+            <cif>B87654321</cif>
+            <nombre>Perifericos Global S.A.</nombre>
+            <pais>España</pais>
+        </proveedor>
+        <etiquetas>
+            <etiqueta>gaming</etiqueta>
+            <etiqueta>mecanico</etiqueta>
+            <etiqueta>rgb</etiqueta>
+        </etiquetas>
+    </producto>
+    <producto id="104" categoria="Monitores">
+        <nombre>Monitor Curvo 34 Pulgadas</nombre>
+        <precio>389.00</precio>
+        <stock>8</stock>
+        <proveedor>
+            <cif>B99887766</cif>
+            <nombre>VisualTech Iberia</nombre>
+            <pais>Portugal</pais>
+        </proveedor>
+        <etiquetas>
+            <etiqueta>ultrawide</etiqueta>
+            <etiqueta>curvo</etiqueta>
+            <etiqueta>144hz</etiqueta>
+        </etiquetas>
+    </producto>
+</catalogo>

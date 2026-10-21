@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "nombre": "Espada Maestra",
+    "disponible": true
+  },
+  {
+    "id": 2,
+    "nombre": "Escudo Hyliano",
+    "disponible": true
+  },
+  {
+    "id": 3,
+    "nombre": "Arco del Bosque",
+    "disponible": false
+  },
+  {
+    "id": 4,
+    "nombre": "Bomba Remota",
+    "disponible": true
+  },
+  {
+    "id": 5,
+    "nombre": "Tunica del Campeon",
+    "disponible": false
+  }
+]

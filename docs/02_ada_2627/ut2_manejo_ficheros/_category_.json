@@ -1,0 +1,8 @@
+{
+  "label": "UT2. Manejo de ficheros",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "En esta unidad aprenderás a gestionar el sistema de archivos con Java NIO.2, procesar flujos de texto plano y ficheros binarios de acceso aleatorio, trabajar con formatos de intercambio modernos (JSON y XML con Jackson) y estructurar el acceso a datos mediante patrones de diseño profesionales (Singleton y DAO)."
+  }
+}
