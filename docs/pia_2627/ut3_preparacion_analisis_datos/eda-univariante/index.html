@@ -13,8 +13,8 @@
 
 <script>window.gtag=window.gtag||function(){(window.dataLayer=window.dataLayer||[]).push(arguments)}</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css" integrity="sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM" crossorigin="anonymous"><link rel="stylesheet" href="/DevTacora/assets/css/styles.956cff31.css">
-<script src="/DevTacora/assets/js/runtime~main.77ef4ffd.js" defer="defer"></script>
-<script src="/DevTacora/assets/js/main.3e73fe19.js" defer="defer"></script>
+<script src="/DevTacora/assets/js/runtime~main.ab830b5d.js" defer="defer"></script>
+<script src="/DevTacora/assets/js/main.82968ced.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
@@ -194,8 +194,8 @@
 <p>Para facilitar el preprocesamiento posterior, documenta en una celda las <strong>conclusiones finales</strong>: qué columnas están listas y cuáles requerirán limpieza obligatoria.</p>
 </li>
 <li>
-<p>Para estructurar este inventario de trabajo, lo mejor es utilizar una <strong>tabla resumen</strong> con el nombre de la variable y su correspondiente acción de preprocesamiento. Por ejemplo:</p>
-<table><thead><tr><th style="text-align:left">Variable</th><th style="text-align:left">Acción de Preprocesamiento</th></tr></thead><tbody><tr><td style="text-align:left"><code>edad</code></td><td style="text-align:left">Sustituir los valores anómalos (&gt;110 años) por <code>np.nan</code> e imputar los valores ausentes mediante la mediana.</td></tr><tr><td style="text-align:left"><code>tipo_cuenta</code></td><td style="text-align:left">Limpiar espacios en blanco y unificar mayúsculas, reemplazar <code>&#x27;?&#x27;</code> por <code>np.nan</code>, imputar por la moda y aplicar <code>OneHotEncoder</code>.</td></tr></tbody></table>
+<p>Para estructurar este inventario de trabajo, lo mejor es utilizar una <strong>tabla resumen</strong> con el nombre de la variable, el tipo de característica (numérica continua, discreta, categórica nominal u ordinal) y su correspondiente acción de preprocesamiento. Por ejemplo:</p>
+<table><thead><tr><th style="text-align:left">Variable</th><th style="text-align:left">Tipo de característica</th><th style="text-align:left">Acción de preprocesamiento</th></tr></thead><tbody><tr><td style="text-align:left"><code>edad</code></td><td style="text-align:left">Numérica continua</td><td style="text-align:left">Sustituir los valores anómalos (&gt;110 años) por <code>np.nan</code> e imputar los valores ausentes mediante la mediana.</td></tr><tr><td style="text-align:left"><code>tipo_cuenta</code></td><td style="text-align:left">Categórica nominal</td><td style="text-align:left">Limpiar espacios en blanco y unificar mayúsculas, reemplazar <code>&#x27;?&#x27;</code> por <code>np.nan</code>, imputar por la moda y aplicar <code>OneHotEncoder</code>.</td></tr></tbody></table>
 </li>
 </ul>
 </li>
