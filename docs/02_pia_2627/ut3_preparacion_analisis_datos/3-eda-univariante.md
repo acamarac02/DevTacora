@@ -396,11 +396,11 @@ Trabajaremos sobre el dataset de entrenamiento resultante de la partición de [`
   
 * **Conclusiones:**
   * Para facilitar el preprocesamiento posterior, documenta en una celda las **conclusiones finales**: qué columnas están listas y cuáles requerirán limpieza obligatoria.
-  * Para estructurar este inventario de trabajo, lo mejor es utilizar una **tabla resumen** con el nombre de la variable y su correspondiente acción de preprocesamiento. Por ejemplo:
+  * Para estructurar este inventario de trabajo, lo mejor es utilizar una **tabla resumen** con el nombre de la variable, el tipo de característica (numérica continua, discreta, categórica nominal u ordinal) y su correspondiente acción de preprocesamiento. Por ejemplo:
 
-    | Variable | Acción de Preprocesamiento |
-    | :--- | :--- |
-    | `edad` | Sustituir los valores anómalos (>110 años) por `np.nan` e imputar los valores ausentes mediante la mediana. |
-    | `tipo_cuenta` | Limpiar espacios en blanco y unificar mayúsculas, reemplazar `'?'` por `np.nan`, imputar por la moda y aplicar `OneHotEncoder`. |
+    | Variable | Tipo de característica | Acción de preprocesamiento |
+    | :--- | :--- | :--- |
+    | `edad` | Numérica continua | Sustituir los valores anómalos (>110 años) por `np.nan` e imputar los valores ausentes mediante la mediana. |
+    | `tipo_cuenta` | Categórica nominal | Limpiar espacios en blanco y unificar mayúsculas, reemplazar `'?'` por `np.nan`, imputar por la moda y aplicar `OneHotEncoder`. |
 
 </div>
