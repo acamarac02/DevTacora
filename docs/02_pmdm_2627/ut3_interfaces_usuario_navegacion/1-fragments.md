@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Fragments"
 sidebar_position: 1
 description: "Los fragments permiten crear interfaces modulares y reutilizables en Android, facilitando el diseño adaptable y la navegación entre secciones de una app."

@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "EDA Univariante"
 sidebar_position: 3
 description: "Análisis Exploratorio de Datos variable a variable: distribuciones numéricas, cardinalidad categórica y el método de análisis obligatorio V-H-A."
@@ -363,7 +362,7 @@ plt.show()
 
 ---
 
-## 💻 Ejercicio Guiado: El Informe Forense Univariante
+## 💻 Ejercicio Guiado: El Informe Univariante
 
 ### Contexto de la Práctica
 Continuando con la auditoría de la entidad bancaria iniciada en la sesión anterior, el director técnico te solicita un **informe forense univariante exhaustivo** sobre el conjunto de entrenamiento blindado (`X_train`).
@@ -379,13 +378,13 @@ Trabajaremos sobre el dataset de entrenamiento resultante de la partición de [`
   * Redacta una breve conclusión justificando qué columnas habría que estudiar posteriormente con detenimiento (aquellas que tengan nulos) o que directamente habría que descartar (aquellas con un porcentaje de nulos muy elevado). 
   * Indica qué variables son numéricas y cuáles categóricas. Fíjate para ello en el tipo de dato y la cardinalidad.
 
-* **Auditoría forense de las variables numéricas:**
+* **Auditoría de las variables numéricas:**
   * Una vez identificadas en el paso anterior las variables numéricas, realiza el diagnóstico forense univariante para cada una de ellas.
     * Muestra su resumen estadístico con `.describe()`.
     * Genera una figura que combine histograma con KDE y boxplot.
     * Redacta obligatoriamente su bloque **V-H-A** en Markdown detallando hallazgos numéricos (outliers, asimetrías o nulos encubiertos) y acciones técnicas de preprocesamiento.
 
-* **Auditoría forense de las variables categóricas:**
+* **Auditoría de las variables categóricas:**
   * Una vez identificadas en el paso anterior las variables categóricas, realiza el diagnóstico forense univariante para cada una de ellas.
     * Muestra la tabla de frecuencias.
     * Genera un gráfico de barras horizontal.
