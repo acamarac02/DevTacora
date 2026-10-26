@@ -1,5 +1,4 @@
 ---
-draft: true
 title: Formato XML 
 sidebar_position: 7
 description: Tratamiento del formato XML mediante Data Binding moderno con Jackson Dataformat XML, anotaciones y comparativa conceptual con DOM.
