@@ -52,7 +52,7 @@ El error formativo más común en el EDA (Análisis Exploratorio de Datos) es co
 | `4-eda-bivariante-multivariante.md` | EDA Bivariante y Relación con el Target | 2 h | Notebook (`.ipynb`) |
 | `5-preprocesamiento-imputacion-escalado.md` | Preprocesamiento I: Rama Numérica, Outliers y Escalado | 2 h | Notebook (`.ipynb`) |
 | `6-codificacion-categorica-ensamble.md` | Preprocesamiento II: Rama Categórica y Ensamble Manual | 2 h | Notebook (`.ipynb`) |
-| `7-feature-engineering-seleccion.md` | Feature Engineering y Selección de Características | 2 h | Notebook (`.ipynb`) |
+| `7-feature-engineering-seleccion.md` | Feature Engineering (Ingeniería de Características) | 2 h | Notebook (`.ipynb`) |
 | `8-pipelines-columntransformer.md` | Pipelines de Scikit-learn y Producción | 3 h | Notebook $\rightarrow$ Script `.py` |
 
 ---

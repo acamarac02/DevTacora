@@ -1,10 +1,10 @@
 ---
 draft: true
-title: "Feature engineering y selección de características"
+title: "Feature engineering"
 sidebar_position: 7
 toc_max_heading_level: 4
-description: "Creación de nuevas variables basadas en conocimiento de dominio (ratios, binning) y selección de características relevantes mediante filtros estadísticos con Scikit-learn."
-keywords: ["feature engineering", "seleccion de variables", "SelectKBest", "VarianceThreshold", "ratios", "binning", "f_classif"]
+description: "Creación de nuevas variables basadas en conocimiento de dominio (ratios, discretización y transformaciones temporales) para enriquecer el conjunto de datos."
+keywords: ["feature engineering", "ingenieria de caracteristicas", "ratios", "binning", "pd.cut", "discretizacion", "transformaciones temporales"]
 ---
 
 <div class="justify-text">
@@ -13,9 +13,8 @@ En las sesiones anteriores aprendimos a limpiar y formatear nuestros datos: sani
 
 Sin embargo, los modelos son esencialmente «miopes» frente al contexto real del problema: solo ven columnas aisladas de números y matrices. No saben qué es un banco, qué significa una nómina o por qué tener poco saldo habiendo ganado mucho dinero puede ser un síntoma claro de abandono inminente.
 
-En esta sesión abordaremos dos disciplinas complementarias y fundamentales:
-1. **Feature Engineering (Ingeniería de características):** El arte de combinar y transformar variables existentes para crear nuevas columnas que aporten información de negocio valiosa y directa al modelo.
-2. **Selección de características:** El proceso de evaluar y cribar nuestras variables para eliminar el ruido, quedándonos únicamente con aquellas que poseen un poder predictivo real.
+En esta sesión abordaremos una disciplina fundamental:
+* **Feature Engineering (Ingeniería de características):** El arte de combinar y transformar variables existentes para crear nuevas columnas que aporten información de negocio valiosa y directa al modelo antes de alimentar los algoritmos predictivos.
 
 ## El mapa global del pipeline
 
@@ -31,11 +30,10 @@ flowchart TD
     FE --> N["5a. Rama Numérica (incluye nuevas características):<br/>Clipping de outliers + StandardScaler"]
     FE --> C["5b. Rama Categórica (incluye nuevas características):<br/>OrdinalEncoder + OneHotEncoder"]
     
-    N --> ENS["6. Ensamble de matrices (np.hstack)"]
+    N --> ENS["6. Ensamble de matrices (pd.DataFrame final)"]
     C --> ENS
     
-    ENS --> SEL["⭐ 7. Selección de características (SelectKBest) ⭐"]
-    SEL --> MODELO["8. Entrenamiento del modelo de ML"]
+    ENS --> MODELO["7. Entrenamiento del modelo de ML"]
 ```
 
 :::warning Cambio en el flujo de trabajo
@@ -180,217 +178,83 @@ Como vimos en el diagrama global de la introducción, el *Feature Engineering* o
 
 ---
 
-## Selección de características: menos es más
+### ¿Qué hacemos con las variables originales? ¿Debemos conservarlas o eliminarlas?
 
-Tras explorar ideas de negocio y aplicar *Feature Engineering*, es tentador crear 30 o 40 columnas nuevas combinando todo lo que se nos ocurra. Sin embargo, en Inteligencia Artificial más variables no significan necesariamente mejores predicciones.
+Una duda inmediata que surge al crear nuevas características es: *«Si ya he creado `ratio_saldo_ingresos`, `grupo_edad` o `antiguedad_anios`, ¿debo mantener las columnas originales (`saldo_cuenta`, `ingresos_anuales`, `edad`, `antiguedad_meses`) en el dataset, o ahora son redundantes?»*.
 
-### La maldición de la dimensionalidad
+La respuesta no es única: **depende de la naturaleza matemática de cada transformación**:
 
-Añadir variables superfluas, repetitivas o con poco poder discriminatorio acarrea problemas muy serios:
+#### 1. Ratios y operaciones combinadas 
 
-1. **Inyección de ruido:** Si introducimos una columna que no tiene correlación real con el abandono, el algoritmo puede encontrar correlaciones casuales o espurias en los datos de entrenamiento, aumentando el sobreajuste (*overfitting*).
-2. **Mayor coste computacional:** Modelos con cientos de columnas tardan mucho más en entrenarse y requieren más memoria en los servidores de producción.
-3. **Pérdida de interpretabilidad:** Es mucho más difícil explicarle al negocio o a un regulador bancario por qué el modelo rechaza una operación si depende de 150 variables en vez de las 10 o 12 más determinantes.
+**SÍ se mantienen las originales ✅:**
 
-La **selección de características (*Feature Selection*)** consiste precisamente en aplicar filtros estadísticos para **descartar el ruido y conservar únicamente las variables más informativas**.
+* En un ratio como `saldo_cuenta / (ingresos_anuales + 1)`, la nueva variable mide una **relación o proporción relativa**.
+* Sin embargo, el ratio pierde por completo la **magnitud o escala absoluta**:
+  * Un cliente con $1.000$ € de saldo y $20.000$ € de ingresos tiene un ratio de $0.05$.
+  * Otro cliente con $50.000$ € de saldo y $1.000.000$ € de ingresos tiene exactamente el mismo ratio ($0.05$).
+* Para el modelo predictivo, ambos clientes tienen el mismo ratio relativo, pero su capacidad patrimonial y el impacto de su abandono para el banco son radicalmente distintos.
+* **Conclusión:** Las variables originales (`saldo_cuenta`, `ingresos_anuales`) y el ratio derivado **no son redundantes, sino complementarias**. Se deben mantener ambas en el dataset.
 
-:::info ¿Siempre es obligatorio aplicar selección de características?
-**No, no siempre se hace.** La decisión de aplicar selección de variables depende fundamentalmente de la naturaleza del problema y del algoritmo que vayamos a utilizar:
+#### 2. Cambios de escala estrictamente lineales 
 
-* **Modelos con selección intrínseca:** Los algoritmos basados en árboles de decisión (como *Random Forest*, *XGBoost* o *LightGBM*) seleccionan automáticamente en cada partición qué variables aportan mayor ganancia de información e ignoran el ruido o las columnas redundantes. Del mismo modo, los modelos lineales con regularización $L_1$ (*Lasso*) penalizan las variables poco informativas llevando sus coeficientes exactamente a cero.
-* **¿Cuándo sí resulta fundamental?**
-  * En algoritmos sensibles a las distancias (como $k$-NN o SVM), donde variables ruidosas distorsionan la distancia geométrica entre puntos (la conocida *«maldición de la dimensionalidad»*).
-  * En modelos lineales estándar sin regularización.
-  * Cuando tras aplicar *One-Hot Encoding* sobre variables de alta cardinalidad o texto el número de columnas se dispara a cientos o miles, ralentizando el entrenamiento y disparando el consumo de memoria.
-  * Cuando el negocio exige un modelo muy simple, rápido y fácil de auditar en producción.
+**NO se mantienen ambas, se elige una ❌**
 
-**La buena práctica en Machine Learning:** Probar ambas opciones. En la fase de experimentación, se entrena y evalúa el modelo con todas las variables (`X_train_final`) y también con las características seleccionadas (`X_train_seleccionado`). Solo si la selección mantiene o mejora la métrica de evaluación (o reduce drásticamente la complejidad sin perder precisión) se adopta definitivamente para el modelo final.
-:::
+* Si calculas `antiguedad_anios = antiguedad_meses / 12.0`, estás aplicando una transformación lineal simple ($y = x / 12$).
+* La correlación estadística entre `antiguedad_meses` y `antiguedad_anios` es **exactamente $1.0$ (correlación lineal perfecta)**.
+* Mantener ambas no aporta ninguna información adicional al modelo e introduce **multicolinealidad perfecta**, lo que puede desestabilizar modelos lineales y regresiones.
+* **Conclusión:** Son redundantes. **Se elige una de las dos** para el ensamble final (aquella cuya unidad resulte más intuitiva y cómoda de interpretar para el negocio o el equipo técnico).
 
----
+#### 3. Discretización en tramos 
 
-### Filtros estadísticos en Scikit-learn
+**Depende del caso y del modelo ⚠️**
 
-Scikit-learn ofrece dos herramientas directas y muy accesibles para cribar características sin necesidad de entrenar modelos complejos:
+* La variable continua original (`edad`) tiene **máxima granularidad** (sabe distinguir entre 29 y 31 años).
+* La variable discretizada (`grupo_edad`: `'Joven'`, `'Adulto'`, `'Senior'`) agrupa en cajones y **pierde información de detalle**, pero ayuda a modelos lineales sencillos a capturar comportamientos no lineales por etapas vitales.
+* En modelos modernos basados en árboles (Random Forest, XGBoost), el algoritmo ya es capaz de encontrar por sí mismo los puntos de corte óptimos sobre la variable continua, por lo que la continua suele ser más potente.
+* **Conclusión:** Introducir ambas a la vez suele generar redundancia innecesaria. Es habitual evaluar cuál de las dos aporta mayor claridad o quedarse con la continua.
 
-```mermaid
-flowchart TD
-    FS["Métodos de Filtrado en Scikit-learn"] --> VT["VarianceThreshold<br/>(No Supervisado)"]
-    FS --> SKB["SelectKBest<br/>(Supervisado)"]
-    
-    VT --> VT_Desc["Elimina columnas casi constantes<br/>(que no tienen varianza propia)"]
-    SKB --> SKB_Desc["Ordena y selecciona las K mejores columnas<br/>según su relación estadística con el target 'y'"]
-```
-
-#### ¿Sobre qué datos se aplica la selección?
-
-Observa el flujo global del pipeline (Paso 7): **la selección de características se realiza sobre el DataFrame unificado (`X_train_final`, `X_test_final`)**, después de haber completado las transformaciones numéricas, la codificación categórica y el ensamble.
-
-¿Por qué se hace en este punto y no antes?
-1. **Compatibilidad técnica:** Los estimadores de Scikit-learn como `VarianceThreshold` y `SelectKBest` requieren matrices puramente numéricas. Si les pasáramos columnas de texto (como `'Corriente'`, `'Grado'`, etc.), arrojarían un error `ValueError`.
-2. **Evaluación equitativa y global:** Al operar sobre el conjunto ensamblado tras el Paso 6, **todas las variables compiten en igualdad de condiciones**: las numéricas continuas escaladas, los nuevos ratios creados, las ordinales codificadas a enteros y las columnas *dummy* procedentes del *One-Hot Encoding*.
-
-Como en la sesión anterior empaquetamos el ensamble directamente como un **`pd.DataFrame`** con sus nombres de columnas correspondientes (`nombres_columnas_final`), ahora podemos consultar sus nombres de forma directa mediante **`X_train_final.columns`**.
-
-#### Filtro no supervisado: `VarianceThreshold`
-
-¿Qué valor aporta una columna que contiene prácticamente el mismo número en todas las filas? Ninguno. Una variable sin variabilidad no tiene capacidad de distinguir a un cliente que abandona de uno que se queda.
-
-La clase **`VarianceThreshold`** calcula la varianza de cada columna en `X_train_final` y elimina automáticamente aquellas cuya variabilidad no alcance un umbral mínimo fijado:
-
-```python
-from sklearn.feature_selection import VarianceThreshold
-
-# 1. Instanciamos el filtro (por ejemplo, descartando varianzas inferiores a 0.01)
-filtro_varianza = VarianceThreshold(threshold=0.01)
-
-# 2. FIT: Aprende la varianza de cada columna exclusivamente de X_train_final
-filtro_varianza.fit(X_train_final)
-
-# 3. Comprobamos qué columnas superaron el filtro usando .columns directamente
-columnas_conservadas = X_train_final.columns[filtro_varianza.get_support()]
-columnas_descartadas = X_train_final.columns[~filtro_varianza.get_support()]
-
-print(f"Columnas conservadas ({len(columnas_conservadas)}): {list(columnas_conservadas)}")
-print(f"Columnas descartadas ({len(columnas_descartadas)}): {list(columnas_descartadas)}")
-```
-
-:::tip Varianza en variables dummy
-Para una variable binaria (0 o 1) con probabilidad de éxito $p$, la varianza es $p(1 - p)$. Fijar un umbral de `threshold=0.01` permite detectar y eliminar de forma natural categorías residuales o erróneas que aparecen en menos del 1 % de los registros (por ejemplo, errores tipográficos residuales o categorías marginales).
-:::
-
-#### Filtro supervisado: `SelectKBest`
-
-Mientras que `VarianceThreshold` solo mira a las características de forma aislada, **`SelectKBest`** es un método **supervisado**: evalúa mediante una prueba estadística qué relación tiene cada columna de $X_{\text{final}}$ con la variable objetivo $y$ y se queda con las **$k$ características con mayor puntuación**.
-
-La función de evaluación estadística (`score_func`) debe elegirse en función del tipo de problema a resolver:
-
-| Tipo de problema ($y$) | Función recomendada (`score_func`) | ¿Qué mide internamente? |
-| :--- | :--- | :--- |
-| **Clasificación** (target discreto: binario o multiclase) | **`f_classif`** | ANOVA F-test: evalúa si la media de la variable varía significativamente entre las diferentes clases del target. |
-| **Regresión** (target cuantitativo continuo: importe, precio) | **`f_regression`** | Correlación lineal de Pearson y test F de regresión. |
-
-*(Nota: Scikit-learn también ofrece `mutual_info_classif` y `mutual_info_regression` basadas en información mutua, útiles cuando sospechamos relaciones no lineales complejas).*
-
-En nuestro caso, como queremos predecir el `abandono` (clasificación binaria: 0 o 1), utilizaremos **`f_classif`** sobre el DataFrame ensamblado:
-
-```python
-import pandas as pd
-from sklearn.feature_selection import SelectKBest, f_classif
-
-# X_train_final es el DataFrame unificado (numéricas, ordinales y dummies)
-# y_train es el target binario (0 o 1)
-
-# 1. Instanciamos el selector para quedarnos con las 5 mejores características
-selector = SelectKBest(score_func=f_classif, k=5)
-
-# 2. FIT: Calcula la relación estadística de cada columna de X_train_final con y_train
-selector.fit(X_train_final, y_train)
-
-# 3. Construimos una tabla resumen con X_train_final.columns para ordenar y visualizar el ranking
-ranking = pd.DataFrame({
-    'Variable': X_train_final.columns,
-    'Puntuacion_F': selector.scores_
-}).sort_values(by='Puntuacion_F', ascending=False)
-
-print("Ranking de relevancia de las variables:")
-print(ranking.to_string(index=False))
-```
-
-**Salida en consola:**
-```text
-Ranking de relevancia de las variables:
-                      Variable  Puntuacion_F
-            nivel_satisfaccion    228.671637
-                 num_productos     14.429925
-                  saldo_cuenta     13.826957
-            saldo_por_producto      6.080619
-            tipo_cuenta_Ahorro      4.526877
-              antiguedad_meses      3.921600
-         tipo_cuenta_Corriente      1.420018
-canal_preferido_Cajero Antiguo      1.221242
-            tipo_cuenta_Nomina      0.839971
-                nivel_estudios      0.746992
-      canal_preferido_Telefono      0.725813
-              ingresos_anuales      0.475857
-       canal_preferido_Oficina      0.363578
-                 tiene_tarjeta      0.264235
-     canal_preferido_App Movil      0.187862
-           canal_preferido_Web      0.150727
-                          edad      0.072807
-          ratio_saldo_ingresos      0.000616
-         tipo_cuenta_Inversion      0.000137
-```
-
-##### ¿Cómo aplicamos el filtro a los datos?
-
-Una vez ajustado el selector, el método `.transform()` nos devuelve una matriz con únicamente las $k$ columnas ganadoras. Si deseamos mantener la comodidad de Pandas, podemos reconstruir el DataFrame con las columnas seleccionadas mediante `selector.get_support()`:
-
-```python
-# TRANSFORM: Conserva solo las 5 columnas ganadoras tanto en Train como en Test
-X_train_sel_array = selector.transform(X_train_final)
-X_test_sel_array = selector.transform(X_test_final)
-
-# Columnas ganadoras seleccionadas
-cols_seleccionadas = X_train_final.columns[selector.get_support()]
-
-# Conversión a DataFrame para poder seguir usando .head()
-X_train_seleccionado = pd.DataFrame(X_train_sel_array, columns=cols_seleccionadas, index=X_train_final.index)
-X_test_seleccionado = pd.DataFrame(X_test_sel_array, columns=cols_seleccionadas, index=X_test_final.index)
-
-print(f"Dimensiones originales (X_train_final):        {X_train_final.shape}")
-print(f"Dimensiones tras filtro (X_train_seleccionado): {X_train_seleccionado.shape}")
-X_train_seleccionado.head()
-```
-
-:::tip ¿Entraron nuestras nuevas variables en el ranking?
-La gran prueba de fuego del *Feature Engineering* consiste en revisar la tabla del ranking: fíjate cómo la nueva columna que creamos (`saldo_por_producto`) ha alcanzado la 4.ª posición con un F-Score de $6.08$, superando a variables tradicionales como la antigüedad o los ingresos. Habrás demostrado empíricamente que tu hipótesis de negocio aporta un valor predictivo directo al modelo.
-:::
-
-##### ¿Cómo elegir el valor adecuado de $k$?
-
-Una duda muy habitual es: *¿con cuántas columnas solemos quedarnos al filtrar?*
-
-No existe un número mágico fijo universal (depende de cada problema y volumen de datos), pero en la práctica profesional se siguen tres pautas esenciales:
-
-1. **La regla visual del «codo» (buscar la caída en el ranking):**  
-   Observa la tabla de puntuaciones obtenida sobre `X_train_final`:
-   * La primera variable (`nivel_satisfaccion`) domina con rotundidad con una puntuación de **$228.67$**.
-   * El siguiente bloque (`num_productos`, `saldo_cuenta`, `saldo_por_producto`, `tipo_cuenta_Ahorro` y `antiguedad_meses`) presenta puntuaciones sólidas y significativas: entre **$3.9$ y $14.4$**.
-   * A partir de ahí, la puntuación se desploma por debajo de **$1.4$**, indicando una relación estadística prácticamente residual.  
-   Mirar dónde se produce la «caída» en el ranking nos indica de forma natural que un valor de **$k = 5$ o $k = 6$** es un punto de corte excelente.
-
-2. **Proporción del dataset (Criterio del 50 % - 70 %):**  
-   En problemas tabulares estándar con entre 10 y 30 características, una regla orientativa muy extendida es conservar entre el 50 % y el 70 % de las mejores variables (o un subconjunto de entre 5 y 10 columnas clave) para mantener modelos interpretables, rápidos y protegidos del sobreajuste.
-
-3. **Optimización con validación cruzada:**  
-   En fases avanzadas de modelado, $k$ se puede tratar como un hiperparámetro más y evaluar mediante búsqueda en cuadrícula (*GridSearchCV*) qué valor concreto ($k=4, 5, 6...$) maximiza la métrica final del modelo (como el F1-Score o el AUC-ROC).
+| Tipo de Feature | Ejemplo | ¿Se conservan las originales? | Motivo |
+| :--- | :--- | :---: | :--- |
+| **Ratios / Relaciones combinadas** | $\frac{\text{saldo}}{\text{ingresos}}$ | **SÍ ✅** | El ratio mide proporción relativa; las originales aportan la magnitud o escala absoluta. |
+| **Escala lineal simple** | $\frac{\text{meses}}{12}$ | **NO (Elegir una) ❌** | Redundancia matemática del 100 % (correlación $r = 1.0$). |
+| **Discretización (Tramos)** | `pd.cut(edad)` | **DECIDIR UNA ⚠️** | Agrupar destruye granularidad continua. Solemos priorizar la continua en modelos complejos. |
 
 ---
 
-## 💻 Ejercicio guiado: diseño de características y selección estadística
+## 💻 Ejercicio guiado: diseño de características
 
 ### Contexto de la práctica
-Continuando con el dataset de clientes bancarios [`clientes_banca_raw.csv`](./0-datasets/clientes_banca_raw.csv), utilizaremos nuestra intuición de negocio para crear nuevas características, completaremos el pipeline ensamblando la matriz final y comprobaremos estadísticamente la relevancia de todas las variables mediante Scikit-learn.
+Continuando con el dataset de clientes bancarios [`clientes_banca_raw.csv`](./0-datasets/clientes_banca_raw.csv), utilizaremos nuestra intuición de negocio para diseñar nuevas características, reorganizaremos el flujo de trabajo en el Notebook y completaremos el pipeline ensamblando el DataFrame final que alimentará los modelos predictivos.
 
 :::info Continuidad del Notebook
-Trabajaremos sobre el mismo Jupyter Notebook en el que realizaste la limpieza, codificación y ensamble de matrices. Reorganiza el proceso para poder hacer Feature Engineering y Selection en los momentos adecuados del Pipeline.
+Trabajaremos sobre **UNA COPIA** del Jupyter Notebook en el que realizaste la limpieza, codificación y ensamble de matrices. Reorganiza las celdas para ubicar la creación de variables en el **Paso 4 del Pipeline** (después de la imputación de nulos y antes del escalado y codificación).
+
+Por tanto, a partir de ahora tienes que tener dos Pipelines:
+- 1_pipeline_sin_feature_engineering.ipynb
+- 2_pipeline_con_feature_engineering.ipynb
 :::
 
 ### Tareas a realizar paso a paso
 
 1. **Diseño de un ratio financiero:**
    * Crea en `X_train` y `X_test` la variable `ratio_saldo_ingresos` dividiendo el saldo entre los ingresos anuales más uno (`saldo_cuenta / (ingresos_anuales + 1)`).
-   * Muestra las estadísticas básicas (`describe()`) de esta nueva columna en `X_train`.
-2. **Diseño de una variable agrupada por tramos:**
+   * Muestra las estadísticas básicas descriptivas (`describe()`) de esta nueva columna en `X_train`.
+2. **Diseño de un ratio por producto:**
+   * Crea en `X_train` y `X_test` la variable `saldo_por_producto` dividiendo el saldo en cuenta entre el número de productos contratados (`saldo_cuenta / num_productos`).
+   * Muestra sus estadísticas descriptivas (`describe()`) en `X_train`.
+3. **Diseño de una variable agrupada por tramos:**
    * Utiliza `pd.cut()` para crear la columna `grupo_edad` en `X_train` y `X_test` clasificando la edad en tres categorías: `'Joven'` ($\le 30$), `'Adulto'` ($31$ a $55$) y `'Senior'` ($> 55$).
    * Muestra la distribución de clientes en cada grupo mediante `.value_counts()`.
-3. **Criba por baja varianza sobre la matriz ensamblada:**
-   * Aplica `VarianceThreshold(threshold=0.01)` sobre la matriz ensamblada `X_train_final` para identificar si alguna variable o dummy generada presenta varianza residual o casi nula.
-4. **Ranking de relevancia con `SelectKBest`:**
-   * Aplica `SelectKBest(score_func=f_classif, k=5)` sobre el DataFrame unificado `X_train_final` frente al target `abandono`.
-   * Genera e imprime un DataFrame ordenado de mayor a menor con el nombre de cada variable (`X_train_final.columns`) y su puntuación estadística (`selector.scores_`).
-5. **Conclusión analítica:**
-   * Responde en una celda Markdown: ¿En qué posición del ranking se han situado las nuevas variables creadas frente a las originales? ¿Valió la pena el proceso de selección o mantendrías todas las variables para un modelo de árbol de decisión?
+4. **Transformación temporal de escala:**
+   * Crea en `X_train` y `X_test` la columna `antiguedad_anios` dividiendo la antigüedad en meses entre 12 (`antiguedad_meses / 12.0`).
+5. **Decisión sobre redundancias e integración en el Pipeline (modificación del código original):**
+   * **Toma de decisiones según la teoría estudiada:** A la luz de los principios anteriores, reflexiona y decide qué variables deben formar parte del dataset final:
+     * ¿Mantienes `saldo_cuenta` e `ingresos_anuales` junto al nuevo `ratio_saldo_ingresos`?
+     * Entre `antiguedad_meses` y `antiguedad_anios`, ¿cuál de las dos conservas y cuál descartas para evitar redundancia lineal?
+     * Entre la `edad` continua y los tramos `grupo_edad`, ¿cuál decides incluir en el ensamble?
+   * Añade las variables numéricas que hayas decidido conservar a la lista de columnas numéricas a escalar con `StandardScaler`.
+   * Incluye las variables categóricas correspondientes en la codificación (`OneHotEncoder` o `OrdinalEncoder`).
+   * Vuelve a ejecutar el ensamble manual para obtener `X_train_final` y `X_test_final` como DataFrames de Pandas con todas sus columnas nombradas.
+   * Muestra las primeras 5 filas con `X_train_final.head()` y redacta una breve justificación en una celda Markdown explicando las decisiones tomadas respecto a qué columnas originales conservaste y cuáles descartaste.
 
 </div>
