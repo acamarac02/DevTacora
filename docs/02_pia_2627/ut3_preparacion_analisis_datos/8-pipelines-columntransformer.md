@@ -7,8 +7,6 @@ description: "Orquestación integral del preprocesamiento con ColumnTransformer 
 keywords: ["Pipeline", "ColumnTransformer", "scikit-learn", "preprocesamiento", "joblib", "produccion", "Jupyter Notebook", "FastAPI"]
 ---
 
-<div class="justify-text">
-
 A lo largo de las sesiones 5, 6 y 7 aprendimos a preparar nuestros datos paso a paso: imputamos nulos, diseñamos nuevas variables de negocio, recortamos valores atípicos, escalamos variables cuantitativas y codificamos las categorías cualitativas. Finalmente, unimos todas las matrices con `np.hstack` para construir nuestro DataFrame final.
 
 Aunque este método manual es ideal para comprender qué ocurre matemáticamente en cada etapa, en el mundo profesional presenta un grave problema: **es un proceso artesanal, frágil e inviable para entornos de producción**.
@@ -304,7 +302,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OrdinalEncoder, OneHotEncoder
 
 # 1. Carga del dataset crudo
-ruta_csv = '0-datasets/clientes_banca_raw.csv' if os.path.exists('0-datasets/clientes_banca_raw.csv') else 'clientes_banca_raw.csv'
+ruta_csv = 'clientes_banca_raw.csv'
 df_raw = pd.read_csv(ruta_csv)
 
 # 2. Separación de características predictoras (X) y variable objetivo (y)
@@ -320,13 +318,9 @@ print(f"Dimensiones de X_train inicial: {X_train.shape}")
 print(f"Dimensiones de X_test inicial:  {X_test.shape}")
 ```
 
-:::note 📝 Pregunta de comprensión 1 (Copia y responde en una celda de Markdown)
-**¿Por qué es imprescindible separar la variable objetivo `y` y realizar la división `train_test_split` ANTES de realizar cualquier imputación o escalado estadístico? ¿Qué pasaría si calculamos la media o la mediana sobre todo el dataset `df_raw` antes de dividir?**
-:::
-
 ---
 
-### Paso 2: Función determinista previa (`preparar_datos_crudos`)
+### Paso 2: Función `preparar_datos_crudos`
 
 #### ¿Qué hace esta función?
 Aplica las reglas de negocio fijas que no aprenden estadísticas:
@@ -406,13 +400,34 @@ print(list(X_train_prep.columns))
 X_train_prep.head(3)
 ```
 
-:::note 📝 Pregunta de comprensión 2 (Copia y responde en una celda de Markdown)
-**¿Por qué esta función `preparar_datos_crudos` NO realiza ningún cálculo estadístico con `.fit()`? Si dentro de un año llega un cliente nuevo a nuestra aplicación web, ¿por qué podemos pasarle directamente su información por esta misma función sin modificar nada?**
-:::
+**📝 Ejercicio A:**
+
+Copia el código anterior en tu Notebook. Para una mejor organización, vamos a dividir ese código en 4 funciones que agrupen las operaciones relacionadas entre sí. Todas ellas se llamarán desde `preparar_datos_crudos()`:
+
+1. `_descartar_columnas_no_utilizables(df)`
+2. `_sanitizar_centinelas_numericos(df)`
+3. `_sanitizar_categoricos(df)`
+4. `_feature_engineering(df)`
+
+**📝 Ejercicio B:**
+
+Sobre `X_train_prep` comprueba que:
+
+- Se han eliminado las columnas no utilizables 
+- Se han añadido las columnas del feature engineering
+- Muestra los valores únicos de `tipo_cuenta` y si tiene nulos.
+
+**📝 Ejercicio C:**
+
+En la sesión 5 estudiamos la técnica de *clipping* para evitar que los valores extremos (*outliers*) inflen la desviación típica y distorsionen el posterior escalado numérico de variables con colas pesadas (como `ingresos_anuales` o `saldo_cuenta`).
+
+1. Crea una nueva función auxiliar `_recortar_outliers(df)` que aplique el método `.clip()` con los umbrales inferior y superior aprendidos durante el EDA de `X_train`.
+2. Añade la llamada a esta función dentro de `preparar_datos_crudos()`.
+3. Justifica en una celda de Markdown de tu notebook: ¿En qué orden cronológico exacto has colocado el recorte respecto a las otras operaciones (descarte, centinelas, categorización y feature engineering) y por qué?
 
 ---
 
-### Paso 3: Función de construcción del `ColumnTransformer` (`construir_pipeline_preprocesamiento`)
+### Paso 3: Función de construcción del `ColumnTransformer` 
 
 #### ¿Qué hace esta función?
 Configura y ensambla la arquitectura de Scikit-learn dividiendo las columnas por naturaleza:
@@ -421,6 +436,13 @@ Configura y ensambla la arquitectura de Scikit-learn dividiendo las columnas por
 3. **Rama Categórica Nominal:** Encadena `SimpleImputer(strategy='most_frequent')` con `OneHotEncoder(sparse_output=False, handle_unknown='ignore')`.
 4. **Rama Passthrough:** Deja pasar la variable binaria `'tiene_tarjeta'` sin modificar.
 5. Ensambla todas las ramas en un único objeto `ColumnTransformer`.
+
+:::tip Diseño defensivo en producción: ¿Por qué incluir `SimpleImputer` si en el EDA no había nulos?
+Aunque en el análisis exploratorio hayamos comprobado que ciertas columnas (como `edad` o `ingresos_anuales`) no contenían ningún valor ausente en el dataset histórico:
+* **En la web el usuario puede omitir campos:** En un formulario web interactivo o en una petición a la API, el cliente puede dejar un campo opcional en blanco o el frontend puede enviar `null`.
+* **La sanitización previa genera nuevos nulos:** En el paso anterior (`preparar_datos_crudos`) convertimos los valores centinela o anómalos (como una edad negativa o el saldo `-999`) a `np.nan`. Si la columna no pasa por un imputador antes de escalar, Scikit-learn lanzará un error crítico (`ValueError: Input contains NaN`).
+* **Coste computacional nulo en entrenamiento:** Si no hay nulos en train, `SimpleImputer` calcula y memoriza la mediana o moda histórica sin alterar los datos existentes, blindando el pipeline como un auténtico «escudo protector» para el futuro.
+:::
 
 #### Parámetros que recibe:
 * No recibe parámetros obligatorios. Contiene la especificación de diseño arquitectónico de nuestras variables.
@@ -479,6 +501,9 @@ def construir_pipeline_preprocesamiento() -> ColumnTransformer:
         remainder='drop'
     )
 
+    # Configuramos la salida para que devuelva directamente DataFrames de Pandas con encabezados
+    preprocesador.set_output(transform='pandas')
+
     return preprocesador
 ```
 
@@ -490,13 +515,31 @@ preprocesador = construir_pipeline_preprocesamiento()
 preprocesador
 ```
 
-:::note 📝 Pregunta de comprensión 3 (Copia y responde en una celda de Markdown)
-**¿Qué papel fundamental cumple el parámetro `handle_unknown='ignore'` dentro del `OneHotEncoder`? Si en el futuro un usuario introduce en el formulario web una categoría imprevista (por ejemplo, `tipo_cuenta = "Inversion"`), ¿qué ocurriría si no hubiéramos incluido ese parámetro?**
-:::
+Responde en una celda de Markdown:
+
+**📝 Ejercicio A**:
+
+¿Qué papel fundamental cumple el parámetro `handle_unknown='ignore'` dentro del `OneHotEncoder`? Si en el futuro un usuario introduce en el formulario web una categoría imprevista (por ejemplo, `tipo_cuenta = "Inversion"`), ¿qué ocurriría si no hubiéramos incluido ese parámetro?
+
+**📝 Ejercicio B**:
+
+¿Qué devuelve la función que hemos creado? ¿El objeto de devuelve ya ha aprendido los parámetros estadísticos de nuestras columnas?
+
+**📝 Ejercicio C**:
+
+¿Qué pasaría si ciertas columnas numéricas las queremos imputar mediante la media y otras mediante la mediana? Simula en una celda Python cómo quedaría el código de la función. No hace falta que repitas la función entera, solo la parte afectada.
+
+**📝 Ejercicio D**:
+
+¿Por qué a todas las columnas le aplicamos un SimpleImputer para eliminar nulos aunque en el EDA observamos que no tenía nulos?
+
+**📝 Ejercicio E**:
+
+¿Qué tipo de columnas debemos incluir entre las columnas passthrough? ¿Qué significan exactamente las columnas passthrough?
 
 ---
 
-### Paso 4: Función de ajuste y serialización (`ajustar_y_guardar_preprocesador`)
+### Paso 4: Función de ajuste y serialización
 
 #### ¿Qué hace esta función?
 1. Ejecuta `.fit_transform()` sobre los datos de entrenamiento (`X_train_prep`), calculando y memorizando las medianas, medias ($\mu$), desviaciones ($\sigma$) y categorías de las columnas.
@@ -511,7 +554,7 @@ preprocesador
 * **`ruta_guardado` (`str`, por defecto `'preprocesador_banca.joblib'`):** Ruta y nombre del archivo binario de salida.
 
 #### Qué devuelve:
-* **`tuple (np.ndarray, np.ndarray)`:** La tupla `(X_train_final, X_test_final)` con las matrices numéricas limpias y listas para modelar.
+* **`tuple (pd.DataFrame, pd.DataFrame)`:** La tupla `(X_train_final, X_test_final)` con los DataFrames finales completamente procesados. Gracias a `set_output(transform='pandas')`, conservan los encabezados de las 22 columnas resultantes y están listos tanto para inspeccionar con `.head()` como para alimentar un modelo.
 
 ```python
 def ajustar_y_guardar_preprocesador(
@@ -545,6 +588,9 @@ Lo ejecutamos en la siguiente celda del notebook:
 X_train_final, X_test_final = ajustar_y_guardar_preprocesador(
     preprocesador, X_train_prep, X_test_prep
 )
+
+# Ahora podemos inspeccionar directamente las 22 columnas procesadas con head():
+X_train_final.head()
 ```
 
 :::note 📝 Pregunta de comprensión 4 (Copia y responde en una celda de Markdown)
@@ -567,15 +613,15 @@ Simula cómo trabajaría nuestra API REST o aplicación web cuando un usuario re
 * **`ruta_artefacto` (`str`, por defecto `'preprocesador_banca.joblib'`):** Ruta del archivo binario guardado.
 
 #### Qué devuelve:
-* **`np.ndarray`:** Matriz de una sola fila con forma `(1, 22)` con todas las variables numéricas escaladas y las categóricas codificadas.
+* **`pd.DataFrame`:** DataFrame de 1 fila y 22 columnas con los datos del nuevo cliente escalados y codificados con sus nombres de columna correspondientes.
 
 ```python
 def transformar_cliente_nuevo(
     datos_cliente: dict, 
     ruta_artefacto: str = 'preprocesador_banca.joblib'
-) -> np.ndarray:
+) -> pd.DataFrame:
     """
-    Recibe los datos crudos de un cliente (JSON / dict) y devuelve el array listo para predecir.
+    Recibe los datos crudos de un cliente (JSON / dict) y devuelve el DataFrame listo para predecir.
     """
     # 1. Cargamos el artefacto preprocesador entrenado
     preprocesador_cargado = joblib.load(ruta_artefacto)
@@ -587,9 +633,9 @@ def transformar_cliente_nuevo(
     df_nuevo_prep = preparar_datos_crudos(df_nuevo)
 
     # 4. Transformamos con el pipeline (sin fit)
-    vector_salida = preprocesador_cargado.transform(df_nuevo_prep)
+    df_salida = preprocesador_cargado.transform(df_nuevo_prep)
 
-    return vector_salida
+    return df_salida
 ```
 
 ¡Llega la prueba de fuego en el notebook! Creamos un cliente simulado con espacios tipográficos, columnas que deben descartarse y valores reales para comprobar la inferencia:
@@ -609,10 +655,10 @@ cliente_simulado = {
     'nivel_satisfaccion': 'Alto'
 }
 
-vector_cliente = transformar_cliente_nuevo(cliente_simulado)
+df_cliente = transformar_cliente_nuevo(cliente_simulado)
 
-print(f"Forma del vector resultante: {vector_cliente.shape}")
-print(f"Vector numérico procesado:\n{vector_cliente}")
+print(f"Forma del DataFrame resultante: {df_cliente.shape}")
+df_cliente
 ```
 
 :::note 📝 Pregunta de comprensión 5 (Copia y responde en una celda de Markdown)
@@ -646,5 +692,3 @@ prediccion = pipeline_completo.predict(nuevo_cliente_df)
 
 Tus datos están limpios, estandarizados, enriquecidos mediante *Feature Engineering*, blindados contra el *Data Leakage* y listos para competir en producción.
 :::
-
-</div>
