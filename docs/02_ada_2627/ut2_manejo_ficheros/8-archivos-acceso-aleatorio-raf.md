@@ -1,5 +1,4 @@
 ---
-draft: true
 title: Archivos de Acceso Aleatorio (RAF)
 sidebar_position: 8
 description: Acceso posicional a archivos mediante RandomAccessFile, puntero de archivo, cálculo de offsets y manipulación de registros de tamaño fijo.
@@ -7,8 +6,6 @@ keywords: [randomaccessfile, raf, puntero, seek, acceso aleatorio, bytes, regist
 ---
 
 <div class="justify-text">
-
-## Introducción: Acceso Secuencial vs. Acceso Aleatorio
 
 Hasta ahora, en todos los tipos de ficheros que hemos estudiado (texto plano, CSV, Properties, JSON y XML), el acceso a la información ha sido **secuencial**:
 
