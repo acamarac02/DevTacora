@@ -320,7 +320,7 @@ print(f"Dimensiones de X_test inicial:  {X_test.shape}")
 
 ---
 
-### Paso 2: Función `preparar_datos_crudos`
+### Paso 2: Función para el tratamiento inicial de los datos
 
 #### ¿Qué hace esta función?
 Aplica las reglas de negocio fijas que no aprenden estadísticas:
@@ -593,20 +593,36 @@ X_train_final, X_test_final = ajustar_y_guardar_preprocesador(
 X_train_final.head()
 ```
 
-:::note 📝 Pregunta de comprensión 4 (Copia y responde en una celda de Markdown)
-**¿Cuál es la diferencia matemática conceptual entre llamar a `.fit_transform()` y llamar a `.transform()`? ¿Por qué bajo ningún concepto debemos hacer `.fit_transform()` sobre `X_test_prep`?**
-:::
+Responde en una celda de Markdown:
+
+**📝 Ejercicio A:**
+
+¿Cuál es la diferencia matemática conceptual entre llamar a `.fit_transform()` y llamar a `.transform()`? ¿Por qué bajo ningún concepto debemos hacer `.fit_transform()` sobre `X_test_prep`?
+
+**📝 Ejercicio B:**
+
+Comprueba que no quedan nulos ni en X_train_final ni en X_test_final.
+
 
 ---
 
-### Paso 5: Función de inferencia para producción (`transformar_cliente_nuevo`)
+### Paso 5: Simulación de inferencia en producción
 
 #### ¿Qué hace esta función?
 Simula cómo trabajaría nuestra API REST o aplicación web cuando un usuario real rellena el formulario:
 1. Carga desde el disco el archivo binario `.joblib` previamente entrenado.
 2. Convierte el diccionario con los datos del usuario en un DataFrame de 1 fila.
 3. Pasa los datos por la función previa `preparar_datos_crudos(df_nuevo)`.
-4. Aplica `preprocesador.transform()` y devuelve el vector numérico listo para pasárselo a `modelo.predict()`.
+4. Aplica `preprocesador.transform()` y devuelve el DataFrame de 1 fila listo para pasárselo a `modelo.predict()`.
+
+:::info 🚀 ¿Cómo viaja este código a una API real?: La necesidad de un módulo `.py`
+En este paso estamos simulando la inferencia dentro del propio Jupyter Notebook, donde la función `preparar_datos_crudos` ya reside en la memoria RAM del entorno.
+
+Sin embargo, en un entorno de producción real (como un microservicio con **FastAPI** o **Flask**):
+1. **El archivo binario `.joblib` solo guarda los transformadores de Scikit-learn:** Memoriza las medianas, medias ($\mu$), desviaciones ($\sigma$) y categorías One-Hot aprendidas, pero **no almacena el código fuente de funciones personalizadas de Pandas** como `preparar_datos_crudos`.
+2. **El backend necesita importar la función determinista:** Para que la API pueda ejecutar esta limpieza previa, el código de `preparar_datos_crudos` (y sus 4 subfunciones) debe guardarse en un archivo de script Python independiente (por ejemplo, `preprocesamiento.py` o `prepare_data.py`).
+3. **El flujo real en la API:** El servidor web importa la función desde el archivo `.py` (`from preprocesamiento import preparar_datos_crudos`), carga el artefacto binario (`joblib.load('preprocesador_banca.joblib')`) en el arranque y procesa cualquier JSON recibido de forma limpia y desacoplada.
+:::
 
 #### Parámetros que recibe:
 * **`datos_cliente` (`dict`):** Diccionario con las claves y valores introducidos por el usuario en la web.
@@ -661,34 +677,12 @@ print(f"Forma del DataFrame resultante: {df_cliente.shape}")
 df_cliente
 ```
 
-:::note 📝 Pregunta de comprensión 5 (Copia y responde en una celda de Markdown)
-**¿Por qué en esta función de inferencia cargamos el archivo `.joblib` en lugar de volver a llamar a `construir_pipeline_preprocesamiento()` y hacer `.fit()` con los datos del nuevo cliente? ¿Qué ocurriría si intentamos hacer `.fit()` sobre un solo cliente nuevo de 1 fila?**
-:::
+Copia y responde en una celda de Markdown:
 
----
+**📝 Ejercicio A:**
 
-## 🔍 Criterios docentes y enlace directo con la UT4
+Explica con tus palabras que objetivo perseguimos con esta última función.
 
-:::tip Conexión con la siguiente unidad (UT4: Modelos de Machine Learning)
-¡Enhorabuena! **Has completado la fase más crítica y laboriosa de toda la ciencia de datos**.
+**📝 Ejercicio B:**
 
-A partir de la próxima unidad (UT4: Algoritmos Supervisados), conectar todo este trabajo con un modelo requerirá únicamente añadir una línea al final del pipeline:
-
-```python
-from sklearn.ensemble import RandomForestClassifier
-
-# Pipeline integral de producción (Preprocesamiento + Algoritmo)
-pipeline_completo = Pipeline([
-    ('preprocesador', preprocesador),
-    ('modelo', RandomForestClassifier(random_state=42))
-])
-
-# Entrenamiento conjunto con un solo comando:
-pipeline_completo.fit(X_train_prep, y_train)
-
-# Predicción directa en producción:
-prediccion = pipeline_completo.predict(nuevo_cliente_df)
-```
-
-Tus datos están limpios, estandarizados, enriquecidos mediante *Feature Engineering*, blindados contra el *Data Leakage* y listos para competir en producción.
-:::
+Piensa en la API que preparamos en la unidad anterior. Explica en qué momento deberíamos utilizar nuestra función de procesamiento. 
