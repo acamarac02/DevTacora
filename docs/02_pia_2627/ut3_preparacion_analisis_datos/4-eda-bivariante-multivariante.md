@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "EDA Bivariante y Multivariante"
 sidebar_position: 4
 description: "Identificación del poder predictivo de las variables frente al target (clasificación y regresión), tablas de contingencia normalizadas, matrices de correlación y detección de multicolinealidad."
@@ -18,7 +17,7 @@ Ahora llega el momento de dar el salto al **análisis bivariante**: cruzar las v
 
 ---
 
-## El Objetivo Supremo: Buscar Señal Predictiva
+## El Objetivo: Buscar Señal Predictiva
 
 Cuando exploramos los datos en Machine Learning supervisado, cada visualización y cada prueba deben responder a una única pregunta fundamental:
 
@@ -64,7 +63,7 @@ sns.boxplot(
     palette=['#2b7bba', '#d95f02'],
     showfliers=False # Ocultamos outliers extremos para comparar el cuerpo central
 )
-plt.title("Saldo en Cuenta según Abandono de Clientes (sin outliers)", fontsize=12, fontweight='bold')
+plt.title("Saldo en Cuenta según Abandono de Clientes", fontsize=12, fontweight='bold')
 plt.xlabel("Abandono (0 = Fiel, 1 = Canceló)", fontweight='bold')
 plt.ylabel("Saldo en Cuenta (€)", fontweight='bold')
 plt.xticks([0, 1], ['Cliente Fiel (0)', 'Cliente Abandono (1)'])
@@ -389,9 +388,9 @@ Ten en cuenta que solo vamos a analizar algunas variables para reducir tiempo de
   * Justifica en una celda Markdown si eliminarías alguna variable y por qué.
 
 * **Inventario de Decisiones Bivariantes para Preprocesamiento:**
-  * Sintetiza las conclusiones de la sesión en una tabla resumen con las columnas `Variable`, `Poder Predictivo Observado` y `Decisión Técnica`:
+  * Sintetiza las conclusiones de la sesión añadiendo a la tabla de la sesión anterior la columna `Poder Predictivo Observado`:
 
-    | Variable | Poder Predictivo Observado | Decisión Técnica |
+    | Variable | Poder Predictivo Observado | Decisión Técnica (esta columna ya está de la sesión anterior - añade si hay algo nuevo.) |
     | :--- | :--- | :--- |
     | `nivel_satisfaccion` | Gran influencia en la target. | **Conservar con prioridad alta** y codificar con `OrdinalEncoder`. |
     | `edad` | Correlación lineal casi nula ($r = -0.01$). | **Conservar** para que modelos no lineales exploren patrones por tramos de edad. |
