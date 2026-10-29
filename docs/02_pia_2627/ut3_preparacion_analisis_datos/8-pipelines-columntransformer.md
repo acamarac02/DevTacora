@@ -7,7 +7,7 @@ description: "Orquestación integral del preprocesamiento con ColumnTransformer 
 keywords: ["Pipeline", "ColumnTransformer", "scikit-learn", "preprocesamiento", "joblib", "produccion", "Jupyter Notebook", "FastAPI"]
 ---
 
-A lo largo de las sesiones 5, 6 y 7 aprendimos a preparar nuestros datos paso a paso: imputamos nulos, diseñamos nuevas variables de negocio, recortamos valores atípicos, escalamos variables cuantitativas y codificamos las categorías cualitativas. Finalmente, unimos todas las matrices con `np.hstack` para construir nuestro DataFrame final.
+A lo largo de las sesiones 5, 6 y 7 aprendimos a preparar nuestros datos paso a paso: imputamos nulos, diseñamos nuevas variables de negocio, escalamos variables cuantitativas según su naturaleza (usando `StandardScaler` o `RobustScaler`) y codificamos las categorías cualitativas. Finalmente, unimos todas las matrices con `np.hstack` para construir nuestro DataFrame final.
 
 Aunque este método manual es ideal para comprender qué ocurre matemáticamente en cada etapa, en el mundo profesional presenta un grave problema: **es un proceso artesanal, frágil e inviable para entornos de producción**.
 
@@ -140,26 +140,32 @@ flowchart TD
     subgraph CT ["⭐ ColumnTransformer (Scikit-learn) — Orquestación Automática ⭐"]
         direction TB
         
-        subgraph SubNum ["1. Rama Numérica (Continua + Ratios)"]
+        subgraph SubNumStd ["1. Rama Numérica Estándar (edad, antiguedad...)"]
             direction LR
-            N1["SimpleImputer(strategy='median')"] --> N2["StandardScaler()"]
+            NS1["SimpleImputer(strategy='mean')"] --> NS2["StandardScaler()"]
         end
         
-        subgraph SubOrd ["2. Rama Categórica Ordinal"]
+        subgraph SubNumRob ["2. Rama Numérica Robusta (ingresos, saldo, ratios...)"]
+            direction LR
+            NR1["SimpleImputer(strategy='median')"] --> NR2["RobustScaler()"]
+        end
+        
+        subgraph SubOrd ["3. Rama Categórica Ordinal"]
             direction LR
             O1["SimpleImputer(strategy='most_frequent')"] --> O2["OrdinalEncoder(categories=...)"]
         end
         
-        subgraph SubNom ["3. Rama Categórica Nominal (Nominal + Tramos)"]
+        subgraph SubNom ["4. Rama Categórica Nominal (Nominal + Tramos)"]
             direction LR
             H1["SimpleImputer(strategy='most_frequent')"] --> H2["OneHotEncoder(handle_unknown='ignore')"]
         end
         
-        subgraph SubPass ["4. Rama Passthrough (Sin alterar)"]
+        subgraph SubPass ["5. Rama Passthrough (Sin alterar)"]
             P1["tiene_tarjeta (columna binaria que pasa directa)"]
         end
         
-        SubNum ~~~ SubOrd
+        SubNumStd ~~~ SubNumRob
+        SubNumRob ~~~ SubOrd
         SubOrd ~~~ SubNom
         SubNom ~~~ SubPass
     end
@@ -184,7 +190,7 @@ Esta función previa no aprende estadísticas (no hace `fit`). Aplica una serie 
 ### 2. Dentro del Pipeline (Automatizado al 100 % por Scikit-learn)
 Todo aquello que **aprende parámetros estadísticos de los datos (`fit`)**:
 * **Imputación estadística:** Aprende medianas y modas **exclusivamente de `X_train`** y las aplica automáticamente en `X_test` o en nuevos clientes.
-* **Escalado numérico:** Aprende la media $\mu$ y la desviación $\sigma$ de entrenamiento y transforma las columnas.
+* **Escalado numérico:** Aprende los parámetros de entrenamiento (medias $\mu$ y desviaciones $\sigma$ para `StandardScaler`, o medianas y rangos intercuartílicos $IQR$ para `RobustScaler`) y transforma las columnas correspondientes.
 * **Codificación categórica:** Memoriza las categorías vistas en entrenamiento y gestiona nuevas categorías imprevistas en producción mediante `handle_unknown='ignore'`.
 * **Paso directo sin transformar (`passthrough`):** Permite conservar variables binarias como `tiene_tarjeta` sin alterarlas ni escalarlas.
 * **Ensamble automático en paralelo:** El `ColumnTransformer` concatena automáticamente todas las columnas procesadas en el orden correcto, **eliminando para siempre la necesidad de usar `np.hstack` a mano**.
@@ -299,7 +305,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler, OrdinalEncoder, OneHotEncoder
+from sklearn.preprocessing import StandardScaler, RobustScaler, OrdinalEncoder, OneHotEncoder
 
 # 1. Carga del dataset crudo
 ruta_csv = 'clientes_banca_raw.csv'
@@ -417,25 +423,18 @@ Sobre `X_train_prep` comprueba que:
 - Se han añadido las columnas del feature engineering
 - Muestra los valores únicos de `tipo_cuenta` y si tiene nulos.
 
-**📝 Ejercicio C:**
-
-En la sesión 5 estudiamos la técnica de *clipping* para evitar que los valores extremos (*outliers*) inflen la desviación típica y distorsionen el posterior escalado numérico de variables con colas pesadas (como `ingresos_anuales` o `saldo_cuenta`).
-
-1. Crea una nueva función auxiliar `_recortar_outliers(df)` que aplique el método `.clip()` con los umbrales inferior y superior aprendidos durante el EDA de `X_train`.
-2. Añade la llamada a esta función dentro de `preparar_datos_crudos()`.
-3. Justifica en una celda de Markdown de tu notebook: ¿En qué orden cronológico exacto has colocado el recorte respecto a las otras operaciones (descarte, centinelas, categorización y feature engineering) y por qué?
-
 ---
 
 ### Paso 3: Función de construcción del `ColumnTransformer` 
 
 #### ¿Qué hace esta función?
 Configura y ensambla la arquitectura de Scikit-learn dividiendo las columnas por naturaleza:
-1. **Rama Numérica:** Encadena `SimpleImputer(strategy='median')` con `StandardScaler()`.
-2. **Rama Categórica Ordinal:** Encadena `SimpleImputer(strategy='most_frequent')` con `OrdinalEncoder(categories=...)` respetando la jerarquía explícita.
-3. **Rama Categórica Nominal:** Encadena `SimpleImputer(strategy='most_frequent')` con `OneHotEncoder(sparse_output=False, handle_unknown='ignore')`.
-4. **Rama Passthrough:** Deja pasar la variable binaria `'tiene_tarjeta'` sin modificar.
-5. Ensambla todas las ramas en un único objeto `ColumnTransformer`.
+1. **Rama Numérica Estándar:** Encadena `SimpleImputer(strategy='mean')` con `StandardScaler()` para variables continuas sin atípicos (`edad`, `num_productos`, `antiguedad_anios`).
+2. **Rama Numérica Robusta:** Encadena `SimpleImputer(strategy='median')` con `RobustScaler()` para variables con valores atípicos legítimos o distribuciones asimétricas (`ingresos_anuales`, `saldo_cuenta`, `ratio_saldo_ingresos`, `saldo_por_producto`).
+3. **Rama Categórica Ordinal:** Encadena `SimpleImputer(strategy='most_frequent')` con `OrdinalEncoder(categories=...)` respetando la jerarquía explícita.
+4. **Rama Categórica Nominal:** Encadena `SimpleImputer(strategy='most_frequent')` con `OneHotEncoder(sparse_output=False, handle_unknown='ignore')`.
+5. **Rama Passthrough:** Deja pasar la variable binaria `'tiene_tarjeta'` sin modificar.
+6. Ensambla todas las ramas en un único objeto `ColumnTransformer`.
 
 :::tip Diseño defensivo en producción: ¿Por qué incluir `SimpleImputer` si en el EDA no había nulos?
 Aunque en el análisis exploratorio hayamos comprobado que ciertas columnas (como `edad` o `ingresos_anuales`) no contenían ningún valor ausente en el dataset histórico:
@@ -455,12 +454,13 @@ def construir_pipeline_preprocesamiento() -> ColumnTransformer:
     """
     Construye y ensambla el ColumnTransformer con todos los sub-pipelines estadísticos.
     """
-    cols_numericas = [
-        'edad', 
+    # 1. Columnas numéricas sin atípicos (edad saneada, conteos y antigüedades)
+    cols_num_standard = ['edad', 'num_productos', 'antiguedad_anios']
+
+    # 2. Columnas numéricas con valores atípicos o colas pesadas
+    cols_num_robust = [
         'ingresos_anuales', 
         'saldo_cuenta', 
-        'num_productos', 
-        'antiguedad_anios', 
         'ratio_saldo_ingresos', 
         'saldo_por_producto'
     ]
@@ -469,13 +469,19 @@ def construir_pipeline_preprocesamiento() -> ColumnTransformer:
     cols_nominales = ['tipo_cuenta', 'canal_preferido', 'grupo_edad']
     cols_passthrough = ['tiene_tarjeta']
 
-    # 1. Rama Numérica: Imputación por mediana + Escalado estándar
-    pipeline_num = Pipeline([
-        ('imputador', SimpleImputer(strategy='median')),
+    # Sub-pipeline 1: Numérico Estándar (media + StandardScaler)
+    pipeline_num_std = Pipeline([
+        ('imputador', SimpleImputer(strategy='mean')),
         ('escalador', StandardScaler())
     ])
 
-    # 2. Rama Ordinal: Imputación por moda + Codificación jerárquica
+    # Sub-pipeline 2: Numérico Robusto (mediana + RobustScaler)
+    pipeline_num_rob = Pipeline([
+        ('imputador', SimpleImputer(strategy='median')),
+        ('escalador', RobustScaler())
+    ])
+
+    # Sub-pipeline 3: Categórico Ordinal (moda + OrdinalEncoder)
     orden_estudios = ['Primaria', 'Secundaria', 'Grado', 'Master', 'Doctorado']
     orden_satisfaccion = ['Muy Bajo', 'Bajo', 'Medio', 'Alto', 'Muy Alto']
     
@@ -484,16 +490,17 @@ def construir_pipeline_preprocesamiento() -> ColumnTransformer:
         ('codificador', OrdinalEncoder(categories=[orden_estudios, orden_satisfaccion]))
     ])
 
-    # 3. Rama Nominal: Imputación por moda + OneHot con protección para producción
+    # Sub-pipeline 4: Categórico Nominal (moda + OneHotEncoder)
     pipeline_nom = Pipeline([
         ('imputador', SimpleImputer(strategy='most_frequent')),
         ('codificador', OneHotEncoder(sparse_output=False, handle_unknown='ignore'))
     ])
 
-    # 4. Ensamble de ramas en ColumnTransformer
+    # Ensamble de ramas en ColumnTransformer
     preprocesador = ColumnTransformer(
         transformers=[
-            ('num', pipeline_num, cols_numericas),
+            ('num_std', pipeline_num_std, cols_num_standard),
+            ('num_rob', pipeline_num_rob, cols_num_robust),
             ('ord', pipeline_ord, cols_ordinales),
             ('nom', pipeline_nom, cols_nominales),
             ('bool', 'passthrough', cols_passthrough)
@@ -527,7 +534,7 @@ Responde en una celda de Markdown:
 
 **📝 Ejercicio C**:
 
-¿Qué pasaría si ciertas columnas numéricas las queremos imputar mediante la media y otras mediante la mediana? Simula en una celda Python cómo quedaría el código de la función. No hace falta que repitas la función entera, solo la parte afectada.
+¿Por qué hemos dividido las variables numéricas en dos ramas distintas (`num_std` con `StandardScaler` y `num_rob` con `RobustScaler`) en lugar de tratarlas a todas con el mismo escalador? Justifica según lo estudiado en la sesión 5 qué características tiene cada grupo de variables.
 
 **📝 Ejercicio D**:
 
