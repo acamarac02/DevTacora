@@ -354,7 +354,7 @@ def preparar_datos_crudos(df_entrada: pd.DataFrame) -> pd.DataFrame:
 
     # A. Descarte de columnas no utilizables en inferencia (si existen en el DataFrame)
     columnas_descarte = ['id_cliente', 'salario_mensual_aprox', 'comentarios_cliente', 'motivo_cancelacion']
-    df = df.drop(columnas_descarte, errors='ignore')
+    df = df.drop(columns=columnas_descarte, errors='ignore')
 
     # B. Sanitización de centinelas numéricos a NaN
     if 'edad' in df.columns:

@@ -53,7 +53,8 @@ El error formativo más común en el EDA (Análisis Exploratorio de Datos) es co
 | `5-preprocesamiento-imputacion-escalado.md` | Preprocesamiento I: Rama Numérica, Outliers y Escalado | 2 h | Notebook (`.ipynb`) |
 | `6-codificacion-categorica-ensamble.md` | Preprocesamiento II: Rama Categórica y Ensamble Manual | 2 h | Notebook (`.ipynb`) |
 | `7-feature-engineering-seleccion.md` | Feature Engineering (Ingeniería de Características) | 2 h | Notebook (`.ipynb`) |
-| `8-pipelines-columntransformer.md` | Pipelines de Scikit-learn y Producción | 3 h | Notebook $\rightarrow$ Script `.py` |
+| `8-pipelines-columntransformer.md` | Pipelines de Scikit-learn y ColumnTransformer | 2 h | Notebook $\rightarrow$ Script `.py` |
+| `9-paso-a-produccion-api.md` | Paso a Producción: Despliegue con Pipelines y FastAPI | 1 h | Script `.py` $\rightarrow$ API REST |
 
 ---
 
