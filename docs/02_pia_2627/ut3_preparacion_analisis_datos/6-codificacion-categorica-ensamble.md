@@ -346,45 +346,70 @@ flowchart TD
     C3 --> Ensamble
     C4 --> Ensamble
     
-    Ensamble --> MatrizFinal["Matriz Final Unificada:<br/>X_train_final (N, M)<br/>X_test_final (N, M)"]
+    Ensamble --> MatrizFinal["DataFrame Final Unificado (pd.DataFrame):<br/>X_train_final (N, M)<br/>X_test_final (N, M)"]
 ```
 
-### Concatenación horizontal con `np.hstack`
+### Concatenación horizontal y creación del DataFrame final
 
-Como las columnas numéricas ya escaladas residen en el DataFrame `X_train` y las transformaciones cualitativas se encuentran en arrays independientes de NumPy, debemos extraer el bloque numérico con `.to_numpy()` y unificar todos los bloques mediante `np.hstack`:
+Como las columnas numéricas ya escaladas residen en el DataFrame `X_train` y las transformaciones cualitativas se encuentran en arrays independientes de NumPy (`X_train_ord` y `X_train_ohe`), debemos unificar todos los bloques.
+
+Para que el resultado final vuelva a ser un **DataFrame de Pandas** estructurado con sus nombres de columnas y sus índices originales (lo que nos permitirá inspeccionarlo cómodamente con `.head()`, filtrarlo o guardarlo en CSV):
+
+1. **Reconstruimos la lista ordenada de nombres de columnas:** Combinamos los nombres de las numéricas, las ordinales y las columnas *dummy* generadas por el `OneHotEncoder`.
+2. **Concatenamos con `np.hstack` y envolvemos en `pd.DataFrame`:** Unimos los bloques matriciales y asignamos tanto los nombres de columnas como los índices originales (`index=X_train.index`).
 
 ```python
 import numpy as np
+import pandas as pd
 
-# Columnas numéricas continuas tratadas en la sesión anterior
-cols_numericas = ['edad', 'ingresos_anuales', 'antiguedad_meses', 'saldo_cuenta']
+# 1. Definimos las columnas numéricas cuantitativas
+# (OJO: incluye tanto las continuas escaladas como las discretas/binarias que no se escalaron)
+cols_numericas = ['edad', 'ingresos_anuales', 'antiguedad_meses', 'saldo_cuenta', 'num_productos', 'tiene_tarjeta']
 
-# Ensamblado manual del conjunto de entrenamiento
-X_train_final = np.hstack([
-    X_train[cols_numericas].to_numpy(),  # Rama numérica ya escalada en X_train (4 columnas)
-    X_train_ord,                         # Rama ordinal codificada (2 columnas)
-    X_train_ohe                          # Rama nominal codificada con One-Hot (N columnas)
-])
+# 2. Reconstruimos la lista completa y ordenada de nombres de columnas
+# (numéricas + ordinales + dummies generadas por OHE)
+nombres_columnas_final = (
+    cols_numericas + 
+    cols_ordinales + 
+    list(encoder_ohe.get_feature_names_out(cols_nominales))
+)
 
-# Ensamblado manual del conjunto de evaluación
-X_test_final = np.hstack([
-    X_test[cols_numericas].to_numpy(),   # Rama numérica ya escalada en X_test
-    X_test_ord,
-    X_test_ohe
-])
+# 3. Concatenamos con np.hstack y convertimos inmediatamente en pd.DataFrame
+X_train_final = pd.DataFrame(
+    np.hstack([
+        X_train[cols_numericas].to_numpy(),  # Rama numérica (escaladas y binarias)
+        X_train_ord,                         # Rama ordinal codificada
+        X_train_ohe                          # Rama nominal codificada con One-Hot
+    ]),
+    columns=nombres_columnas_final,
+    index=X_train.index
+)
+
+X_test_final = pd.DataFrame(
+    np.hstack([
+        X_test[cols_numericas].to_numpy(),
+        X_test_ord,
+        X_test_ohe
+    ]),
+    columns=nombres_columnas_final,
+    index=X_test.index
+)
 
 print(f"Dimensiones de X_train_final: {X_train_final.shape}")
 print(f"Dimensiones de X_test_final:  {X_test_final.shape}")
+
+# Inspección visual de las primeras filas del DataFrame unificado
+X_train_final.head()
 ```
 
 ### La fragilidad del enfoque artesanal: el «código espagueti»
 
-Aunque este procedimiento funciona y genera una matriz válida para Scikit-learn, expone una **fricción técnica extrema** en el día a día de un equipo de ingeniería de datos. 
+Aunque este procedimiento funciona y nos devuelve un DataFrame limpio y listo con `.head()`, expone una **fricción técnica considerable** en el día a día de un equipo de ingeniería de datos. 
 
 Analicemos los riesgos críticos de este enfoque manual:
 
-1. **Pérdida total de metadatos:**  
-   Al convertir todo en un array bidimensional puro de NumPy con `np.hstack`, perdemos los nombres de las columnas, los tipos de datos de Pandas y los índices de las filas. La matriz resultante es un bloque anónimo de números flotantes.
+1. **Reconstrucción artesanal de metadatos:**  
+   Al unificar bloques con `np.hstack`, NumPy descarta por completo los nombres de las columnas y los índices. Nos vemos obligados a reconstruir manualmente listas de cadenas de texto (`nombres_columnas_final = cols_numericas + cols_ordinales + list(...)`), con el riesgo añadido de equivocarnos en el orden relativo de las columnas respecto a los arrays concatenados.
 2. **Mezcla caótica de estructuras (DataFrames y Arrays):**  
    Tenemos partes del dataset modificadas dentro de `X_train` y otras partes dispersas en arrays flotantes (`X_train_ord`, `X_train_ohe`). Esto nos obliga a recordar exactamente qué lista de columnas numéricas extraer (`X_train[cols_numericas].to_numpy()`) y cuáles ignorar para no meter texto original en NumPy.
 3. **Altísimo riesgo de desalineación de columnas:**  
@@ -401,7 +426,7 @@ Esta fricción manual y evidente es precisamente el motivo por el cual la ingeni
 ## 💻 Ejercicio guiado: rama categórica y ensamble final
 
 ### Contexto de la práctica
-Completaremos la transformación de [`clientes_banca_raw.csv`](./0-datasets/clientes_banca_raw.csv) abordando todas las características cualitativas, blindando el sistema ante categorías desconocidas y ensamblando la matriz final que alimentará el modelo predictivo.
+Completaremos la transformación de [`clientes_banca_raw.csv`](./0-datasets/clientes_banca_raw.csv) abordando todas las características cualitativas y ensamblando la matriz final que alimentará el modelo predictivo.
 
 :::info Continuidad del Notebook
 Trabaja en el mismo Jupyter Notebook donde completaste la sesión anterior (donde ya dispones de las columnas numéricas escaladas directamente en `X_train` y `X_test`).
@@ -410,24 +435,20 @@ Trabaja en el mismo Jupyter Notebook donde completaste la sesión anterior (dond
 ### Tareas a realizar paso a paso
 
 1. **Sanitización y normalización de cadenas:**
-   * Convierte a formato estándar (eliminación de espacios en blanco en los extremos y unificación tipográfica) las columnas cualitativas: `tipo_cuenta`, `canal_preferido`, `nivel_estudios` y `nivel_satisfaccion`.
+   * Convierte a formato estándar (eliminación de espacios en blanco en los extremos y unificación tipográfica) las columnas cualitativas que lo necesiten.
 2. **Imputación cualitativa:**
-   * Aplica `SimpleImputer` con `strategy='most_frequent'` sobre el conjunto de variables cualitativas (`tipo_cuenta`, `canal_preferido`, `nivel_estudios`, `nivel_satisfaccion`).
-   * Verifica que no quedan nulos en las columnas categóricas de `X_train` ni de `X_test`.
-3. **Codificación ordinal explícita:**
-   * Define la jerarquía exacta para `nivel_estudios` (`'Primaria'`, `'Secundaria'`, `'Grado'`, `'Master'`, `'Doctorado'`).
-   * Define la jerarquía exacta para `nivel_satisfaccion` (`'Muy Bajo'`, `'Bajo'`, `'Medio'`, `'Alto'`, `'Muy Alto'`).
-   * Ajusta `OrdinalEncoder(categories=...)` sobre `X_train` y transforma tanto Train como Test.
-4. **Codificación nominal protegida:**
-   * Configura `OneHotEncoder` con `sparse_output=False` y `handle_unknown='ignore'`.
-   * Ajusta el transformador sobre las columnas nominales de `X_train` y transforma Train y Test.
+   * Aplica `SimpleImputer` con `strategy='most_frequent'` sobre el conjunto de variables cualitativas que lo requieran.
+   * Verifica que no quedan nulos en dichas columnas.
+3. **Codificación ordinal:**
+   * Define la jerarquía exacta para las variables que sean categóricas ordinales.
+   * Realiza la transformación tanto en `X_train` como en `X_test`.
+4. **Codificación nominal:**
+   * Configura `OneHotEncoder` y ajusta el transformador sobre las columnas nominales de `X_train` y transforma Train y Test.
    * Extrae e imprime los nombres de las características generadas con `encoder.get_feature_names_out()`.
-5. **Simulación de fallo en producción (Prueba de estrés):**
-   * Crea un pequeño DataFrame de prueba con un cliente ficticio que posea una categoría nunca vista en el entrenamiento (ej. `canal_preferido = 'Metaverso'`).
-   * Pasa dicho registro por el `.transform()` de tu codificador One-Hot y comprueba que no lanza error y asigna ceros en todas las columnas dummies del canal.
-6. **Ensamble manual y auditoría dimensional:**
-   * Utiliza `np.hstack` para unir las columnas numéricas ya escaladas de `X_train` y `X_test` (`X_train[cols_numericas].to_numpy()`) con los bloques ordinal y nominal generados en esta sesión.
+5. **Ensamble manual y auditoría dimensional:**
+   * Utiliza `np.hstack` para unir las columnas numéricas ya preparadas de `X_train` y `X_test` con los bloques ordinal y nominal generados en esta sesión.
    * Imprime la forma (`.shape`) de `X_train_final` y `X_test_final` y comprueba que ambas matrices tienen exactamente el mismo número de columnas.
-   * Redacta una breve reflexión final en Markdown analizando qué inconvenientes tendría mantener este script manual si el dataset original tuviera 150 columnas en lugar de 10.
+   * Muestra por pantalla los primeros 10 clientes de `X_train_final` y `X_test_final` para verificar que el ensamble se ha realizado correctamente.
+   * Asegúrate de que no se te haya olvidado añadir ninguna columna importante.
 
 </div>

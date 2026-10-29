@@ -421,4 +421,13 @@ Recuerda que en la primera fase habíamos eliminado algunas columnas claramente 
    * Comprueba los parámetros aprendidos por cada escalador (`.mean_`, `.scale_`, `.center_`).
    * Justifica en una celda de Markdown por qué los valores transformados de `X_test` no tienen exactamente media 0 ni mediana 0 y por qué esto es lo estadísticamente correcto.
 
+:::warning ¿Qué ocurre con `num_productos` y `tiene_tarjeta`?
+Quizás te preguntes qué ocurre con estas dos variables numéricas:
+
+* **En el EDA:** Aunque son cuantitativas discretas, las analizamos visualmente como si fueran categóricas mediante diagramas de barras (`countplot`) o tablas de frecuencias. Con tan pocos valores únicos ($1, 2, 3, 4$ en productos y $0, 1$ en tarjeta), un diagrama de caja (*boxplot*) o un histograma continuo carece de sentido analítico.
+* **A la hora de escalar en el preprocesamiento:**
+  * **`num_productos` SÍ debe escalarse:** Al ser un conteo con un rango de $[1, 4]$, si la dejamos sin escalar mientras el resto de columnas numéricas (saldo, ingresos, edad) están estandarizadas alrededor de $0.0$, sus magnitudes no estarían en equilibrio. En algoritmos sensibles a distancias euclídeas o gradientes, una variación de 2 o 3 productos tendría una influencia desproporcionada. Por tanto, debe incluirse en el grupo de variables a transformar con `StandardScaler`.
+  * **`tiene_tarjeta` NO debe escalarse:** Es una variable binaria natural con valores exclusivos en $\{0, 1\}$. Si le aplicáramos `StandardScaler`, destruiríamos su significado booleano directo ($0 = \text{No}$, $1 = \text{Sí}$), convirtiendo los ceros en valores negativos y los unos en positivos. Esta columna se mantiene directamente inalterada.
+:::
+
 </div>
