@@ -140,7 +140,7 @@ Para visualizar esta tabla de contingencia de forma clara, utilizamos un gráfic
 
 ```python
 # Gráfico de barras apiladas al 100%
-orden_satisfaccion = ['Muy Bajo', 'Bajo', 'Medio', 'Alto', 'Muy Alto']
+orden_satisfaccion = tabla_relacion.index
 tabla_relacion.reindex(orden_satisfaccion).plot(
     kind='bar', 
     stacked=True, 

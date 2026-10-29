@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Introducción"
 sidebar_position: 1
 description: "Los menús en Android permiten estructurar la navegación de una aplicación mediante elementos visuales como Toolbar, Navigation Drawer, Bottom Navigation o TabLayout, ofreciendo una experiencia coherente y fluida al usuario."

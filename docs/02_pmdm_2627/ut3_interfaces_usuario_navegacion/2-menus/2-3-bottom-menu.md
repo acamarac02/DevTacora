@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Bottom Navigation"
 sidebar_position: 3
 description: "La barra inferior de navegación permite acceder fácilmente a las secciones principales de la app. En Android se implementa con BottomNavigationView, integrándose con la Toolbar y el Navigation Component."

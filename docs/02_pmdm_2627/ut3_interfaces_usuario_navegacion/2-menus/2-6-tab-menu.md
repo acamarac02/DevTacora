@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "TabLayout"
 sidebar_position: 6
 description: "El TabLayout permite organizar el contenido en pestañas sincronizadas con ViewPager2 para deslizar entre diferentes fragments, como en una app de noticias con secciones Local, Nacional e Internacional."

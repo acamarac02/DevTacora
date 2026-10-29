@@ -1,9 +1,8 @@
 ---
-draft: true
 title: "Preprocesamiento I: rama numérica"
 sidebar_position: 5
-description: "Tratamiento integral de variables cuantitativas con Scikit-learn: el contrato fit/transform, sustitución de centinelas, imputación con SimpleImputer, recorte de outliers (clipping), escalado numérico y prevención de Data Leakage."
-keywords: ["preprocesamiento", "SimpleImputer", "outliers", "clipping", "winsorizing", "StandardScaler", "MinMaxScaler", "RobustScaler", "data leakage", "fit transform"]
+description: "Tratamiento integral de variables cuantitativas con Scikit-learn: el contrato fit/transform, sustitución de centinelas, imputación con SimpleImputer, escalado numérico con StandardScaler y RobustScaler y prevención de Data Leakage."
+keywords: ["preprocesamiento", "SimpleImputer", "outliers", "StandardScaler", "RobustScaler", "MinMaxScaler", "data leakage", "fit transform"]
 ---
 
 <div class="justify-text">
@@ -12,7 +11,7 @@ En las sesiones anteriores hemos realizado el diagnóstico de nuestros datos: id
 
 Fruto de ese análisis, ya disponemos de una **prescripción técnica clara**: sabemos qué columnas tienen nulos, cuáles esconden valores centinela, cuáles presentan asimetría y valores atípicos (*outliers*) y qué variables se encuentran en escalas totalmente dispares.
 
-Ahora empieza el tratamiento: el **preprocesamiento de datos**. En esta sesión nos centraremos de forma exclusiva y exhaustiva en la **rama numérica (cuantitativa)**, dominando la API de transformadores de Scikit-learn, aprendiendo a evitar la temida fuga de datos (*Data Leakage*) y aplicando la secuencia matemática correcta: **centinelas $\to$ imputación $\to$ outliers $\to$ escalado**.
+Ahora empieza el tratamiento: el **preprocesamiento de datos**. En esta sesión nos centraremos de forma exclusiva y exhaustiva en la **rama numérica (cuantitativa)**, dominando la API de transformadores de Scikit-learn, aprendiendo a evitar la temida fuga de datos (*Data Leakage*) y aplicando la secuencia matemática correcta: **centinelas $\to$ imputación $\to$ escalado numérico (StandardScaler / RobustScaler)**.
 
 ---
 
@@ -158,11 +157,10 @@ En un dataset real con valores cuantitativos continuos, debemos seguir rigurosam
 ```mermaid
 flowchart LR
     A["1. Centinelas a NaN"] --> B["2. Imputación numérica"]
-    B --> C["3. Recorte de outliers (clipping)"]
-    C --> D["4. Escalado numérico"]
+    B --> C["3. Escalado numérico<br/>(StandardScaler / RobustScaler)"]
 ```
 
-Analicemos en detalle cada una de las cuatro etapas.
+Analicemos en detalle cada una de las tres etapas.
 
 ---
 
@@ -278,73 +276,15 @@ Una vez ejecutado este codigo, `X_train` y `X_test` ya no tendrán nulos.
 
 ---
 
-## Tratamiento de outliers numéricos: truncado (*clipping* o *winsorizing*)
+## Escalado numérico
 
-En el EDA bivariante descubrimos que existen clientes con ingresos de $345.000$ € frente a una mediana de $26.800$ €. Estos valores no son erratas (son clientes con rentas muy altas reales), por lo que **no queremos borrarlos ni perder sus filas**.
+Una vez que los datos están limpios de centinelas y sin valores nulos, llega la última etapa esencial de la rama numérica: **el escalado**.
 
-Sin embargo, si intentamos escalar estas columnas directamente, los resultados serán catastróficos.
+Esta operación se debe aplicar tanto a:
+* Columnas numéricas continuas
+* Columnas numéricas discretas
 
-### ¿Por qué tratar los outliers antes del escalado?
-
-Pensemos en la fórmula de la estandarización clásica:
-$$z = \frac{x - \mu}{\sigma}$$
-
-Donde $x$ es el valor original, $\mu$ la media de la columna, $\sigma$ su desviación típica y $z$ el nuevo valor estandarizado (*z-score*).
-
-Si una variable tiene una media $\mu = 30.000$ € y un outlier extremo de $1.000.000$ €:
-1. La desviación típica ($\sigma$) se infla de forma colosal.
-2. Al dividir entre un $\sigma$ gigantesco, todos los clientes normales ($25.000$ €, $32.000$ €, $28.000$ €) tendrán un valor $z$ prácticamente idéntico (ej. $-0.01$, $+0.02$, $0.00$).
-3. **El modelo pierde la capacidad de distinguir entre un cliente con 20.000 € y uno con 40.000 €**, porque ambos han quedado aplastados en el mismo milímetro numérico.
-
-### La técnica de truncado (*clipping* o *winsorizing*)
-
-Consiste en acotar los valores extremos sustituyendo cualquier cifra por debajo de un umbral inferior o por encima de un umbral superior por dicho valor límite:
-
-* **Cálculo de umbrales:** Se calculan **estrictamente sobre `X_train`** mediante percentiles (ej. percentil 1 y 99) o límites del rango intercuartílico ($Q_1 - 1.5\text{IQR}$ y $Q_3 + 1.5\text{IQR}$).
-* **Aplicación:** Se aplica `.clip(inferior, superior)` tanto sobre `X_train` como sobre `X_test`.
-
-### Implementación en código
-
-```python
-# Aplicaremos clipping sobre las columnas con colas pesadas identificadas en el EDA
-cols_outliers = ['ingresos_anuales', 'saldo_cuenta']
-
-# Guardaremos los límites aprendidos para reutilizarlos en inferencia
-limites_outliers = {}
-
-for col in cols_outliers:
-    # 1. Calculamos los percentiles 1% y 99% SOLO EN X_train
-    q_inf = X_train[col].quantile(0.01)
-    q_sup = X_train[col].quantile(0.99)
-    
-    limites_outliers[col] = (q_inf, q_sup)
-    print(f"Umbrales aprendidos para {col}: inferior = {q_inf:.2f} | superior = {q_sup:.2f}")
-    
-    # 2. Aplicamos el recorte directamente sobre Train y Test usando los límites de Train
-    X_train[col] = X_train[col].clip(lower=q_inf, upper=q_sup)
-    X_test[col] = X_test[col].clip(lower=q_inf, upper=q_sup)
-```
-
-#### Ejemplo visual del efecto de *clipping*
-
-Para comprender qué le ocurre a los datos fila a fila, imaginemos que para `ingresos_anuales` los percentiles calculados en `X_train` resultan ser:
-* **Límite inferior (percentil 1%):** $12.000$ €
-* **Límite superior (percentil 99%):** $85.000$ €
-
-| Observación | Valor antes de *clipping* | Valor después de *clipping* | Diagnóstico del cambio |
-| :--- | :---: | :---: | :--- |
-| **Cliente A** (ingreso atípicamente bajo) | $4.500$ € | **$12.000$ €** | Inferior al umbral mínimo $\to$ se eleva al percentil 1%. |
-| **Cliente B** (ingreso típico) | $26.800$ € | **$26.800$ €** | Dentro del rango normal $\to$ **permanece inalterado**. |
-| **Cliente C** (ingreso medio-alto) | $55.000$ € | **$55.000$ €** | Dentro del rango normal $\to$ **permanece inalterado**. |
-| **Cliente D** (outlier extremo) | $345.000$ € | **$85.000$ €** | Superior al umbral máximo $\to$ se acota al percentil 99%. |
-
-> **Conclusión clave:** El *clipping* no modifica en absoluto los datos del 98% de la población normal. Solo «pone un techo y un suelo» a los extremos legítimos para evitar que inflen artificialmente la desviación típica en el siguiente paso: el escalado.
-
----
-
-## Escalado numérico con `StandardScaler`
-
-Ahora que los datos están limpios, sin nulos y con los valores extremos acotados, llega la última etapa de la rama numérica: **el escalado**.
+No se debe aplicar a variables binarias puras (0/1), ya que están en un rango ya reducido.
 
 ### ¿Por qué es obligatorio escalar?
 
@@ -352,48 +292,92 @@ La mayoría de los algoritmos de Machine Learning son «miopes» frente a las un
 * Si introducimos `ingresos_anuales` (valores entre $10.000$ y $90.000$) y `edad` (valores entre $18$ y $80$), el modelo interpretará que una diferencia de $1.000$ € es numéricamente mucho más importante que una diferencia de $20$ años de vida, simplemente porque el número absoluto es mayor.
 * Los algoritmos basados en **distancias euclídeas** (KNN, SVM, K-Means) o en **optimización por descenso de gradiente** (Regresión Lineal, Regresión Logística, Redes Neuronales) colapsan si las variables no están en rangos equiparables.
 
-### Nuestro transformador de referencia: `StandardScaler`
+### ¿Cómo elegir entre `StandardScaler` y `RobustScaler`?
 
-En este curso utilizaremos **`StandardScaler`** como nuestro escalador estándar de referencia para todas las variables cuantitativas continuas. 
+Para elegir el escalador adecuado, debemos analizar la distribución de cada variable identificada durante el EDA y distinguir entre dos tipos de valores extremos:
 
-Transforma cada variable para que tenga **media 0 y desviación típica 1**:
+1. **Outliers no realistas (centinelas o errores ya subsanados):**
+   * En nuestro dataset, la variable **`edad`** presentaba valores anómalos imposibles (como edades $\le 0$ o mayores de $120$ años).
+   * Al haber aplicado la fase de sanitización previa y convertirlos en `np.nan`, esos valores fueron sustituidos por la media o mediana en la etapa de imputación.
+   * **Por lo tanto, la variable `edad` deja de tener outliers.** Su distribución pasa a ser simétrica y normal, por lo que debe escalarse con **`StandardScaler`**.
+2. **Outliers reales y legítimos (colas pesadas del negocio):**
+   * En variables como **`ingresos_anuales`** o **`saldo_cuenta`**, existen clientes reales con patrimonios o rentas muy altas (por ejemplo, clientes con $345.000$ € de ingresos frente a una mediana de $26.800$ €).
+   * Estos valores no son erratas; son clientes legítimos de alto poder adquisitivo y no queremos borrarlos.
+   * Si aplicáramos `StandardScaler`, estos valores extremos inflarían la desviación típica y aplastarían al 99 % de los clientes normales. Para estas variables, la solución óptima y profesional es **`RobustScaler`**.
+
+---
+
+### StandardScaler
+
+Transforma cada variable para que tenga **media 0 y desviación típica 1** mediante la fórmula de la estandarización (*z-score*):
+
 $$z = \frac{x - \mu}{\sigma}$$
 
-* **$z$ (*z-score* o valor estandarizado):** Es el nuevo valor resultante tras el escalado. Representa a cuántas desviaciones típicas de distancia se encuentra la observación respecto al promedio (por ejemplo, $z = +2.0$ significa que ese cliente está dos desviaciones típicas por encima de la media de la población).
-* **$x$:** El valor original de la variable en sus unidades brutas (por ejemplo, $35.000$ € de sueldo).
-* **$\mu$ (*mu*):** La **media aritmética** calculada exclusivamente sobre el conjunto de entrenamiento (`scaler.mean_`).
-* **$\sigma$ (*sigma*):** La **desviación típica** calculada exclusivamente sobre el conjunto de entrenamiento (`scaler.scale_`), que mide la dispersión habitual de los datos.
+* **$x$:** Valor original de la variable.
+* **$\mu$ (*mu*):** Media aritmética aprendida exclusivamente de `X_train` (`scaler.mean_`).
+* **$\sigma$ (*sigma*):** Desviación típica aprendida exclusivamente de `X_train` (`scaler.scale_`).
 
-Al haber aplicado previamente *clipping* sobre los outliers, `StandardScaler` se convierte en la opción óptima: los datos se distribuyen uniformemente sin deformaciones y encajan de forma nativa con los algoritmos de Machine Learning que aplican regularización ($L_1$, $L_2$).
+#### ¿Cuándo elegirlo?
+* Variables cuantitativas con distribuciones aproximadamente simétricas o gaussianas.
+* Variables que **no presentan outliers reales** (o cuyos centinelas ya fueron corregidos e imputados, como `edad` y `antiguedad_meses`).
 
-:::info ¿Existen otros tipos de escaladores?
-Sí, Scikit-learn ofrece alternativas para casos específicos, aunque no serán nuestro estándar de trabajo en datos tabulares:
-* **`MinMaxScaler`:** Escala los datos a un intervalo acotado estricto, típicamente $[0, 1]$. Es muy útil en procesamiento de imágenes (píxeles de 0 a 255) o en algoritmos que no admiten números negativos, pero tiene el peligro de que si en producción entra un valor superior al máximo visto en entrenamiento, el resultado superará el 1.0.
-* **`RobustScaler`:** Utiliza la mediana y el rango intercuartílico ($IQR$). Se concibió para datasets con outliers que no se quieren o no se pueden recortar. Como nosotros ya realizamos *clipping* en el paso previo, no necesitamos utilizarlo.
-:::
-
-### Implementación en código
-
+#### Ejemplo de código:
 ```python
 from sklearn.preprocessing import StandardScaler
 
-# Columnas cuantitativas continuas que deben recibir escalado
-cols_a_escalar = ['edad', 'ingresos_anuales', 'antiguedad_meses', 'saldo_cuenta']
+# Columnas simétricas y sin outliers reales
+cols_standard = ['edad', 'antiguedad_meses']
 
-# 1. Instanciamos el escalador
-scaler = StandardScaler()
-
-# 2. FIT: Aprende la media y desviación típica ÚNICAMENTE de X_train
-scaler.fit(X_train[cols_a_escalar])
+scaler_std = StandardScaler()
+scaler_std.fit(X_train[cols_standard])
 
 print("Parámetros aprendidos por StandardScaler:")
-for col, media, desviacion in zip(cols_a_escalar, scaler.mean_, scaler.scale_):
-    print(f" - {col}: μ = {media:.2f}, σ = {desviacion:.2f}")
+for col, media, desv in zip(cols_standard, scaler_std.mean_, scaler_std.scale_):
+    print(f" - {col}: media (μ) = {media:.2f} | desviación (σ) = {desv:.2f}")
 
-# 3. TRANSFORM: Escalamos y actualizamos directamente las columnas en Train y Test
-X_train[cols_a_escalar] = scaler.transform(X_train[cols_a_escalar])
-X_test[cols_a_escalar] = scaler.transform(X_test[cols_a_escalar])
+# Transformamos Train y Test
+X_train[cols_standard] = scaler_std.transform(X_train[cols_standard])
+X_test[cols_standard] = scaler_std.transform(X_test[cols_standard])
 ```
+
+---
+
+### RobustScaler
+
+Escala las características utilizando estadísticas robustas que son **inmunes a los valores atípicos**: utiliza la **mediana** y el **rango intercuartílico ($IQR$)**:
+
+$$z = \frac{x - \text{mediana}}{IQR}$$
+
+Donde el rango intercuartílico es la distancia entre el percentil 75 ($Q_3$) y el percentil 25 ($Q_1$):
+$$IQR = Q_3 - Q_1$$
+
+* **Mediana:** El centro de los datos donde el 50 % de la población queda por debajo (`scaler.center_`).
+* **$IQR$:** La amplitud del 50 % central de los datos (`scaler.scale_`). Los clientes millonarios o extremos quedan fuera de este cálculo y no pueden deformar la escala.
+
+#### ¿Cuándo elegirlo?
+* Variables económicas o métricas de negocio con **asimetría pronunciada o presencia de outliers reales legítimos** (`saldo_cuenta`, `ingresos_anuales`).
+* Permite que el preprocesamiento sea **100 % automático y reproducible** en Scikit-learn sin necesidad de recortar a mano los datos con *clipping*.
+
+#### Ejemplo de código:
+```python
+from sklearn.preprocessing import RobustScaler
+
+# Columnas con asimetría y outliers reales de negocio
+cols_robust = ['ingresos_anuales', 'saldo_cuenta']
+
+scaler_rob = RobustScaler()
+scaler_rob.fit(X_train[cols_robust])
+
+print("Parámetros aprendidos por RobustScaler:")
+for col, med, iqr in zip(cols_robust, scaler_rob.center_, scaler_rob.scale_):
+    print(f" - {col}: mediana = {med:.2f} | IQR = {iqr:.2f}")
+
+# Transformamos Train y Test
+X_train[cols_robust] = scaler_rob.transform(X_train[cols_robust])
+X_test[cols_robust] = scaler_rob.transform(X_test[cols_robust])
+```
+
+---
 
 ### Verificación visual: la prueba del espejo
 
@@ -404,7 +388,7 @@ El escalado es una **transformación lineal**: desplaza el centro de los datos y
 ![La prueba del espejo: comparación de la distribución antes y después del escalado](./0-img/prueba-espejo-escalado.png)
 
 :::tip ¿Cómo saber que el escalado es correcto?
-Si observas ambos gráficos uno al lado del otro, verás que las curvas KDE y los histogramas son **gemelos idénticos**. Lo único que ha cambiado es el eje horizontal: donde antes leíamos $20.000$ o $60.000$ €, ahora leemos desviaciones típicas estándar (con media $\mu = 0.00$ y desviación $\sigma = 1.00$).
+Si observas ambos gráficos uno al lado del otro, verás que las curvas KDE y los histogramas son **gemelos idénticos**. Lo único que ha cambiado es el eje horizontal: donde antes leíamos $20.000$ o $60.000$ €, ahora leemos desviaciones relativas respecto al centro.
 :::
 
 ---
@@ -415,27 +399,26 @@ Si observas ambos gráficos uno al lado del otro, verás que las curvas KDE y lo
 Como científicos de datos del banco, debemos transformar las variables numéricas de [`clientes_banca_raw.csv`](./0-datasets/clientes_banca_raw.csv) para alimentar el futuro modelo de predicción de abandono.
 
 :::info Archivo de Trabajo
-Continuaremos trabajando sobre el mismo Jupyter Notebook de las prácticas anteriores. Ya deberíamos tener hecho la división en train y test y el EDA, junto con las conclusiones extraidas de ella.
+**Crea un nuevo Jupyter Notebook**. En las primeras celdas copiate la tabla resumen del EDA para tenerla como guión y la división en train y test. 
+
+Recuerda que en la primera fase habíamos eliminado algunas columnas claramente innecesarias como `id_cliente`.
 :::
 
 ### Tareas a realizar paso a paso
 
 1. **Sanitización de centinelas:**
-   * Modifica los valores centinelas o imposibles que detectaras en el EDA.
-   * Comprueba como se modifica el número de nulos después de las modificaciones.
-   * También puedes comprobar como los valores mínimos y máximos de esas variables han cambiado.
+   * Modifica los valores centinelas o imposibles que detectaste en el EDA (edades $\le 0$ o $> 120$, ingresos $\le 0$, saldo $-999$) sustituyéndolos por `np.nan`.
+   * Comprueba cómo se modifica el número de nulos en `X_train` y `X_test`.
 2. **Imputación numérica de los valores nulos:**
-   * Aplica `SimpleImputer` con la estrategia adecuada para cada variable.
-   * Comprueba que no quedan nulos tanto en `X_train` como en `X_test`.
-3. **Recorte de outliers:**
-   * Si se detectaron outliers reales, aplica clip para eliminarlos.
-   * Muestra los valores mínimos y máximos de esas variables modificadas.
-4. **Estandarización numérica:**
-   * Aplica el escalado numérico a tu conjunto de variables numéricas continuas.
-   * Muestra los valores mínimo y máximos de esas variables modificadas.
-5. **Auditoría final:**
-   * Muestra las 10 primeras filas de `X_train` y `X_test` para comprobar de forma rápida que se han aplicado todas las modificaciones anteriores.
-   * Comprueba que la media de cada columna numérica en `X_train` es aproximadamente $0.0$ y la desviación típica es $1.0$.
-   * Observa la media de `X_test`: ¿es exactamente $0.0$? Justifica en una celda Markdown por qué es normal y deseable que en `X_test` no sea exactamente $0.0$.
+   * Aplica `SimpleImputer` con la estrategia adecuada según el diagnóstico del EDA (`strategy='median'` para variables asimétricas o con centinelas, `strategy='mean'` para variables simétricas como la edad).
+   * Comprueba que no quedan nulos ni en `X_train` ni en `X_test`.
+3. **Escalado numérico según la naturaleza de la variable:**
+   * Justifica qué variables escaladas utilizarán `StandardScaler` (aquellas sin outliers reales tras la sanitización o que directamente no tenían outliers).
+   * Justifica qué variables escaladas utilizarán `RobustScaler` (aquellas con outliers legítimos y colas pesadas).
+   * Aplica cada escalador aprendiendo (`fit`) exclusivamente sobre `X_train` y transformando (`transform`) tanto `X_train` como `X_test`.
+4. **Auditoría final:**
+   * Muestra las 10 primeras filas de `X_train` y `X_test` para comprobar visualmente que todas las variables numéricas están escaladas.
+   * Comprueba los parámetros aprendidos por cada escalador (`.mean_`, `.scale_`, `.center_`).
+   * Justifica en una celda de Markdown por qué los valores transformados de `X_test` no tienen exactamente media 0 ni mediana 0 y por qué esto es lo estadísticamente correcto.
 
 </div>

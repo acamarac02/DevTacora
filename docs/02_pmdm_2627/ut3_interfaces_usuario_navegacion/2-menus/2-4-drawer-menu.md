@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Navigation Drawer"
 sidebar_position: 4
 description: "El menú lateral (drawer) permite acceder rápidamente a las secciones principales de la app. Se implementa con DrawerLayout y NavigationView, integrándose con la Toolbar y el Navigation Component."

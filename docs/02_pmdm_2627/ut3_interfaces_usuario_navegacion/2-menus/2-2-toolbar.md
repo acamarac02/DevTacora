@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Top App Bar / Toolbar"
 sidebar_position: 2
 description: "La barra superior de la aplicación (Toolbar o Top App Bar) permite mostrar el título, acciones y opciones de navegación, integrándose fácilmente con NavigationUI y los principios de Material Design."

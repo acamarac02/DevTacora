@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Options Menu"
 sidebar_position: 5
 description: "El menú de opciones (Options Menu) se muestra en la Toolbar y permite ofrecer acciones adicionales o navegación entre secciones secundarias. Se implementa mediante un archivo de menú XML y los métodos onCreateOptionsMenu y onOptionsItemSelected."

@@ -8,7 +8,7 @@ keywords: ["OneHotEncoder", "OrdinalEncoder", "handle_unknown", "categoricas", "
 
 <div class="justify-text">
 
-En la sesión anterior dominamos el tratamiento exhaustivo de las variables cuantitativas: sanitizamos valores centinela, imputamos nulos, acotamos los valores atípicos mediante *clipping* y estandarizamos las distribuciones con `StandardScaler`.
+En la sesión anterior dominamos el tratamiento exhaustivo de las variables cuantitativas: sanitizamos valores centinela, imputamos nulos y escalamos las distribuciones según su naturaleza mediante `StandardScaler` y `RobustScaler`.
 
 Sin embargo, las bases de datos del mundo real no están compuestas únicamente por números continuos. Columnas como el `tipo_cuenta`, el `canal_preferido`, el `nivel_estudios` o el `nivel_satisfaccion` contienen información cualitativa expresada mediante texto o categorías discretas. 
 
@@ -333,8 +333,7 @@ Para poder alimentar un algoritmo de Machine Learning, necesitamos unificar todo
 flowchart TD
     subgraph RamaNumerica ["Rama Numérica (Sesión 5 en X_train / X_test)"]
         N1["Valores Centinela"] --> N2["SimpleImputer (Mediana / Media)"]
-        N2 --> N3["Clipping de Outliers"]
-        N3 --> N4["StandardScaler en X_train[cols_a_escalar]"]
+        N2 --> N4["Escalado (StandardScaler / RobustScaler)"]
     end
 
     subgraph RamaCategorica ["Rama Categórica (Sesión 6)"]
