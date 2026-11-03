@@ -152,7 +152,7 @@ flowchart TD
         
         subgraph SubOrd ["3. Rama Categórica Ordinal"]
             direction LR
-            O1["SimpleImputer(strategy='most_frequent')"] --> O2["OrdinalEncoder(categories=...)"]
+            O1["SimpleImputer(strategy='most_frequent')"] --> O2["OrdinalEncoder(categories=...)"] --> O3["MinMaxScaler()"]
         end
         
         subgraph SubNom ["4. Rama Categórica Nominal (Nominal + Tramos)"]
@@ -305,7 +305,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler, RobustScaler, OrdinalEncoder, OneHotEncoder
+from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler, OrdinalEncoder, OneHotEncoder
 
 # 1. Carga del dataset crudo
 ruta_csv = 'clientes_banca_raw.csv'
@@ -431,7 +431,7 @@ Sobre `X_train_prep` comprueba que:
 Configura y ensambla la arquitectura de Scikit-learn dividiendo las columnas por naturaleza:
 1. **Rama Numérica Estándar:** Encadena `SimpleImputer(strategy='mean')` con `StandardScaler()` para variables continuas sin atípicos (`edad`, `num_productos`, `antiguedad_anios`).
 2. **Rama Numérica Robusta:** Encadena `SimpleImputer(strategy='median')` con `RobustScaler()` para variables con valores atípicos legítimos o distribuciones asimétricas (`ingresos_anuales`, `saldo_cuenta`, `ratio_saldo_ingresos`, `saldo_por_producto`).
-3. **Rama Categórica Ordinal:** Encadena `SimpleImputer(strategy='most_frequent')` con `OrdinalEncoder(categories=...)` respetando la jerarquía explícita.
+3. **Rama Categórica Ordinal:** Encadena `SimpleImputer(strategy='most_frequent')`, `OrdinalEncoder(categories=...)` y `MinMaxScaler()` para acotar las categorías numéricas entre 0 y 1 respetando su jerarquía explícita y equilibrando su escala frente al One-Hot.
 4. **Rama Categórica Nominal:** Encadena `SimpleImputer(strategy='most_frequent')` con `OneHotEncoder(sparse_output=False, handle_unknown='ignore')`.
 5. **Rama Passthrough:** Deja pasar la variable binaria `'tiene_tarjeta'` sin modificar.
 6. Ensambla todas las ramas en un único objeto `ColumnTransformer`.
@@ -481,13 +481,14 @@ def construir_pipeline_preprocesamiento() -> ColumnTransformer:
         ('escalador', RobustScaler())
     ])
 
-    # Sub-pipeline 3: Categórico Ordinal (moda + OrdinalEncoder)
+    # Sub-pipeline 3: Categórico Ordinal (moda + OrdinalEncoder + MinMaxScaler)
     orden_estudios = ['Primaria', 'Secundaria', 'Grado', 'Master', 'Doctorado']
     orden_satisfaccion = ['Muy Bajo', 'Bajo', 'Medio', 'Alto', 'Muy Alto']
     
     pipeline_ord = Pipeline([
         ('imputador', SimpleImputer(strategy='most_frequent')),
-        ('codificador', OrdinalEncoder(categories=[orden_estudios, orden_satisfaccion]))
+        ('codificador', OrdinalEncoder(categories=[orden_estudios, orden_satisfaccion])),
+        ('escalador', MinMaxScaler())
     ])
 
     # Sub-pipeline 4: Categórico Nominal (moda + OneHotEncoder)

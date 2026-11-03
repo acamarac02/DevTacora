@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Preprocesamiento II: rama categórica y ensamble manual"
 sidebar_position: 6
 description: "Tratamiento integral de variables cualitativas con Scikit-learn: imputación de texto, codificación con OneHotEncoder y OrdinalEncoder, blindaje ante categorías desconocidas y ensamble manual de matrices."
@@ -144,13 +143,52 @@ Esto implica que estas características han quedado temporalmente fuera del Data
 :::
 
 Al inspeccionar los datos transformados, observamos que:
-* `'Primaria'` $\to 1.0$
-* `'Grado'` $\to 3.0$
-* `'Doctorado'` $\to 5.0$
+* `'Primaria'` $\to 0.0$
+* `'Grado'` $\to 2.0$
+* `'Doctorado'` $\to 4.0$
 
-El modelo lineal o el árbol de decisión podrá interpretar de forma nativa que avanzar de `1.0` a `3.0` representa un incremento en la escala formativa.
+El modelo lineal o el árbol de decisión podrá interpretar de forma nativa que avanzar de `0.0` a `2.0` representa un incremento en la escala formativa.
 
-### El error clásico a desterrar: codificar nominales con enteros arbitrarios
+### ¿Deberíamos escalar las variables generadas por `OrdinalEncoder`?
+
+**Sí, especialmente si vas a utilizar modelos sensibles a la escala y basados en distancias (como KNN, SVM o regresión con regularización).**
+
+Piensa en lo siguiente:
+1. Las variables nominales codificadas con `OneHotEncoder` se mueven estrictamente en el rango $[0, 1]$.
+2. Si una variable ordinal tiene 5 niveles, `OrdinalEncoder` le asigna valores enteros entre $0$ y $4$.
+3. En modelos como KNN (donde se calcula la distancia euclídea), una diferencia de varias categorías en la variable ordinal aportará $(4 - 0)^2 = 16$ a la distancia, dominando de forma desproporcionada sobre cualquier variable binaria (cuyo impacto máximo es $(1 - 0)^2 = 1$).
+
+Para equilibrar su importancia, la práctica estándar consiste en **escalar la matriz ordinal** (normalmente con `MinMaxScaler` para acotarla entre $0$ y $1$, o con `StandardScaler`):
+
+```python
+from sklearn.preprocessing import MinMaxScaler
+
+# 1. Instanciamos el escalador
+scaler_ord = MinMaxScaler()
+
+# 2. Ajustamos en train y transformamos train y test (respetando la regla de oro)
+X_train_ord_scaled = scaler_ord.fit_transform(X_train_ord)
+X_test_ord_scaled = scaler_ord.transform(X_test_ord)
+```
+
+Al escalarla con `MinMaxScaler`:
+* `'Primaria'` $\to 0.0$
+* `'Secundaria'` $\to 0.25$
+* `'Grado'` $\to 0.50$
+* `'Master'` $\to 0.75$
+* `'Doctorado'` $\to 1.0$
+
+De esta manera, **se preserva intacta la relación de jerarquía** ($0.0 < 0.25 < 0.50 \dots$) y a la vez convive en **perfecta igualdad de rango $[0, 1]$** con las columnas binarias del `OneHotEncoder`.
+
+*(Nota: Si el modelo que vas a entrenar es un árbol de decisión o Random Forest, este escalado no es estrictamente necesario, ya que los árboles son inmunes a las diferencias de escala).*
+
+---
+
+## Codificación nominal con `OneHotEncoder`
+
+Para variables puramente cualitativas sin relación de orden (`tipo_cuenta`, `canal_preferido`, `pais`, etc.), el estándar indiscutible en la industria es la **codificación One-Hot** (*One-Hot Encoding* o variables *dummy*).
+
+:::info El error a evitar: codificar nominales con enteros arbitrarios
 
 Un fallo muy habitual entre principiantes consiste en codificar variables nominales asignando números enteros correlativos, ya sea manualmente con diccionarios de Python o mediante `LabelEncoder`:
 
@@ -159,7 +197,7 @@ Un fallo muy habitual entre principiantes consiste en codificar variables nomina
 mapeo_tramposo = {'Coche': 0, 'Moto': 1, 'Camion': 2}
 ```
 
-:::danger ¿Por qué está prohibido hacer esto con variables nominales?
+**¿Por qué está prohibido hacer esto con variables nominales?**
 Al asignar `0`, `1` y `2` a las categorías `Coche`, `Moto` y `Camion`:
 1. El modelo asume que un `Camion` vale el doble que una `Moto` ($2 = 2 \times 1$).
 2. El algoritmo asume que un `Coche` y un `Camion` están el doble de distanciados ($|2 - 0| = 2$) que un `Coche` y una `Moto` ($|1 - 0| = 1$).
@@ -167,12 +205,6 @@ Al asignar `0`, `1` y `2` a las categorías `Coche`, `Moto` y `Camion`:
 
 `LabelEncoder` está diseñado exclusivamente para transformar la variable objetivo unidimensional ($y$), **nunca** para la matriz de características explicativas ($X$).
 :::
-
----
-
-## Codificación nominal con `OneHotEncoder`
-
-Para variables puramente cualitativas sin relación de orden (`tipo_cuenta`, `canal_preferido`, `pais`, etc.), el estándar indiscutible en la industria es la **codificación One-Hot** (*One-Hot Encoding* o variables *dummy*).
 
 ### Mecanismo de funcionamiento
 
@@ -186,7 +218,7 @@ El transformador crea **una nueva columna binaria por cada categoría única** d
 
 Geométricamente, las tres categorías quedan situadas a la **misma distancia euclídea** entre sí ($\sqrt{(1-0)^2 + (0-1)^2} = \sqrt{2} \approx 1.414$), garantizando la máxima equidad matemática y eliminando cualquier sesgo de jerarquía artificial.
 
-### Parámetros clave para entornos de producción
+### Parámetros clave
 
 `OneHotEncoder` incorpora argumentos fundamentales para garantizar la estabilidad del software en producción:
 
@@ -224,6 +256,20 @@ print("Nuevas columnas generadas:")
 for nombre in nombres_dummies:
     print(f" - {nombre}")
 ```
+
+### ¿Deberíamos escalar las variables generadas por `OneHotEncoder`?
+
+Existe una tentación recurrente tras aplicar `OneHotEncoder`: pasar toda la matriz combinada por un `StandardScaler`. **Esto es un grave error metodológico**.
+
+Las columnas resultantes de un One-Hot Encoding ya se encuentran acotadas en un rango natural perfecto:
+
+$$\{0, 1\}$$
+
+Si aplicamos `StandardScaler` sobre una columna binaria:
+
+1. **Destruye su significado booleano directo:** Una celda con `0` ya no representa *"ausencia del atributo"* ni `1` representa *"presencia del atributo"*.
+2. **Introduce valores continuos artificiales:** Al restar la media ($\mu$) y dividir por la desviación ($\sigma$), los ceros se transforman en valores negativos (ej. $-0.26$) y los unos en valores positivos altos (ej. $+3.81$), dependiendo de cuán frecuente sea la categoría.
+3. **Destruye la esparcidad de los datos:** En datasets de gran volumen, millones de ceros que no ocupaban espacio se convierten en números flotantes de 64 bits, disparando el consumo de memoria RAM.
 
 ### Prueba de estrés: categorías desconocidas en inferencia
 
@@ -299,32 +345,12 @@ Con un diccionario y `.map()` defines de forma 100 % explícita y bajo tu contro
 
 ---
 
-## Regla de oro: NUNCA se escalan las variables dummy
-
-Existe una tentación recurrente tras aplicar `OneHotEncoder`: pasar toda la matriz combinada por un `StandardScaler`. **Esto es un grave error metodológico**.
-
-Las columnas resultantes de un One-Hot Encoding ya se encuentran acotadas en un rango natural perfecto:
-
-$$\{0, 1\}$$
-
-Si aplicamos `StandardScaler` sobre una columna binaria:
-
-1. **Destruye su significado booleano directo:** Una celda con `0` ya no representa *"ausencia del atributo"* ni `1` representa *"presencia del atributo"*.
-2. **Introduce valores continuos artificiales:** Al restar la media ($\mu$) y dividir por la desviación ($\sigma$), los ceros se transforman en valores negativos (ej. $-0.26$) y los unos en valores positivos altos (ej. $+3.81$), dependiendo de cuán frecuente sea la categoría.
-3. **Destruye la esparcidad de los datos:** En datasets de gran volumen, millones de ceros que no ocupaban espacio se convierten en números flotantes de 64 bits, disparando el consumo de memoria RAM.
-
-:::warning Principio de separación arquitectónica
-El escalado numérico (`StandardScaler`, `MinMaxScaler`) pertenece **única y exclusivamente a las características cuantitativas continuas** (importe, saldo, edad, tiempo). Las variables binarias y dummies procedentes de `OneHotEncoder` deben mantenerse exactamente como unos y ceros.
-:::
-
----
-
 ## La fricción del ensamble manual de matrices
 
 Llegados a este punto, hemos procesado las diferentes ramas de nuestro conjunto de datos:
 
 1. **Rama numérica continua** (Sesión 5): Las columnas cuantitativas (`cols_a_escalar = ['edad', 'ingresos_anuales', 'antiguedad_meses', 'saldo_cuenta']`) ya quedaron limpias y estandarizadas directamente en los DataFrames `X_train` y `X_test`.
-2. **Rama ordinal codificada** (Sesión 6): Los arrays de NumPy `X_train_ord` y `X_test_ord`.
+2. **Rama ordinal codificada y escalada** (Sesión 6): Los arrays de NumPy `X_train_ord_scaled` y `X_test_ord_scaled`.
 3. **Rama nominal codificada** (Sesión 6): Los arrays de NumPy `X_train_ohe` y `X_test_ohe`.
 
 Para poder alimentar un algoritmo de Machine Learning, necesitamos unificar todos estos bloques en una **única matriz bidimensional final** ($X_{\text{final}}$):
@@ -338,11 +364,11 @@ flowchart TD
 
     subgraph RamaCategorica ["Rama Categórica (Sesión 6)"]
         C1["Limpieza tipográfica"] --> C2["SimpleImputer (Moda)"]
-        C2 --> C3["OrdinalEncoder -> X_train_ord"]
+        C2 --> C3["OrdinalEncoder + MinMaxScaler -> X_train_ord_scaled"]
         C2 --> C4["OneHotEncoder -> X_train_ohe"]
     end
 
-    N4 --> Ensamble["Ensamble Manual:<br/>np.hstack([X_train[cols_a_escalar].to_numpy(), X_train_ord, X_train_ohe])"]
+    N4 --> Ensamble["Ensamble Manual:<br/>np.hstack([X_train[cols_a_escalar].to_numpy(), X_train_ord_scaled, X_train_ohe])"]
     C3 --> Ensamble
     C4 --> Ensamble
     
@@ -351,7 +377,7 @@ flowchart TD
 
 ### Concatenación horizontal y creación del DataFrame final
 
-Como las columnas numéricas ya escaladas residen en el DataFrame `X_train` y las transformaciones cualitativas se encuentran en arrays independientes de NumPy (`X_train_ord` y `X_train_ohe`), debemos unificar todos los bloques.
+Como las columnas numéricas ya escaladas residen en el DataFrame `X_train` y las transformaciones cualitativas se encuentran en arrays independientes de NumPy (`X_train_ord_scaled` y `X_train_ohe`), debemos unificar todos los bloques.
 
 Para que el resultado final vuelva a ser un **DataFrame de Pandas** estructurado con sus nombres de columnas y sus índices originales (lo que nos permitirá inspeccionarlo cómodamente con `.head()`, filtrarlo o guardarlo en CSV):
 
@@ -378,7 +404,7 @@ nombres_columnas_final = (
 X_train_final = pd.DataFrame(
     np.hstack([
         X_train[cols_numericas].to_numpy(),  # Rama numérica (escaladas y binarias)
-        X_train_ord,                         # Rama ordinal codificada
+        X_train_ord_scaled,                  # Rama ordinal codificada y escalada
         X_train_ohe                          # Rama nominal codificada con One-Hot
     ]),
     columns=nombres_columnas_final,
@@ -388,7 +414,7 @@ X_train_final = pd.DataFrame(
 X_test_final = pd.DataFrame(
     np.hstack([
         X_test[cols_numericas].to_numpy(),
-        X_test_ord,
+        X_test_ord_scaled,
         X_test_ohe
     ]),
     columns=nombres_columnas_final,
@@ -411,11 +437,11 @@ Analicemos los riesgos críticos de este enfoque manual:
 1. **Reconstrucción artesanal de metadatos:**  
    Al unificar bloques con `np.hstack`, NumPy descarta por completo los nombres de las columnas y los índices. Nos vemos obligados a reconstruir manualmente listas de cadenas de texto (`nombres_columnas_final = cols_numericas + cols_ordinales + list(...)`), con el riesgo añadido de equivocarnos en el orden relativo de las columnas respecto a los arrays concatenados.
 2. **Mezcla caótica de estructuras (DataFrames y Arrays):**  
-   Tenemos partes del dataset modificadas dentro de `X_train` y otras partes dispersas en arrays flotantes (`X_train_ord`, `X_train_ohe`). Esto nos obliga a recordar exactamente qué lista de columnas numéricas extraer (`X_train[cols_numericas].to_numpy()`) y cuáles ignorar para no meter texto original en NumPy.
+   Tenemos partes del dataset modificadas dentro de `X_train` y otras partes dispersas en arrays flotantes (`X_train_ord_scaled`, `X_train_ohe`). Esto nos obliga a recordar exactamente qué lista de columnas numéricas extraer (`X_train[cols_numericas].to_numpy()`) y cuáles ignorar para no meter texto original en NumPy.
 3. **Altísimo riesgo de desalineación de columnas:**  
    Si en `X_train_final` concatenaste `[numéricas, ordinales, nominales]`, pero en `X_test_final` o en la función de inferencia en producción concatenas por error `[numéricas, nominales, ordinales]`, las dimensiones coincidirán, pero el modelo estará multiplicando los pesos de la educación por las dummies del canal. El modelo predecirá basura sin emitir ningún mensaje de error.
 4. **Infierno de serialización en producción:**  
-   Para desplegar este modelo en una API REST, el ingeniero de software debe guardar mediante `joblib.dump` **cuatro o cinco archivos `.joblib` distintos** (`imputer_num.joblib`, `scaler.joblib`, `imputer_cat.joblib`, `encoder_ord.joblib`, `encoder_ohe.joblib`), cargarlos individualmente y ejecutar el preprocesamiento en el mismo orden exacto para cada predicción en tiempo real.
+   Para desplegar este modelo en una API REST, el ingeniero de software debe guardar mediante `joblib.dump` **cinco o seis archivos `.joblib` distintos** (`imputer_num.joblib`, `scaler_num.joblib`, `imputer_cat.joblib`, `encoder_ord.joblib`, `scaler_ord.joblib`, `encoder_ohe.joblib`), cargarlos individualmente y ejecutar el preprocesamiento en el mismo orden exacto para cada predicción en tiempo real.
 
 :::tip La semilla de la siguiente etapa
 Esta fricción manual y evidente es precisamente el motivo por el cual la ingeniería de software moderna en Inteligencia Artificial inventó herramientas como **`ColumnTransformer`** y **`Pipeline`**. En las próximas sesiones aprenderemos a encapsular toda esta maquinaria dispersa en un único objeto unificado de Scikit-learn.
@@ -439,14 +465,15 @@ Trabaja en el mismo Jupyter Notebook donde completaste la sesión anterior (dond
 2. **Imputación cualitativa:**
    * Aplica `SimpleImputer` con `strategy='most_frequent'` sobre el conjunto de variables cualitativas que lo requieran.
    * Verifica que no quedan nulos en dichas columnas.
-3. **Codificación ordinal:**
+3. **Codificación ordinal y escalado:**
    * Define la jerarquía exacta para las variables que sean categóricas ordinales.
-   * Realiza la transformación tanto en `X_train` como en `X_test`.
+   * Realiza la transformación con `OrdinalEncoder` tanto en `X_train` como en `X_test` (`X_train_ord` y `X_test_ord`).
+   * Escala los valores con `MinMaxScaler` para obtener `X_train_ord_scaled` y `X_test_ord_scaled` acotados entre 0 y 1.
 4. **Codificación nominal:**
    * Configura `OneHotEncoder` y ajusta el transformador sobre las columnas nominales de `X_train` y transforma Train y Test.
    * Extrae e imprime los nombres de las características generadas con `encoder.get_feature_names_out()`.
 5. **Ensamble manual y auditoría dimensional:**
-   * Utiliza `np.hstack` para unir las columnas numéricas ya preparadas de `X_train` y `X_test` con los bloques ordinal y nominal generados en esta sesión.
+   * Utiliza `np.hstack` para unir las columnas numéricas ya preparadas de `X_train` y `X_test` con los bloques ordinal escalado (`X_train_ord_scaled` y `X_test_ord_scaled`) y nominal (`X_train_ohe` y `X_test_ohe`) generados en esta sesión.
    * Imprime la forma (`.shape`) de `X_train_final` y `X_test_final` y comprueba que ambas matrices tienen exactamente el mismo número de columnas.
    * Muestra por pantalla los primeros 10 clientes de `X_train_final` y `X_test_final` para verificar que el ensamble se ha realizado correctamente.
    * Asegúrate de que no se te haya olvidado añadir ninguna columna importante.
