@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Feature engineering"
 sidebar_position: 7
 toc_max_heading_level: 4
@@ -256,5 +255,25 @@ Por tanto, a partir de ahora tienes que tener dos Pipelines:
    * Incluye las variables categóricas correspondientes en la codificación (`OneHotEncoder` o `OrdinalEncoder`).
    * Vuelve a ejecutar el ensamble manual para obtener `X_train_final` y `X_test_final` como DataFrames de Pandas con todas sus columnas nombradas.
    * Muestra las primeras 5 filas con `X_train_final.head()` y redacta una breve justificación en una celda Markdown explicando las decisiones tomadas respecto a qué columnas originales conservaste y cuáles descartaste.
+6. **Investigación: Selección de características (*Feature Selection*).**
+   En esta sesión hemos aprendido a crear nuevas variables (*Feature Engineering*). Sin embargo, añadir columnas indiscriminadamente plantea un nuevo reto: ¿nos conviene alimentar el modelo con todas o algunas introducen ruido, redundancia o coste innecesario?
+   
+   Añade al final de tu notebook una **celda de Markdown** titulada `Investigación: Selección de Características (Feature Selection)` donde investigues y respondas a las siguientes cuatro cuestiones.
+
+   * **a) ¿Qué es la Selección de Características (*Feature Selection*)?**  
+     * *Límite:* Máximo 3-4 líneas.
+     * Define el concepto con tus palabras.
+   * **b) ¿Qué utilidad y beneficios aporta a un modelo de Machine Learning?**  
+     * *Límite:* Máximo 6-8 líneas.
+     * Identifica, al menos, tres beneficios.
+   * **c) ¿Cuándo es conveniente o necesario utilizarla?**  
+     * *Límite:* Máximo 4 líneas.
+     * Describe escenarios o señales de alerta en un proyecto de datos que aconsejen aplicar selección de variables.
+   * **d) Método de filtro: `SelectKBest`**  
+     * *Límite:* Máximo 6-8 líneas.
+     * Describe cómo funciona ese método.
+     
+
+   **NOTA**: El objetivo es evaluar si has adquirido los conocimientos, por lo que redacta la respuesta con tus palabras y sin copiar explicaciones kilométricas de la IA.
 
 </div>

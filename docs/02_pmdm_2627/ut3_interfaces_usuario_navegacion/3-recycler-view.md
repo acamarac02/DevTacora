@@ -1,5 +1,4 @@
 ---
-draft: true
 title: RecyclerView
 sidebar_position: 3
 description: "RecyclerView permite mostrar listas de datos de forma eficiente mediante un sistema de ViewHolder y adaptadores, ideal para listas dinámicas o grandes volúmenes de información."
