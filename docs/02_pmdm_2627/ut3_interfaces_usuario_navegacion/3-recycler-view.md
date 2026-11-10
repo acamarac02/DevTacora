@@ -123,7 +123,7 @@ public class AnimalesRepository {
 
     private List<Animal> listaAnimales;
 
-    private AnimalesRepository() {
+    public AnimalesRepository() {
         listaAnimales = new ArrayList<>();
 
         listaAnimales.add(new Animal("Max", R.drawable.perro1, "Max es un labrador leal y juguetón."));

@@ -1,6 +1,5 @@
 ---
-draft: true
-title: "Pipelines y ColumnTransformer en Scikit-learn"
+title: "Pipelines en Scikit-learn"
 sidebar_position: 8
 toc_max_heading_level: 4
 description: "Orquestación integral del preprocesamiento con ColumnTransformer y Pipeline de Scikit-learn, serialización con joblib y tutorial guiado en Jupyter Notebook."
