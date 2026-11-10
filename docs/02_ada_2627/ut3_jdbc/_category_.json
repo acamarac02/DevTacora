@@ -1,0 +1,8 @@
+{
+  "label": "UT3. Acceso a BBDD relacionales con JDBC",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "En esta unidad aprenderás a conectar aplicaciones Java con bases de datos relacionales (MySQL en Docker) mediante JDBC, aplicar el patrón Singleton para la gestión de conexiones, ejecutar operaciones CRUD seguras con PreparedStatement y ResultSet, y resolver el mapeo de relaciones (JOIN) y herencia en bases de datos relacionales."
+  }
+}
