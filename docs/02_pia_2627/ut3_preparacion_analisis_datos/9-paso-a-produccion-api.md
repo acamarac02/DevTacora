@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Paso a Producción"
 sidebar_position: 9
 toc_max_heading_level: 4
