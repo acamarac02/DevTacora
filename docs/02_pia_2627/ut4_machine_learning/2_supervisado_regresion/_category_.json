@@ -1,0 +1,8 @@
+{
+  "label": "2. Supervisado: Regresión",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Predicción de variables cuantitativas continuas, funciones de coste, métricas de error y construcción de pipelines completos de regresión."
+  }
+}
