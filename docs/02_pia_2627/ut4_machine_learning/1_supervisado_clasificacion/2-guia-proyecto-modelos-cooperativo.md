@@ -1,70 +1,91 @@
 ---
 draft: true
-title: "Proyecto 1: Estudio Cooperativo de Modelos de Clasificación"
+title: "Proyecto: Estudio de modelos"
 sidebar_position: 2
-description: "Guía docente y de trabajo para el Proyecto 1: investigación en equipos de 3 alumnos sobre los 7 grandes modelos de clasificación, presentaciones y notebooks prácticos."
-keywords: ["proyecto 1", "flipped classroom", "modelos clasificacion", "regresion logistica", "knn", "arboles de decision", "random forest", "gradient boosting", "svm", "xgboost"]
+description: "Guía del Proyecto 1: estudio en equipo de los principales algoritmos de clasificación, preparación de la presentación y desarrollo de dos notebooks prácticos."
+keywords: ["proyecto 1", "clasificacion", "regresion logistica", "knn", "arboles de decision", "random forest", "gradient boosting", "svm", "xgboost"]
 ---
 
 <div class="justify-text">
 
-:::info Resumen de la actividad
-En este proyecto cooperativo en grupos de 3, cada equipo se especializa en un algoritmo de clasificación, elaborando una presentación técnica y dos notebooks demostrativos sobre conjuntos de datos estandarizados con pocas características.
+## Introducción
+
+En este proyecto trabajaremos en grupos de tres personas para estudiar en detalle uno de los principales algoritmos de clasificación supervisada. Cada equipo se especializará en un modelo concreto y deberá preparar una presentación breve para explicárselo al resto de la clase, acompañada de dos cuadernos prácticos (uno para clasificación binaria y otro para clasificación multiclase).
+
+---
+
+## Modelos a estudiar
+
+Cada equipo tendrá asignado uno de los siguientes ocho temas:
+
+* **Regresión Logística (`LogisticRegression`):** función sigmoide, estimación de probabilidades, parámetro de regularización `C` y extensión a clasificación multiclase.
+* **K-Vecinos más Cercanos (`KNeighborsClassifier`):** cálculo de distancias, número de vecinos (`n_neighbors`), ponderación por distancia (`weights`) y efecto de la escala de los datos.
+* **Árboles de Decisión (`DecisionTreeClassifier`):** criterios de división (`gini` y `entropy`), profundidad máxima (`max_depth`), mínimo de muestras para dividir y representación gráfica del árbol.
+* **Bosques Aleatorios (`RandomForestClassifier`):** concepto de ensamble (*Bagging*), número de árboles (`n_estimators`), control de profundidad e importancia de variables.
+* **Gradient Boosting (`GradientBoostingClassifier`):** ensamble secuencial (*Boosting*), tasa de aprendizaje (`learning_rate`), número de estimadores y control del sobreajuste.
+* **Máquinas de Vectores de Soporte (`SVC`):** hiperplano de separación, margen, vectores de soporte y uso de *kernels* (`linear` frente a `rbf`).
+* **XGBoost (`XGBClassifier`):** optimización de árboles potenciados por gradiente, hiperparámetros clave (`n_estimators`, `learning_rate`, `max_depth`) y regularización.
+* **Ensambles basados en árboles (Bagging, Pasting y Boosting):** diferencias conceptuales entre un árbol individual (`DecisionTreeClassifier`) y los métodos de ensamble (`BaggingClassifier`, `RandomForestClassifier`, `GradientBoostingClassifier`, `XGBoost`), técnicas de muestreo con y sin reemplazo (*Bagging* frente a *Pasting*), votación y aprendizaje paralelo frente a secuencial.
+
+---
+
+## Entregables
+
+### Presentación
+
+La exposición tendrá una duración aproximada de **10 minutos**, más un breve turno de preguntas. Se valorará especialmente que las diapositivas sean claras, directas y visuales, evitando bloques largos de texto.
+
+La presentación deberá cubrir cuatro puntos obligatorios sobre el algoritmo asignado (en el caso del grupo de **Ensambles**, el foco principal recaerá en el primer punto comparando las estrategias de *Bagging*, *Pasting* y *Boosting* frente a un árbol único, sin necesidad de profundizar en el detalle de los hiperparámetros, atributos útiles y requisitos de preprocesamiento de cada modelo):
+
+* **Funcionamiento interno:** explicación intuitiva de cómo aprende el algoritmo y cómo toma las decisiones al predecir, sin entrar en demostraciones matemáticas complejas. Es recomendable utilizar imágenes que ayuden a entender cómo funciona el algoritmo.
+* **Hiperparámetros fundamentales:** los hiperparámetros más importantes del modelo, indicando para qué sirven y qué ocurre cuando se sube o se baja su valor.
+* **Atributos útiles tras el entrenamiento:** qué información interna se puede consultar después de ejecutar `.fit()` (por ejemplo, `.coef_`, `.intercept_`, `.feature_importances_`, `.classes_`, etc.).
+* **Requisitos de preprocesamiento:** si el modelo necesita escalado obligatorio de variables, si es sensible a valores atípicos (*outliers*) o cualquier otra condición relevante para que funcione bien.
+
+### Notebooks prácticos (Binario y Multiclase)
+
+Cada grupo entregará **dos archivos `.ipynb`**: uno para un problema de **clasificación binaria** y otro para **clasificación multiclase**. En ambos casos se utilizarán conjuntos de datos limpios y con pocas variables para centrar el trabajo en el comportamiento del modelo.
+
+Cada notebook debe seguir esta estructura:
+
+1. **Carga del dataset** e inspección básica de sus dimensiones y clases.
+2. **División en entrenamiento y prueba** (`train_test_split` con `random_state=42`).
+3. **Entrenamiento del modelo** ajustando manualmente los hiperparámetros estudiados.
+    * En el **grupo de Ensambles**, se entrenarán y compararán un árbol individual, `BaggingClassifier` con `bootstrap=True` y `bootstrap=False` para Bagging/Pasting, y un modelo de Boosting.
+4. **Consulta de atributos útiles** mostrando e interpretando los valores obtenidos tras el entrenamiento.
+    * Apartado opcional para el grupo de Ensambles.
+5. **Predicciones con nuevos datos** sobre ejemplos creados manualmente.
+6. **Evaluación y métricas:** Accuracy, Matriz de Confusión, Precision, Recall y F1-Score.
+7. **Análisis de *overfitting* y *underfitting***.
+8. **Prueba con otros valores de hiperparámetros**, visualizando cómo cambian los atributos útiles, métricas, si hay sobreajuste o no, etc.
+    * Apartado opcional para el grupo de Ensambles.
+9. **En modelos sensibles a la escala**, comprobar las diferencias de resultados entrenando el modelo con los datos escalados y sin escalar, utilizando siempre los mismos valores de hiperparámetros.
+10. **Conclusiones:** interpretación clara de los resultados obtenidos en las métricas y en las pruebas realizadas.
+
+#### Conjuntos de datos de partida
+
+Para que todos los grupos trabajen con los mismos datos y se puedan comparar los resultados entre algoritmos, se utilizarán dos conjuntos incluidos en Scikit-Learn sin valores nulos y con cuatro características numéricas:
+
+```python
+from sklearn.datasets import load_breast_cancer, load_wine
+
+# 1. Dataset para clasificación binaria (4 características seleccionadas)
+cancer = load_breast_cancer(as_frame=True)
+columnas_binarias = ["mean radius", "mean texture", "mean perimeter", "mean area"]
+X_bin = cancer.data[columnas_binarias]
+y_bin = cancer.target
+
+# 2. Dataset para clasificación multiclase (3 tipos de vino, 4 características seleccionadas)
+wine = load_wine(as_frame=True)
+columnas_vino = ["alcohol", "malic_acid", "color_intensity", "proline"]
+X_multi = wine.data[columnas_vino]
+y_multi = wine.target
+```
+
+:::info
+Para este proyecto **no hay que hacer EDA**, os confirmo que el dataset está limpio.
+
+Sobre el **preprocesamiento**, en modelos sensibles a la escala de las variables (como Regresión Logística, KNN o SVC), conviene comparar los resultados obtenidos antes y después de aplicar un escalado con `StandardScaler` para observar su impacto real.
 :::
-
-## Objetivos del Proyecto
-
-* Investigar de forma autónoma el principio de funcionamiento de un algoritmo de clasificación sin entrar en demostraciones matemáticas complejas.
-* Identificar los hiperparámetros críticos que controlan el sesgo, la varianza y la complejidad del modelo.
-* Conocer los atributos internos que el estimador expone tras el entrenamiento para interpretar sus decisiones.
-* Determinar las exigencias de preprocesamiento del modelo (necesidad de escalado numérico, sensibilidad a valores atípicos o soporte nativo para relaciones no lineales).
-* Comunicar eficazmente los hallazgos técnicos ante el resto del grupo en una exposición sintética de 10 minutos.
-
----
-
-## Modelos Asignados (7 Grupos)
-
-1. **Regresión Logística (Logistic Regression):**  
-   Función sigmoide, probabilidades, regularización ($C$) y extensión multiclase (`ovr` / `multinomial`).
-2. **K-Vecinos más Cercanos (K-Nearest Neighbors - KNN):**  
-   Métrica de distancia, número de vecinos ($k$), ponderación por distancia e impacto de la dimensionalidad.
-3. **Árboles de Decisión (Decision Tree Classifier):**  
-   Criterios de división (Gini / Entropía), profundidad máxima (`max_depth`), muestras mínimas para dividir y visualización gráfica del árbol.
-4. **Bosques Aleatorios (Random Forest Classifier):**  
-   Concepto de ensamble por ensacado (*Bagging*), estimadores base (`n_estimators`), aleatoriedad de características e importancia de variables.
-5. **Potenciación del Gradiente (Gradient Boosting Classifier):**  
-   Ensamble secuencial (*Boosting*), corrección iterativa de errores residuales, tasa de aprendizaje (`learning_rate`) y control de sobreajuste.
-6. **Máquinas de Vectores de Soporte (Support Vector Machines - SVC):**  
-   Hiperplanos de separación, margen óptimo, vectores de soporte y el truco del núcleo (*Kernel* lineal vs RBF).
-7. **XGBoost Classifier:**  
-   Optimización moderna de árboles potenciados por gradiente, regularización interna, velocidad de cómputo y manejo de divisiones eficientes.
-
----
-
-## Entregables del Proyecto
-
-### 1. Presentación Técnica (10 minutos de exposición + 3 min de preguntas)
-* **Contenido mínimo:**
-  * Intuición del funcionamiento interno (con analogías visuales, sin fórmulas densas).
-  * Tabla con los 3 a 5 hiperparámetros fundamentales y qué efecto tiene subirlos o bajarlos.
-  * Atributos clave tras `fit()` (ej. `.coef_`, `.intercept_`, `.feature_importances_`, `.classes_`).
-  * Semáforo de preprocesamiento: ¿Requiere escalado obligatorio? ¿Es sensible a outliers?
-* **Criterios de calidad:** Diapositivas limpias, diagramas explicativos y dominio oral por parte de todos los miembros del equipo.
-
-### 2. Dos Notebooks Demostrativos (Binario y Multiclase)
-Para asegurar que todos los grupos trabajan en igualdad de condiciones y se centran en el entrenamiento sin perder tiempo limpiando datos, se trabajarán dos datasets directos con un número reducido de variables numéricas:
-* **Notebook 1 — Clasificación Binaria:**  
-  * Dataset controlado y limpio con 4-6 características clave (subconjunto seleccionado de variables numéricas continuas).
-* **Notebook 2 — Clasificación Multiclase:**  
-  * Dataset con pocas características y 3 clases bien definidas (ej. `load_iris` o subconjunto de `load_wine`).
-
-**Estructura obligatoria de cada notebook:**
-1. Carga del conjunto de datos y partición train/test fija (`random_state=42`).
-2. Instanciación y entrenamiento del modelo asignado con sus hiperparámetros destacados.
-3. Consulta e impresión comentada de sus atributos útiles tras el entrenamiento.
-4. Predicción sobre nuevos ejemplos hipotéticos.
-5. Diagnóstico de sobreajuste/subajuste comparando métricas en entrenamiento vs test.
-6. Evaluación: Accuracy, Matriz de Confusión, Precision, Recall y F1-Score.
-7. Conclusiones técnicas redactadas en Markdown.
 
 </div>
