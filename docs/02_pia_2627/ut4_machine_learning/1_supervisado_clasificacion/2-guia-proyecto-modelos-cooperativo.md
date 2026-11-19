@@ -10,7 +10,12 @@ keywords: ["proyecto 1", "clasificacion", "regresion logistica", "knn", "arboles
 
 ## Introducción
 
-En este proyecto trabajaremos en grupos de tres personas para estudiar en detalle uno de los principales algoritmos de clasificación supervisada. Cada equipo se especializará en un modelo concreto y deberá preparar una presentación breve para explicárselo al resto de la clase, acompañada de dos cuadernos prácticos (uno para clasificación binaria y otro para clasificación multiclase).
+En este proyecto trabajaremos en grupos para estudiar en detalle uno de los principales algoritmos de clasificación supervisada. Cada equipo se especializará en un modelo concreto y deberá preparar una presentación breve para explicárselo al resto de la clase, acompañada de dos cuadernos prácticos (uno para clasificación binaria y otro para clasificación multiclase).
+
+Se van a formar, según criterio de la profesora:
+
+* 6 grupos de 2 alumnos
+* 2 grupos de 3 alumnos
 
 ---
 
@@ -87,5 +92,21 @@ Para este proyecto **no hay que hacer EDA**, os confirmo que el dataset está li
 
 Sobre el **preprocesamiento**, en modelos sensibles a la escala de las variables (como Regresión Logística, KNN o SVC), conviene comparar los resultados obtenidos antes y después de aplicar un escalado con `StandardScaler` para observar su impacto real.
 :::
+
+---
+
+## Rúbrica de evaluación
+
+La calificación del proyecto se reparte al **50% entre la presentación oral** y los **dos notebooks prácticos** (binario y multiclase):
+
+| Bloque | Criterio de evaluación | Ponderación |
+| :--- | :--- | :---: |
+| **Presentación y Exposición (50%)** | **Contenido sintético y visual** (ideas clave sin exceso de texto) | **15%** |
+| | **Completitud técnica** (funcionamiento, hiperparámetros, atributos y preprocesamiento) | **20%** |
+| | **Dominio y claridad en la exposición** (seguridad al explicar y responder preguntas) | **15%** |
+| **Notebooks Prácticos (50%)** | **Entrenamiento, atributos útiles y nuevas predicciones** | **15%** |
+| | **Evaluación, métricas y análisis de *overfitting*/*underfitting*** | **15%** |
+| | **Experimentación** (pruebas con hiperparámetros y escalado cuando aplique) | **10%** |
+| | **Conclusiones** (interpretación clara de los resultados) | **10%** |
 
 </div>
