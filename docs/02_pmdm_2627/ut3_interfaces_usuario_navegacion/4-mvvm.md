@@ -1,5 +1,4 @@
 ---
-draft: true
 title: Arquitectura MVVM
 sidebar_position: 4
 description: "MVVM (Model-View-ViewModel) es la arquitectura recomendada por Android para organizar el código de forma modular, manteniendo una separación clara entre la interfaz de usuario, la lógica de presentación y el acceso a los datos."

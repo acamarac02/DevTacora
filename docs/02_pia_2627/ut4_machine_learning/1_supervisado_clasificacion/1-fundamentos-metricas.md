@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Fundamentos y Métricas de Clasificación"
 sidebar_position: 1
 description: "Fundamentos de la clasificación supervisada, interpretación de la matriz de confusión, métricas precision, recall y F1-score, ajuste del umbral de decisión y detección de sobreajuste."
