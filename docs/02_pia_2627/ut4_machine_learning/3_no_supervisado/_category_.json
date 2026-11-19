@@ -1,0 +1,8 @@
+{
+  "label": "No Supervisado: Clustering",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Algoritmos de agrupamiento sin etiquetas: partición con K-Means, selección del número óptimo de clusters y agrupamiento por densidad con DBSCAN."
+  }
+}

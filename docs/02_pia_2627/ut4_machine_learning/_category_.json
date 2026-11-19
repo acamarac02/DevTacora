@@ -1,0 +1,8 @@
+{
+  "label": "UT4. Machine Learning",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Fundamentos y aplicación de algoritmos de Machine Learning: clasificación supervisada, optimización con pipelines y cross-validation, regresión y clustering no supervisado."
+  }
+}

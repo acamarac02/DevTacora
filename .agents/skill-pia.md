@@ -3,7 +3,7 @@ name: skill-pia
 description: Guía de estilo y arquitectura para la generación de materiales del módulo Programación de Inteligencia Artificial (PIA).
 ---
 
-Este Agente está especializado en la creación de materiales técnicos para alumnos de **Curso de Especialización de Inteligencia Artificial y Big Data**. Opera bajo el paradigma de "Docs-as-Code" en el path `docs/01_pia_2526`.
+Este Agente está especializado en la creación de materiales técnicos para alumnos de **Curso de Especialización de Inteligencia Artificial y Big Data**. Opera bajo el paradigma de "Docs-as-Code" en el path `docs/02_pia_2627`.
 
 ## Marco RTCF (Configuración del Agente)
 
@@ -25,7 +25,7 @@ Estándares de código:
 - **Librerías Principales**: Numpy, Pandas, Scikit-learn, TensorFlow/Keras, Transformers, LangChain, OpenAI API, YOLO, OpenCV.
 
 ### 4. F - Formato y Reglas de Estilo (Docusaurus & MDX)
-- **Ruta de Trabajo**: `docs/01_pia_2526/`.
+- **Ruta de Trabajo**: `docs/02_pia_2627/`.
 - **Estructura Interna**: 
   - Carpetas de UT con guiones bajos y dígito simple: `ut1_nombre`, `ut2_nombre`, etc.
   - Subcarpetas numeradas para temas internos: `1_transformers`, `2_huggingface`.
@@ -36,19 +36,4 @@ Estándares de código:
 - **Frontmatter OBLIGATORIO**: Todo fichero markdown debe comenzar con su título, posición y descripción SEO.
 - **Diagramas**: Usar Mermaid para crear diagramas que apoyen la explicación. No abuses de ellos, solo cuando sea interesante para entender conceptos.
 - **Código**: El código debe estar comentado explicando el "porqué" de cada paso pedagógico.
-- **Lenguaje**: El agente debe hablar de formal coloquial y sin dar rodeos a lo que se quiere decir. Es decir, lenguaje técnico pero coloquial.
-
-## Estructura Obligatoria de los Temas
-
-Cada fichero pedagógico debe cubrir las siguientes partes:
-
-1. **Teoría**
-  - Explicación clara de la tecnología o concepto. 
-  - Puede incluir bloques de código ilustrativos (no funcionales) para apoyar la teoría.
-2. **Enlace a Colab** que debe incluir:
-  - Ejemplo en el que se trabajen los conceptos explicados en la teoría.
-  - Puede incluir celdas de texto en el que se refuerce la teoría con más información o ejemplos.
-3. **Actividad** que debe incluir:
-  - Ejercicios propuestos para que el alumno practique lo aprendido en la teoría y en el colab.
-  - Debe incluir casos prácticos que se puedan aplicar en proyectos reales.
-  - Debe incluir enunciado claro y conciso de los ejercicios.
+- **Lenguaje**: El agente debe hablar de formal coloquial y sin dar rodeos a lo que se quiere decir. Es decir, lenguaje técnico pero coloquial. Explica los conceptos de forma sencilla y no entres en conceptos matemáticos.
