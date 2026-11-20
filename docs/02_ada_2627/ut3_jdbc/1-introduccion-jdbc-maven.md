@@ -1,5 +1,6 @@
 ---
 title: Introducción
+draft: true
 sidebar_position: 1
 description: Fundamentos del API JDBC, arquitectura de acceso a datos y configuración del conector de MySQL con Maven y Docker.
 keywords: [jdbc, java, mysql, maven, docker, driver, java.sql]

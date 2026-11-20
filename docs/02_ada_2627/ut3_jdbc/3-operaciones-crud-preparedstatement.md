@@ -1,5 +1,6 @@
 ---
 title: Operaciones CRUD
+draft: true
 sidebar_position: 3
 description: Ejecución de consultas SELECT y operaciones DML (INSERT, UPDATE, DELETE) seguras, tipadas y parametrizadas mediante PreparedStatement.
 keywords: [crud, preparedstatement, resultset, sql injection, return_generated_keys, executequery, executeupdate]
