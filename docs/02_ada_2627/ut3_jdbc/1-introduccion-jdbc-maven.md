@@ -1,6 +1,5 @@
 ---
 title: Introducción
-draft: true
 sidebar_position: 1
 description: Fundamentos del API JDBC, arquitectura de acceso a datos y configuración del conector de MySQL con Maven y Docker.
 keywords: [jdbc, java, mysql, maven, docker, driver, java.sql]
@@ -158,7 +157,7 @@ public class TestConexion {
 }
 ```
 
-:::warning Posibles errores frecuentes en el aula
+:::warning Posibles errores frecuentes
 * **`Communications link failure`**: El contenedor de Docker no está iniciado o el puerto `3306` no está publicado correctamente (`-p 3306:3306`).
 * **`Access denied for user 'root'@'...'`**: La contraseña indicada no coincide con la definida al crear el contenedor Docker.
 * **`Unknown database 'tienda'`**: La base de datos aún no ha sido creada en el servidor MySQL.

@@ -1,6 +1,5 @@
 ---
 title: Caso práctico guiado
-draft: true
 sidebar_position: 4
 description: Desarrollo guiado de una aplicación de consola completa conectada a MySQL, implementando el CRUD de la base de datos tienda con composición de clases y patrón DAO.
 keywords: [demo, caso practico, tienda, producto, fabricante, crud, java, composicion, dao]

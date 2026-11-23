@@ -1,6 +1,5 @@
 ---
 title: Patrón Singleton y conexiones
-draft: true
 sidebar_position: 2
 description: Justificación e implementación detallada del patrón de diseño Singleton para la gestión eficiente y centralizada de conexiones JDBC.
 keywords: [singleton, patrones de diseño, conexion, jdbc, connection, drivermanager]
