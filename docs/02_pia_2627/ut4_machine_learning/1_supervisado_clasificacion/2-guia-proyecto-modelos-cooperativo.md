@@ -1,5 +1,4 @@
 ---
-draft: true
 title: "Proyecto: Estudio de modelos"
 sidebar_position: 2
 description: "Guía del Proyecto 1: estudio en equipo de los principales algoritmos de clasificación, preparación de la presentación y desarrollo de dos notebooks prácticos."
@@ -101,9 +100,9 @@ La calificación del proyecto se reparte al **50% entre la presentación oral** 
 
 | Bloque | Criterio de evaluación | Ponderación |
 | :--- | :--- | :---: |
-| **Presentación y Exposición (50%)** | **Contenido sintético y visual** (ideas clave sin exceso de texto) | **15%** |
+| **Presentación y Exposición (50%)** | **Contenido sintético y visual** (ideas clave sin exceso de texto) | **10%** |
 | | **Completitud técnica** (funcionamiento, hiperparámetros, atributos y preprocesamiento) | **20%** |
-| | **Dominio y claridad en la exposición** (seguridad al explicar y responder preguntas) | **15%** |
+| | **Dominio y claridad en la exposición** (seguridad al explicar y responder preguntas) | **20%** |
 | **Notebooks Prácticos (50%)** | **Entrenamiento, atributos útiles y nuevas predicciones** | **15%** |
 | | **Evaluación, métricas y análisis de *overfitting*/*underfitting*** | **15%** |
 | | **Experimentación** (pruebas con hiperparámetros y escalado cuando aplique) | **10%** |
