@@ -1,6 +1,5 @@
 ---
 title: Mapeo de herencia
-draft: true
 sidebar_position: 5
 description: Representación de jerarquías de herencia de Java en bases de datos relacionales mediante la estrategia de tabla única (Single Table) con columna discriminadora.
 keywords: [herencia, single table, discriminador, polimorfismo, jdbc, desfase objeto relacional]
